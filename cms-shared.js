@@ -30,7 +30,7 @@
         updatedAt: null,
         site: {
             featuredGameId: "wukong",
-            catalogHeading: "Thư viện bản Việt hóa",
+            catalogHeading: "Thư viện Việt hóa",
             catalogIntro: "Tìm đúng game, phiên bản và trạng thái kiểm thử trong một danh mục gọn, có bộ lọc và phân trang rõ ràng.",
             catalogPageSize: "9",
             trailerKicker: "TRAILER BOARD / GAME HOT GẦN ĐÂY",

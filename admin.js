@@ -337,7 +337,7 @@
             <option value="${escapeHtml(game.id)}">${escapeHtml(game.title)}</option>
         `).join("");
         featuredSelect.value = selectedId;
-        form.elements.catalogHeading.value = state.site.catalogHeading || "Thư viện bản Việt hóa";
+        form.elements.catalogHeading.value = state.site.catalogHeading || "Thư viện Việt hóa";
         form.elements.catalogIntro.value = state.site.catalogIntro || "";
         form.elements.catalogPageSize.value = String(state.site.catalogPageSize || "9");
     }

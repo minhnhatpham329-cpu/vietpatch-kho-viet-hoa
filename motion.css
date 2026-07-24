@@ -1,0 +1,409 @@
+:root {
+    --motion-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --motion-ease-soft: cubic-bezier(0.22, 0.74, 0.24, 1);
+    --motion-step: 64ms;
+}
+
+/* Page entrance */
+.main-header {
+    animation: vp-header-enter 680ms var(--motion-ease-out) both;
+}
+
+.main-header .logo-mark {
+    animation: vp-mark-enter 760ms 80ms var(--motion-ease-out) both;
+    transform-origin: 50% 50%;
+}
+
+.main-header .logo-copy,
+.main-header .nav-menu,
+.main-header .header-actions {
+    animation: vp-header-item-enter 620ms var(--motion-ease-out) both;
+}
+
+.main-header .nav-menu {
+    animation-delay: 90ms;
+}
+
+.main-header .header-actions {
+    animation-delay: 150ms;
+}
+
+.tab-content.active {
+    animation: vp-tab-enter 460ms var(--motion-ease-out) both;
+}
+
+/* Scroll choreography. Attributes are attached by motion.js so content remains
+   fully visible if scripting is unavailable. */
+[data-motion] {
+    --motion-delay: calc(var(--motion-order, 0) * var(--motion-step));
+    transition:
+        opacity 720ms var(--motion-ease-out) var(--motion-delay),
+        transform 820ms var(--motion-ease-out) var(--motion-delay),
+        clip-path 900ms var(--motion-ease-out) var(--motion-delay);
+    will-change: opacity, transform;
+}
+
+.motion-ready [data-motion]:not(.motion-in) {
+    opacity: 0;
+}
+
+.motion-ready [data-motion="rise"]:not(.motion-in) {
+    transform: translate3d(0, 34px, 0);
+}
+
+.motion-ready [data-motion="left"]:not(.motion-in) {
+    transform: translate3d(-42px, 0, 0);
+}
+
+.motion-ready [data-motion="right"]:not(.motion-in) {
+    transform: translate3d(42px, 0, 0);
+}
+
+.motion-ready [data-motion="scale"]:not(.motion-in) {
+    transform: translate3d(0, 24px, 0) scale(0.975);
+}
+
+.motion-ready [data-motion="wipe"]:not(.motion-in) {
+    clip-path: inset(0 100% 0 0);
+}
+
+.motion-ready [data-motion].motion-in {
+    opacity: 1;
+    transform: none;
+    clip-path: inset(0 0 0 0);
+}
+
+/* Trailer board */
+.weekly-trailer.motion-in .weekly-trailer-media > img {
+    animation: vp-trailer-drift 12s 240ms ease-out both;
+}
+
+.weekly-trailer-head {
+    position: relative;
+    overflow: hidden;
+}
+
+.weekly-trailer-head::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 1px;
+    background: var(--vermilion);
+    transform: scaleX(0);
+    transform-origin: left center;
+}
+
+.weekly-trailer.motion-in .weekly-trailer-head::after {
+    animation: vp-rule-grow 900ms 220ms var(--motion-ease-out) forwards;
+}
+
+.weekly-trailer-caption > * {
+    opacity: 0;
+    transform: translateY(12px);
+}
+
+.weekly-trailer.motion-in .weekly-trailer-caption > * {
+    animation: vp-copy-enter 580ms var(--motion-ease-out) forwards;
+}
+
+.weekly-trailer.motion-in .weekly-trailer-caption > :nth-child(1) {
+    animation-delay: 230ms;
+}
+
+.weekly-trailer.motion-in .weekly-trailer-caption > :nth-child(2) {
+    animation-delay: 300ms;
+}
+
+.weekly-trailer.motion-in .weekly-trailer-caption > :nth-child(3) {
+    animation-delay: 370ms;
+}
+
+.weekly-trailer-play > i {
+    position: relative;
+    transition: background-color 180ms ease, transform 260ms var(--motion-ease-out);
+}
+
+.weekly-trailer-play > i::after {
+    content: "";
+    position: absolute;
+    inset: 5px;
+    border: 1px solid rgba(255, 255, 255, 0.62);
+    opacity: 0;
+    transform: scale(0.78);
+}
+
+.weekly-trailer-play:hover > i {
+    transform: scale(1.06);
+}
+
+.weekly-trailer-play:hover > i::after {
+    animation: vp-play-ring 900ms var(--motion-ease-out);
+}
+
+/* Living collection */
+.catalog-overview > div {
+    transition: background-color 240ms ease, color 240ms ease;
+}
+
+.catalog-overview > div:hover {
+    color: var(--paper-white);
+    background: var(--ink);
+}
+
+.catalog-overview strong {
+    transition: color 240ms ease, transform 320ms var(--motion-ease-out);
+}
+
+.catalog-overview > div:hover strong {
+    color: var(--vermilion);
+    transform: translateY(-3px);
+}
+
+.game-card.catalog-row {
+    transition:
+        opacity 720ms var(--motion-ease-out) var(--motion-delay, 0ms),
+        transform 820ms var(--motion-ease-out) var(--motion-delay, 0ms),
+        border-color 220ms ease,
+        background-color 220ms ease;
+}
+
+.game-card.catalog-row .card-header-img {
+    isolation: isolate;
+}
+
+.game-card.catalog-row .card-header-img::after {
+    content: "";
+    position: absolute;
+    z-index: 2;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(110deg, transparent 28%, rgba(255, 255, 255, 0.28) 48%, transparent 68%);
+    transform: translateX(-125%);
+}
+
+.game-card.catalog-row:hover .card-header-img::after,
+.game-card.catalog-row:focus-within .card-header-img::after {
+    transform: translateX(125%);
+    transition: transform 760ms var(--motion-ease-soft);
+}
+
+.game-card.catalog-row .catalog-number {
+    transition:
+        color 220ms ease,
+        background-color 220ms ease,
+        transform 340ms var(--motion-ease-out);
+}
+
+.game-card.catalog-row:hover .catalog-number,
+.game-card.catalog-row:focus-within .catalog-number {
+    transform: translate3d(5px, 5px, 0);
+}
+
+.collection-index-note button i,
+.flow-guide-btn i,
+.submit-btn i,
+.community-action i,
+.back-home-btn i {
+    transition: transform 280ms var(--motion-ease-out);
+}
+
+.collection-index-note button:hover i,
+.flow-guide-btn:hover i,
+.submit-btn:hover i,
+.community-action:hover i,
+.back-home-btn:hover i {
+    transform: translateX(6px);
+}
+
+/* Editorial and archive pages */
+.archive-masthead::after {
+    animation: vp-orbit-drift 16s ease-in-out infinite alternate;
+    transform-origin: 50% 50%;
+}
+
+.archive-masthead.motion-in .archive-section-index,
+.archive-masthead.motion-in h1,
+.archive-masthead.motion-in .archive-masthead-copy p,
+.archive-masthead.motion-in .archive-metrics {
+    animation: vp-copy-enter 650ms var(--motion-ease-out) both;
+}
+
+.archive-masthead.motion-in h1 {
+    animation-delay: 70ms;
+}
+
+.archive-masthead.motion-in .archive-masthead-copy p {
+    animation-delay: 140ms;
+}
+
+.archive-masthead.motion-in .archive-metrics {
+    animation-delay: 210ms;
+}
+
+.install-flow-grid article,
+.request-form-card,
+.request-list-area,
+.progress-card,
+.request-item,
+.library-empty,
+.library-grid > * {
+    backface-visibility: hidden;
+}
+
+.motion-ready [data-motion] .motion-bar {
+    width: 0 !important;
+}
+
+.motion-ready [data-motion].motion-in .motion-bar {
+    width: var(--motion-bar-target) !important;
+    transition: width 1100ms var(--motion-ease-out) calc(var(--motion-delay, 0ms) + 180ms);
+}
+
+/* Focus states retain the same responsive feel as hover. */
+button:active,
+.game-card.catalog-row:active {
+    transition-duration: 80ms !important;
+    transform: translateY(1px);
+}
+
+@keyframes vp-header-enter {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes vp-mark-enter {
+    from {
+        opacity: 0;
+        transform: rotate(-12deg) scale(0.72);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes vp-header-item-enter {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes vp-tab-enter {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes vp-copy-enter {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes vp-trailer-drift {
+    from {
+        transform: scale(1.055) translate3d(-0.7%, -0.5%, 0);
+        filter: saturate(0.78) contrast(1.08);
+    }
+    to {
+        transform: scale(1.015) translate3d(0, 0, 0);
+        filter: saturate(0.94) contrast(1.04);
+    }
+}
+
+@keyframes vp-rule-grow {
+    to {
+        transform: scaleX(1);
+    }
+}
+
+@keyframes vp-play-ring {
+    0% {
+        opacity: 0;
+        transform: scale(0.78);
+    }
+    35% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        transform: scale(1.5);
+    }
+}
+
+@keyframes vp-orbit-drift {
+    from {
+        transform: rotate(-4deg) translate3d(0, -5px, 0);
+    }
+    to {
+        transform: rotate(5deg) translate3d(-10px, 8px, 0);
+    }
+}
+
+@media (max-width: 760px) {
+    :root {
+        --motion-step: 38ms;
+    }
+
+    [data-motion] {
+        transition-duration: 560ms;
+    }
+
+    .motion-ready [data-motion="left"]:not(.motion-in),
+    .motion-ready [data-motion="right"]:not(.motion-in) {
+        transform: translate3d(0, 24px, 0);
+    }
+
+    .archive-masthead::after {
+        animation-duration: 20s;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .main-header,
+    .main-header .logo-mark,
+    .main-header .logo-copy,
+    .main-header .nav-menu,
+    .main-header .header-actions,
+    .tab-content.active,
+    .weekly-trailer.motion-in .weekly-trailer-media > img,
+    .archive-masthead::after {
+        animation: none !important;
+    }
+
+    [data-motion],
+    .motion-ready [data-motion]:not(.motion-in),
+    .weekly-trailer-caption > * {
+        opacity: 1 !important;
+        transform: none !important;
+        clip-path: none !important;
+        transition: none !important;
+    }
+
+    .motion-ready [data-motion] .motion-bar {
+        width: var(--motion-bar-target) !important;
+    }
+}

@@ -112,6 +112,23 @@ const SCHEMA_STATEMENTS = [
         attempts INTEGER NOT NULL DEFAULT 0,
         window_started_at INTEGER NOT NULL,
         blocked_until INTEGER NOT NULL DEFAULT 0
+    )`,
+    `CREATE TABLE IF NOT EXISTS vietpatch_oauth_identities (
+        provider TEXT NOT NULL,
+        provider_user_id TEXT NOT NULL,
+        user_id TEXT NOT NULL,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL,
+        PRIMARY KEY (provider, provider_user_id),
+        UNIQUE (provider, user_id)
+    )`,
+    `CREATE INDEX IF NOT EXISTS vietpatch_oauth_user_idx
+        ON vietpatch_oauth_identities (user_id)`,
+    `CREATE TABLE IF NOT EXISTS vietpatch_rate_limits (
+        rate_key TEXT PRIMARY KEY,
+        attempts INTEGER NOT NULL DEFAULT 0,
+        window_started_at INTEGER NOT NULL,
+        blocked_until INTEGER NOT NULL DEFAULT 0
     )`
 ];
 

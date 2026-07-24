@@ -11,20 +11,20 @@
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <meta name="referrer" content="strict-origin-when-cross-origin">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; form-action 'self'; script-src 'self' 'sha256-YEu8GwWdF4CDeFCLktdzc0N7ooqeUWN7NuW/xtDzamg=' https://www.youtube.com; script-src-attr 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' data: https://cdnjs.cloudflare.com https://fonts.gstatic.com; img-src 'self' data: blob: https:; frame-src https://www.youtube.com https://www.youtube-nocookie.com; connect-src 'self'; media-src 'self' blob:; worker-src 'self' blob:; upgrade-insecure-requests">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; form-action 'self'; script-src 'self' 'sha256-YEu8GwWdF4CDeFCLktdzc0N7ooqeUWN7NuW/xtDzamg=' https://www.youtube.com https://challenges.cloudflare.com; script-src-attr 'none'; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' data: https://cdnjs.cloudflare.com https://fonts.gstatic.com; img-src 'self' data: blob: https:; frame-src https://www.youtube.com https://www.youtube-nocookie.com https://challenges.cloudflare.com; connect-src 'self' https://challenges.cloudflare.com; media-src 'self' blob:; worker-src 'self' blob:; upgrade-insecure-requests">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="vi_VN">
     <meta property="og:site_name" content="VietPatch">
     <meta property="og:title" content="VietPatch | Kho bản Việt hóa game">
     <meta property="og:description" content="Kho bản Việt hóa game PC có thông tin phiên bản, tiến độ và trạng thái kiểm thử rõ ràng.">
     <meta property="og:url" content="https://vietpatch.online/">
-    <meta property="og:image" content="https://minhnhatpham329-cpu.github.io/vietpatch-kho-viet-hoa/assets/images/og.png">
+    <meta property="og:image" content="__SITE_ORIGIN__/assets/images/og.png">
     <meta property="og:image:width" content="1680">
     <meta property="og:image:height" content="935">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="VietPatch | Kho bản Việt hóa game">
     <meta name="twitter:description" content="Kho bản Việt hóa game PC có thông tin phiên bản, tiến độ và trạng thái kiểm thử rõ ràng.">
-    <meta name="twitter:image" content="https://minhnhatpham329-cpu.github.io/vietpatch-kho-viet-hoa/assets/images/og.png">
+    <meta name="twitter:image" content="__SITE_ORIGIN__/assets/images/og.png">
     <title>VietPatch – Kho bản Việt hóa game PC đã kiểm thử</title>
     <link rel="canonical" href="https://vietpatch.online/">
     <link rel="alternate" hreflang="vi-VN" href="https://vietpatch.online/">
@@ -44,8 +44,8 @@
     
     <!-- Custom CSS -->
     <link rel="stylesheet" href="style.css?v=20260626-securepay2">
-    <link rel="stylesheet" href="redesign.css?v=20260724-v7">
-    <link rel="stylesheet" href="collection.css?v=20260724-v2">
+    <link rel="stylesheet" href="redesign.css?v=20260724-auth1">
+    <link rel="stylesheet" href="collection.css?v=20260724-auth1">
     <link rel="stylesheet" href="motion.css?v=20260724-v1">
 </head>
 <body>
@@ -85,7 +85,7 @@
 
                 <div class="user-session" id="user-profile-widget" role="button" tabindex="0" aria-label="Mở trình đơn tài khoản">
                     <div class="avatar">
-                        <img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=VietPatch" alt="" id="user-avatar">
+                        <span id="user-avatar" aria-hidden="true">VP</span>
                     </div>
                     <div class="user-info">
                         <span class="username" id="display-username">Khách</span>
@@ -433,7 +433,7 @@
                 <div class="cta-callout-content">
                     <h2>Kho bản Việt hóa</h2>
                     <p>Tra cứu hồ sơ patch theo game và phiên bản.</p>
-                    <button class="btn-cream-inverse" onclick="document.querySelector('.catalog-section').scrollIntoView({behavior: 'smooth'})">
+                    <button class="btn-cream-inverse" id="open-catalog-index-btn" type="button">
                         <i class="fa-solid fa-gamepad"></i> Mở chỉ mục patch
                     </button>
                 </div>
@@ -644,25 +644,25 @@
                 
                 <div class="team-grid">
                     <div class="team-card">
-                        <img src="https://api.dicebear.com/7.x/notionists/svg?seed=Admin" alt="Avatar" class="team-avatar">
+                        <span class="team-avatar" aria-hidden="true">KE</span>
                         <div class="team-name">Kenshi</div>
                         <div class="team-role">Founder / Lead Tech</div>
                         <p style="margin-top: 1rem; font-size: 0.85rem; color: var(--text-secondary);">Chuyên gia giải mã Unreal Engine & Unity. Đứng sau công cụ trích xuất text.</p>
                     </div>
                     <div class="team-card">
-                        <img src="https://api.dicebear.com/7.x/notionists/svg?seed=Translator" alt="Avatar" class="team-avatar">
+                        <span class="team-avatar" aria-hidden="true">MI</span>
                         <div class="team-name">Mizuki</div>
                         <div class="team-role">Head Translator</div>
                         <p style="margin-top: 1rem; font-size: 0.85rem; color: var(--text-secondary);">Biên tập viên chính, đảm bảo văn phong tự nhiên, đậm chất điện ảnh.</p>
                     </div>
                     <div class="team-card">
-                        <img src="https://api.dicebear.com/7.x/notionists/svg?seed=QA" alt="Avatar" class="team-avatar">
+                        <span class="team-avatar" aria-hidden="true">ZE</span>
                         <div class="team-name">Zero</div>
                         <div class="team-role">QA & Tester</div>
                         <p style="margin-top: 1rem; font-size: 0.85rem; color: var(--text-secondary);">Kiểm thử hàng trăm giờ in-game để đảm bảo không lỗi tràn chữ.</p>
                     </div>
                     <div class="team-card">
-                        <img src="https://api.dicebear.com/7.x/notionists/svg?seed=Community" alt="Avatar" class="team-avatar">
+                        <span class="team-avatar" aria-hidden="true">LU</span>
                         <div class="team-name">Luna</div>
                         <div class="team-role">Community Mgr</div>
                         <p style="margin-top: 1rem; font-size: 0.85rem; color: var(--text-secondary);">Quản lý cộng đồng Discord, ghi nhận và xử lý yêu cầu game.</p>
@@ -810,6 +810,15 @@
                     <h3>Truy cập bộ sưu tập</h3>
                 </header>
 
+                <button class="google-auth-btn" id="google-auth-btn" type="button" hidden>
+                    <i class="fa-brands fa-google" aria-hidden="true"></i>
+                    <span>Tiếp tục với Google</span>
+                    <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                </button>
+                <div class="auth-divider" id="auth-divider" hidden>
+                    <span>hoặc dùng email</span>
+                </div>
+
                 <div class="auth-tabs" role="tablist" aria-label="Tài khoản">
                     <button class="auth-tab-btn active" id="tab-login-btn" type="button">Đăng nhập</button>
                     <button class="auth-tab-btn" id="tab-register-btn" type="button">Tạo tài khoản</button>
@@ -829,6 +838,7 @@
                         <label for="login-pass">Mật khẩu</label>
                         <input type="password" id="login-pass" required minlength="8" autocomplete="current-password" placeholder="Nhập mật khẩu">
                     </div>
+                    <div class="turnstile-slot" id="login-turnstile" hidden aria-label="Xác minh người dùng"></div>
                     <button type="submit" class="auth-submit-btn">Đăng nhập <i class="fa-solid fa-arrow-right"></i></button>
                     <p class="auth-tip">Tài khoản chỉ dùng để đồng bộ bộ sưu tập và giao dịch của bạn.</p>
                 </form>
@@ -847,8 +857,9 @@
                         <label for="reg-pass">Mật khẩu</label>
                         <input type="password" id="reg-pass" required minlength="8" autocomplete="new-password" placeholder="Tối thiểu 8 ký tự">
                     </div>
+                    <div class="turnstile-slot" id="register-turnstile" hidden aria-label="Xác minh người dùng"></div>
                     <button type="submit" class="auth-submit-btn">Tạo tài khoản <i class="fa-solid fa-arrow-right"></i></button>
-                    <p class="auth-tip">Bằng việc đăng ký, bạn đồng ý sử dụng tài khoản cho các chức năng của VietPatch.</p>
+                    <p class="auth-tip">Email chỉ dùng để xác minh tài khoản, khôi phục quyền truy cập và bảo vệ giao dịch.</p>
                 </form>
             </section>
         </div>
@@ -973,7 +984,7 @@
     <!-- Custom App Script -->
     <script src="cms-public-seed.js?v=20260724-secure1"></script>
     <script src="cms-shared.js?v=20260626-accountpay1"></script>
-    <script src="app.js?v=20260724-v7"></script>
+    <script src="app.js?v=20260724-auth1"></script>
     <script src="motion.js?v=20260724-v1"></script>
 </body>
 </html>

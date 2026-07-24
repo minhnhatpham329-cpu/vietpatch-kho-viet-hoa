@@ -1244,6 +1244,55 @@ textarea {
     line-height: 1.1;
 }
 
+.google-auth-btn {
+    width: 100%;
+    min-height: 50px;
+    padding: 0 15px;
+    display: grid;
+    grid-template-columns: 22px 1fr 22px;
+    align-items: center;
+    gap: 10px;
+    color: var(--ink);
+    background: var(--paper-white);
+    border: 1px solid var(--ink);
+    border-radius: 0;
+    font-size: 0.68rem;
+    font-weight: 800;
+    text-align: left;
+}
+
+.google-auth-btn:hover {
+    color: var(--paper-white);
+    background: var(--ink);
+}
+
+.google-auth-btn .fa-google {
+    color: var(--vermilion);
+}
+
+.google-auth-btn .fa-arrow-right {
+    justify-self: end;
+}
+
+.auth-divider {
+    margin: 18px 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 0.54rem;
+    text-transform: uppercase;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+    height: 1px;
+    flex: 1;
+    content: "";
+    background: var(--rule);
+}
+
 .auth-tabs {
     margin-bottom: 26px;
     display: grid;
@@ -1342,6 +1391,16 @@ textarea {
 .auth-submit-btn:disabled {
     opacity: 0.62;
     cursor: wait;
+}
+
+.turnstile-slot {
+    min-height: 65px;
+    margin: 4px 0 14px;
+    overflow: hidden;
+}
+
+.turnstile-slot iframe {
+    max-width: 100%;
 }
 
 .auth-tip {

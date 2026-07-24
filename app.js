@@ -513,12 +513,19 @@ let activeHeroSlide = 0;
 let heroRotationInterval = null;
 let detailReturnFocus = null;
 let accountServiceAvailable = null;
+let authSecurityConfig = {
+    googleEnabled: false,
+    turnstile: { enabled: false, siteKey: "" }
+};
+let turnstileScriptPromise = null;
+const turnstileWidgets = { login: null, register: null };
+const turnstileTokens = { login: "", register: "" };
 
-// User Profile System (server-backed with local cache)
+// User Profile System (server-backed, sensitive state stays in memory only)
 let userState = {
     loggedIn: false,
     username: "Khách",
-    email: "member@vietpatch.com",
+    email: "",
     balance: 0,
     ownedGames: [],
     joinedAt: new Date().toISOString(),
@@ -1270,6 +1277,10 @@ async function apiRequest(path, options = {}) {
             ORDER_NOT_FOUND: "Không tìm thấy đơn thanh toán này.",
             PATCH_UNAVAILABLE: "Bản Việt hóa chưa sẵn sàng để tải.",
             PAYMENT_NOT_CONFIGURED: "Thanh toán VietQR chưa được cấu hình trên máy chủ.",
+            HUMAN_VERIFICATION_FAILED: "Xác minh chống bot không hợp lệ. Vui lòng thử lại.",
+            HUMAN_VERIFICATION_REQUIRED: "Vui lòng hoàn tất bước xác minh chống bot.",
+            HUMAN_VERIFICATION_UNAVAILABLE: "Dịch vụ xác minh đang tạm gián đoạn. Vui lòng thử lại.",
+            TOO_MANY_REQUESTS: "Thiết bị này gửi quá nhiều yêu cầu. Vui lòng thử lại sau.",
             TOO_MANY_LOGIN_ATTEMPTS: "Bạn đã thử đăng nhập quá nhiều lần. Hãy chờ 15 phút.",
             USE_FREE_UNLOCK: "Bản Việt hóa này đang miễn phí, hãy thêm thẳng vào thư viện."
         };
@@ -1291,7 +1302,7 @@ function applyServerUser(serverUser) {
     userState = {
         loggedIn: Boolean(serverUser.loggedIn),
         username: serverUser.username || "Gamer",
-        email: serverUser.email || "member@vietpatch.com",
+        email: serverUser.email || "",
         balance: Number(serverUser.balance) || 0,
         ownedGames: Array.isArray(serverUser.ownedGames) ? [...new Set(serverUser.ownedGames)] : [],
         joinedAt: serverUser.joinedAt || new Date().toISOString(),
@@ -1303,6 +1314,8 @@ function applyServerUser(serverUser) {
 
 function clearAuthenticatedUserCache() {
     userState.loggedIn = false;
+    userState.username = "Khách";
+    userState.email = "";
     userState.balance = 0;
     userState.ownedGames = [];
     userState.transactionHistory = [];
@@ -1344,17 +1357,16 @@ function updateAuthServiceNotice() {
 }
 
 function loadUserState() {
-    const saved = localStorage.getItem("vietpatch_user");
-    if (saved) {
-        try {
-            userState = JSON.parse(saved);
-        } catch (e) {
-            console.error("Failed to parse user state, loading defaults.");
-        }
-    } else {
-        saveUserState();
-    }
-
+    localStorage.removeItem("vietpatch_user");
+    userState = {
+        loggedIn: false,
+        username: "Khách",
+        email: "",
+        balance: 0,
+        ownedGames: [],
+        joinedAt: new Date().toISOString(),
+        transactionHistory: []
+    };
     normalizeUserState();
     
     loadCommunityRequests();
@@ -1362,13 +1374,13 @@ function loadUserState() {
 
 function saveUserState() {
     normalizeUserState();
-    localStorage.setItem("vietpatch_user", JSON.stringify(userState));
+    localStorage.removeItem("vietpatch_user");
 }
 
 function normalizeUserState() {
     userState.loggedIn = Boolean(userState.loggedIn);
     userState.username = userState.username || "Khách";
-    userState.email = userState.email || "member@vietpatch.com";
+    userState.email = userState.email || "";
     userState.balance = Number(userState.balance) || 0;
     userState.ownedGames = Array.isArray(userState.ownedGames) ? [...new Set(userState.ownedGames)] : [];
     userState.joinedAt = userState.joinedAt || new Date().toISOString();
@@ -1428,7 +1440,7 @@ function updateUIForUserSession() {
     if (userState.loggedIn) {
         displayUsername.textContent = userState.username;
         displayBalance.textContent = formatCurrency(userState.balance);
-        userAvatar.src = `https://api.dicebear.com/7.x/pixel-art/svg?seed=${userState.username}`;
+        userAvatar.textContent = String(userState.username || "VP").trim().slice(0, 2).toUpperCase();
         
         ddUsername.textContent = userState.username;
         ddEmail.textContent = userState.email;
@@ -1437,7 +1449,7 @@ function updateUIForUserSession() {
     } else {
         displayUsername.textContent = "Đăng nhập";
         displayBalance.textContent = "Khách";
-        userAvatar.src = "https://api.dicebear.com/7.x/pixel-art/svg?seed=guest";
+        userAvatar.textContent = "VP";
         
         ddUsername.textContent = "Tài khoản khách";
         ddEmail.textContent = "Đăng nhập để giao dịch";
@@ -1942,7 +1954,7 @@ function getSteamImage(game, variant = "header") {
 }
 
 function getFallbackGameImage(game) {
-    return `https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(game?.title || "VietPatch")}`;
+    return "assets/brand/vietpatch-mark.png";
 }
 
 function getGameCoverImage(game) {
@@ -2059,7 +2071,7 @@ function renderUserProfile() {
         <div class="profile-layout">
             <section class="profile-id-card">
                 <div class="profile-avatar-frame">
-                    <img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=${encodeURIComponent(userState.username)}" alt="Avatar ${escapeHtml(userState.username)}">
+                    <span aria-hidden="true">${escapeHtml(String(userState.username || "VP").slice(0, 2).toUpperCase())}</span>
                 </div>
                 <div class="profile-id-main">
                     <span class="profile-kicker">MEMBER DOSSIER</span>
@@ -2601,13 +2613,123 @@ function closeDepositModal() {
 function openAuthModal() {
     updateAuthServiceNotice();
     document.getElementById("auth-modal").classList.add("active");
+    void ensureTurnstileWidget(activeAuthMode());
 }
 
 function closeAuthModal() {
     document.getElementById("auth-modal").classList.remove("active");
 }
 
-async function handleLogin(email, password) {
+function loadTurnstileScript() {
+    if (window.turnstile) return Promise.resolve(window.turnstile);
+    if (turnstileScriptPromise) return turnstileScriptPromise;
+    turnstileScriptPromise = new Promise((resolve, reject) => {
+        const script = document.createElement("script");
+        script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
+        script.async = true;
+        script.defer = true;
+        script.onload = () => resolve(window.turnstile);
+        script.onerror = () => reject(new Error("TURNSTILE_SCRIPT_FAILED"));
+        document.head.appendChild(script);
+    });
+    return turnstileScriptPromise;
+}
+
+async function initializeAuthSecurity() {
+    try {
+        const config = await apiRequest("/api/vietpatch/auth/config");
+        authSecurityConfig = {
+            googleEnabled: Boolean(config.googleEnabled),
+            turnstile: {
+                enabled: Boolean(config.turnstile?.enabled),
+                siteKey: String(config.turnstile?.siteKey || "")
+            }
+        };
+    } catch {
+        authSecurityConfig = {
+            googleEnabled: false,
+            turnstile: { enabled: false, siteKey: "" }
+        };
+    }
+
+    const googleButton = document.getElementById("google-auth-btn");
+    const divider = document.getElementById("auth-divider");
+    if (googleButton) googleButton.hidden = !authSecurityConfig.googleEnabled;
+    if (divider) divider.hidden = !authSecurityConfig.googleEnabled;
+
+    if (authSecurityConfig.turnstile.enabled) {
+        try {
+            await loadTurnstileScript();
+            if (document.getElementById("auth-modal")?.classList.contains("active")) {
+                await ensureTurnstileWidget(activeAuthMode());
+            }
+        } catch {
+            showToast("Không tải được lớp xác minh chống bot. Vui lòng tải lại trang.", "error");
+        }
+    }
+}
+
+function activeAuthMode() {
+    return document.getElementById("register-form")?.classList.contains("active")
+        ? "register"
+        : "login";
+}
+
+async function ensureTurnstileWidget(mode = activeAuthMode()) {
+    if (!authSecurityConfig.turnstile.enabled) return;
+    const turnstile = await loadTurnstileScript();
+    const container = document.getElementById(`${mode}-turnstile`);
+    if (!container || !turnstile) return;
+    container.hidden = false;
+    if (turnstileWidgets[mode] !== null) return;
+    turnstileWidgets[mode] = turnstile.render(container, {
+        sitekey: authSecurityConfig.turnstile.siteKey,
+        action: mode,
+        theme: "light",
+        size: "flexible",
+        appearance: "interaction-only",
+        callback: token => {
+            turnstileTokens[mode] = String(token || "");
+        },
+        "expired-callback": () => {
+            turnstileTokens[mode] = "";
+        },
+        "error-callback": () => {
+            turnstileTokens[mode] = "";
+            return true;
+        }
+    });
+}
+
+function currentTurnstileToken(mode) {
+    if (!authSecurityConfig.turnstile.enabled) return "";
+    if (turnstileTokens[mode]) return turnstileTokens[mode];
+    const widgetId = turnstileWidgets[mode];
+    return widgetId !== null && window.turnstile
+        ? String(window.turnstile.getResponse(widgetId) || "")
+        : "";
+}
+
+function resetTurnstile(mode) {
+    turnstileTokens[mode] = "";
+    const widgetId = turnstileWidgets[mode];
+    if (widgetId !== null && window.turnstile) window.turnstile.reset(widgetId);
+}
+
+function handleGoogleAuthResult() {
+    const url = new URL(window.location.href);
+    const result = url.searchParams.get("auth");
+    if (!result) return;
+    url.searchParams.delete("auth");
+    history.replaceState({}, "", `${url.pathname}${url.search}${url.hash}`);
+    if (result === "google-success") {
+        showToast("Đã đăng nhập an toàn bằng Google.", "success");
+    } else if (result === "google-error") {
+        showToast("Không thể xác minh tài khoản Google. Vui lòng thử lại.", "error");
+    }
+}
+
+async function handleLogin(email, password, turnstileToken = "") {
     const submitButton = document.querySelector("#login-form .auth-submit-btn");
     if (submitButton) {
         submitButton.disabled = true;
@@ -2616,7 +2738,7 @@ async function handleLogin(email, password) {
     try {
         const payload = await apiRequest("/api/vietpatch/auth/login", {
             method: "POST",
-            body: { email, password }
+            body: { email, password, turnstileToken }
         });
         applyServerUser(payload.user);
         updateUIForUserSession();
@@ -2628,6 +2750,7 @@ async function handleLogin(email, password) {
     } catch (error) {
         showToast(error.status === 401 ? "Email hoặc mật khẩu không đúng." : (error.message || "Không đăng nhập được."), "error");
     } finally {
+        resetTurnstile("login");
         if (submitButton) {
             submitButton.disabled = false;
             submitButton.innerHTML = `Đăng nhập <i class="fa-solid fa-arrow-right"></i>`;
@@ -2635,7 +2758,7 @@ async function handleLogin(email, password) {
     }
 }
 
-async function handleRegister(username, email, password) {
+async function handleRegister(username, email, password, turnstileToken = "") {
     const submitButton = document.querySelector("#register-form .auth-submit-btn");
     if (submitButton) {
         submitButton.disabled = true;
@@ -2644,7 +2767,7 @@ async function handleRegister(username, email, password) {
     try {
         const payload = await apiRequest("/api/vietpatch/auth/register", {
             method: "POST",
-            body: { username, email, password }
+            body: { username, email, password, turnstileToken }
         });
         applyServerUser(payload.user);
         updateUIForUserSession();
@@ -2661,6 +2784,7 @@ async function handleRegister(username, email, password) {
         }[error.code || error.message] || error.message || "Không tạo được tài khoản.";
         showToast(message, "error");
     } finally {
+        resetTurnstile("register");
         if (submitButton) {
             submitButton.disabled = false;
             submitButton.innerHTML = `Tạo tài khoản <i class="fa-solid fa-arrow-right"></i>`;
@@ -2673,6 +2797,8 @@ async function handleLogout() {
         await apiRequest("/api/vietpatch/auth/logout", { method: "POST" });
     } catch {}
     userState.loggedIn = false;
+    userState.username = "Khách";
+    userState.email = "";
     userState.balance = 0;
     userState.ownedGames = [];
     userState.transactionHistory = [];
@@ -2992,11 +3118,13 @@ function initHotTrailerBanner() {
 // ==========================================================================
 document.addEventListener("DOMContentLoaded", async () => {
     const cmsReady = initializeCmsContent();
+    const authSecurityReady = initializeAuthSecurity();
 
     // 1. Load User Session
     loadUserState();
     updateUIForUserSession();
-    refreshUserFromServer({ silent: true });
+    const userRefresh = refreshUserFromServer({ silent: true });
+    Promise.allSettled([authSecurityReady, userRefresh]).then(handleGoogleAuthResult);
 
     // 2. Render Initial views
     renderGamesGrid();
@@ -3013,6 +3141,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     
     // 3. Tab switching listeners
+    document.getElementById("open-catalog-index-btn")?.addEventListener("click", () => {
+        document.querySelector(".catalog-section")?.scrollIntoView({ behavior: "smooth" });
+    });
+
     document.querySelectorAll("[data-tab]").forEach(el => {
         el.addEventListener("click", (e) => {
             e.preventDefault();
@@ -3228,6 +3360,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         tabRegisterBtn.classList.remove("active");
         loginForm.classList.add("active");
         registerForm.classList.remove("active");
+        void ensureTurnstileWidget("login");
     });
     
     tabRegisterBtn.addEventListener("click", () => {
@@ -3235,6 +3368,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         tabLoginBtn.classList.remove("active");
         registerForm.classList.add("active");
         loginForm.classList.remove("active");
+        void ensureTurnstileWidget("register");
+    });
+
+    document.getElementById("google-auth-btn")?.addEventListener("click", () => {
+        window.location.assign("/api/vietpatch/auth/google-start?returnTo=%2F");
     });
     
     // Login form submission
@@ -3242,7 +3380,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         e.preventDefault();
         const email = document.getElementById("login-email").value;
         const pass = document.getElementById("login-pass").value;
-        await handleLogin(email, pass);
+        const turnstileToken = currentTurnstileToken("login");
+        if (authSecurityConfig.turnstile.enabled && !turnstileToken) {
+            showToast("Vui lòng hoàn tất bước xác minh chống bot.", "error");
+            await ensureTurnstileWidget("login");
+            return;
+        }
+        await handleLogin(email, pass, turnstileToken);
     });
     
     // Register form submission
@@ -3251,7 +3395,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         const username = document.getElementById("reg-username").value;
         const email = document.getElementById("reg-email").value;
         const pass = document.getElementById("reg-pass").value;
-        await handleRegister(username, email, pass);
+        const turnstileToken = currentTurnstileToken("register");
+        if (authSecurityConfig.turnstile.enabled && !turnstileToken) {
+            showToast("Vui lòng hoàn tất bước xác minh chống bot.", "error");
+            await ensureTurnstileWidget("register");
+            return;
+        }
+        await handleRegister(username, email, pass, turnstileToken);
     });
     
     // 11. Deposit Modal Triggers

@@ -6,6 +6,7 @@ import {
     recordAuthFailure,
     userSessionCookie
 } from "../../../_lib/user-auth.js";
+import { assertHuman } from "../../../_lib/bot-protection.js";
 import { publicAccount, verifyAccountLogin } from "../../../_lib/vietpatch-store.js";
 import { assertSameOrigin, errorResponse, httpError, json, readJson } from "../../../_lib/http.js";
 
@@ -16,6 +17,7 @@ export async function onRequestPost(context) {
         const body = await readJson(context.request, 32 * 1024);
         const email = normalizeEmail(body.email);
         identityHash = await assertAuthAllowed(context.request, context.env, email);
+        await assertHuman(context.request, context.env, body.turnstileToken, "login");
         const account = await verifyAccountLogin(context.env, email, body.password);
         if (!account) {
             await recordAuthFailure(context.env, identityHash);

@@ -1030,8 +1030,14 @@ img {
     width: 92px;
     height: 92px;
     margin: 0 auto 1rem;
+    display: grid;
+    place-items: center;
+    color: var(--paper-white);
+    background: var(--ink);
     border-radius: 50%;
-    object-fit: cover;
+    font-family: var(--mono);
+    font-weight: 900;
+    letter-spacing: 0.08em;
 }
 
 .about-hero {
@@ -2822,10 +2828,25 @@ body::selection {
     box-shadow: 4px 4px 0 var(--zine-ink);
 }
 
-.profile-avatar-frame img {
+.profile-avatar-frame img,
+.profile-avatar-frame span {
     width: 88%;
     height: 88%;
+}
+
+.profile-avatar-frame img {
     object-fit: contain;
+}
+
+.profile-avatar-frame span {
+    display: grid;
+    place-items: center;
+    color: var(--paper-white);
+    background: linear-gradient(145deg, var(--vermilion), #8d2018);
+    font-family: var(--mono);
+    font-size: 1.15rem;
+    font-weight: 900;
+    letter-spacing: 0.06em;
 }
 
 .profile-id-main {

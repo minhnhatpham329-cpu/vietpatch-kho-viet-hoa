@@ -336,10 +336,21 @@ img {
     border-radius: 0;
 }
 
-.user-session .avatar img {
+.user-session .avatar img,
+.user-session .avatar span {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+}
+
+.user-session .avatar span {
+    display: grid;
+    place-items: center;
+    color: var(--paper-white);
+    background: linear-gradient(145deg, var(--vermilion), #8d2018);
+    font-family: var(--mono);
+    font-size: 0.58rem;
+    font-weight: 900;
+    letter-spacing: 0.04em;
 }
 
 .user-session .user-info {

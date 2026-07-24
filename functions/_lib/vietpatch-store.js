@@ -178,6 +178,94 @@ export async function verifyAccountLogin(env, emailValue, passwordValue) {
     return getAccountById(env, row.id);
 }
 
+export async function getOrCreateGoogleAccount(env, profile) {
+    await ensureSchema(env);
+    const providerUserId = String(profile?.sub || "").trim();
+    const email = normalizeEmail(profile?.email);
+    const username = normalizeUsername(profile?.name || email.split("@")[0] || "Gamer");
+    if (
+        profile?.emailVerified !== true
+        || !/^[A-Za-z0-9_-]{3,255}$/.test(providerUserId)
+        || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+        || email.length > 254
+        || username.length < 2
+    ) {
+        throw httpError(403, "GOOGLE_IDENTITY_NOT_VERIFIED");
+    }
+
+    const identity = await env.DB.prepare(
+        `SELECT user_id FROM vietpatch_oauth_identities
+         WHERE provider = 'google' AND provider_user_id = ?`
+    ).bind(providerUserId).first();
+    if (identity?.user_id) {
+        await env.DB.prepare(
+            `UPDATE vietpatch_oauth_identities SET updated_at = ?
+             WHERE provider = 'google' AND provider_user_id = ?`
+        ).bind(nowIso(), providerUserId).run();
+        return getAccountById(env, identity.user_id);
+    }
+
+    const existing = await env.DB.prepare(
+        "SELECT id FROM vietpatch_users WHERE email = ? COLLATE NOCASE"
+    ).bind(email).first();
+    const createdAt = nowIso();
+    if (existing?.id) {
+        try {
+            await env.DB.prepare(
+                `INSERT INTO vietpatch_oauth_identities
+                    (provider, provider_user_id, user_id, created_at, updated_at)
+                 VALUES ('google', ?, ?, ?, ?)`
+            ).bind(providerUserId, existing.id, createdAt, createdAt).run();
+        } catch (error) {
+            if (!isUniqueError(error)) throw error;
+            const linked = await env.DB.prepare(
+                `SELECT user_id FROM vietpatch_oauth_identities
+                 WHERE provider = 'google' AND provider_user_id = ?`
+            ).bind(providerUserId).first();
+            if (linked?.user_id) return getAccountById(env, linked.user_id);
+            throw httpError(409, "GOOGLE_ACCOUNT_ALREADY_LINKED");
+        }
+        return getAccountById(env, existing.id);
+    }
+
+    const userId = randomId("usr");
+    const disabledPasswordHash = `oauth$google$${randomHex(32)}`;
+    try {
+        await env.DB.batch([
+            env.DB.prepare(
+                `INSERT INTO vietpatch_users
+                    (id, email, username, password_hash, balance, created_at, updated_at)
+                 VALUES (?, ?, ?, ?, 0, ?, ?)`
+            ).bind(
+                userId,
+                email,
+                username,
+                disabledPasswordHash,
+                createdAt,
+                createdAt
+            ),
+            env.DB.prepare(
+                `INSERT INTO vietpatch_oauth_identities
+                    (provider, provider_user_id, user_id, created_at, updated_at)
+                 VALUES ('google', ?, ?, ?, ?)`
+            ).bind(providerUserId, userId, createdAt, createdAt)
+        ]);
+    } catch (error) {
+        if (!isUniqueError(error)) throw error;
+        const linked = await env.DB.prepare(
+            `SELECT user_id FROM vietpatch_oauth_identities
+             WHERE provider = 'google' AND provider_user_id = ?`
+        ).bind(providerUserId).first();
+        if (linked?.user_id) return getAccountById(env, linked.user_id);
+        const emailOwner = await env.DB.prepare(
+            "SELECT id FROM vietpatch_users WHERE email = ? COLLATE NOCASE"
+        ).bind(email).first();
+        if (emailOwner?.id) return getAccountById(env, emailOwner.id);
+        throw error;
+    }
+    return getAccountById(env, userId);
+}
+
 export async function hasEntitlement(env, userId, gameId) {
     await ensureSchema(env);
     const row = await env.DB.prepare(

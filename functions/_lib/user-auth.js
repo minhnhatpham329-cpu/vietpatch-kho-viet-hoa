@@ -217,3 +217,50 @@ export async function clearAuthFailures(env, identityHash) {
     await env.DB.prepare("DELETE FROM vietpatch_auth_attempts WHERE identity_hash = ?")
         .bind(identityHash).run();
 }
+
+export async function consumeRateLimit(request, env, {
+    scope,
+    identity = "",
+    limit = 10,
+    windowMs = 15 * 60 * 1000,
+    blockMs = windowMs
+}) {
+    await ensureSchema(env);
+    const safeScope = String(scope || "request").slice(0, 60);
+    const safeIdentity = String(identity || "").slice(0, 180);
+    const rateKey = await checksum(
+        `vietpatch-rate|${safeScope}|${safeIdentity}|${clientFingerprint(request)}`
+    );
+    const now = Date.now();
+    const row = await env.DB.prepare(
+        `SELECT attempts, window_started_at, blocked_until
+         FROM vietpatch_rate_limits WHERE rate_key = ?`
+    ).bind(rateKey).first();
+
+    if (Number(row?.blocked_until) > now) {
+        const error = httpError(429, "TOO_MANY_REQUESTS");
+        error.retryAfter = Math.ceil((Number(row.blocked_until) - now) / 1000);
+        throw error;
+    }
+
+    const sameWindow = row && now - Number(row.window_started_at) <= windowMs;
+    const attempts = sameWindow ? Number(row.attempts) + 1 : 1;
+    const windowStartedAt = sameWindow ? Number(row.window_started_at) : now;
+    const blockedUntil = attempts > limit ? now + blockMs : 0;
+
+    await env.DB.prepare(
+        `INSERT INTO vietpatch_rate_limits
+            (rate_key, attempts, window_started_at, blocked_until)
+         VALUES (?, ?, ?, ?)
+         ON CONFLICT(rate_key) DO UPDATE SET
+            attempts = excluded.attempts,
+            window_started_at = excluded.window_started_at,
+            blocked_until = excluded.blocked_until`
+    ).bind(rateKey, attempts, windowStartedAt, blockedUntil).run();
+
+    if (blockedUntil) {
+        const error = httpError(429, "TOO_MANY_REQUESTS");
+        error.retryAfter = Math.ceil(blockMs / 1000);
+        throw error;
+    }
+}

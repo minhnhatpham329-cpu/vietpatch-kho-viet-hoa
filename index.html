@@ -3,29 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="VietPatch - Kho bản Việt hóa game đã kiểm thử, có thông tin tương thích, hướng dẫn cài đặt và gói hoàn tác rõ ràng.">
+    <meta name="description" content="VietPatch - Kho sưu tập bản Việt hóa game với trạng thái kiểm thử, phiên bản tương thích và tiến độ rõ ràng.">
     <meta name="theme-color" content="#f3efe5">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; form-action 'self'; script-src 'self' https://www.youtube.com; script-src-attr 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' data: https://cdnjs.cloudflare.com https://fonts.gstatic.com; img-src 'self' data: blob: https:; frame-src https://www.youtube.com https://www.youtube-nocookie.com; connect-src 'self'; media-src 'self' blob:; worker-src 'self' blob:; upgrade-insecure-requests">
     <meta property="og:type" content="website">
     <meta property="og:title" content="VietPatch | Kho bản Việt hóa game">
-    <meta property="og:description" content="Tra cứu bản Việt hóa, phiên bản tương thích, trạng thái kiểm thử và hướng dẫn cài đặt.">
+    <meta property="og:description" content="Khám phá kho sưu tập bản Việt hóa, theo dõi tiến độ và bình chọn dự án cộng đồng.">
     <meta property="og:url" content="https://minhnhatpham329-cpu.github.io/vietpatch-kho-viet-hoa/">
     <meta property="og:image" content="https://minhnhatpham329-cpu.github.io/vietpatch-kho-viet-hoa/assets/images/og.png">
     <meta property="og:image:width" content="1680">
     <meta property="og:image:height" content="935">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="VietPatch | Kho bản Việt hóa game">
-    <meta name="twitter:description" content="Tra cứu bản Việt hóa, phiên bản tương thích, trạng thái kiểm thử và hướng dẫn cài đặt.">
+    <meta name="twitter:description" content="Khám phá kho sưu tập bản Việt hóa, theo dõi tiến độ và bình chọn dự án cộng đồng.">
     <meta name="twitter:image" content="https://minhnhatpham329-cpu.github.io/vietpatch-kho-viet-hoa/assets/images/og.png">
     <title>VietPatch | Kho bản Việt hóa game đã kiểm thử</title>
     
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap">
     
     <!-- Custom CSS -->
     <link rel="stylesheet" href="style.css?v=20260626-securepay2">
     <link rel="stylesheet" href="redesign.css?v=20260724-v6">
+    <link rel="stylesheet" href="collection.css?v=20260724-v1">
 </head>
 <body>
     <!-- Global Header -->
@@ -44,10 +48,9 @@
             </button>
 
             <nav class="nav-menu" id="primary-navigation" aria-label="Điều hướng chính">
-                <button class="nav-link active" data-tab="home" type="button">Kho game</button>
+                <button class="nav-link active" data-tab="home" type="button">Kho sưu tập</button>
                 <button class="nav-link" data-tab="progress" type="button">Tiến độ</button>
-                <button class="nav-link" data-tab="guides" type="button">Hướng dẫn</button>
-                <button class="nav-link" data-tab="requests" type="button">Đề xuất game</button>
+                <button class="nav-link" data-tab="requests" type="button">Đề xuất</button>
             </nav>
 
             <div class="header-actions">
@@ -57,9 +60,9 @@
                     <kbd>Enter</kbd>
                 </label>
 
-                <button class="library-shortcut" data-tab="library" type="button" aria-label="Mở thư viện của tôi">
+                <button class="library-shortcut" data-tab="library" type="button" aria-label="Mở bộ sưu tập của tôi">
                     <i class="fa-regular fa-bookmark"></i>
-                    <span>Thư viện</span>
+                    <span>Bộ sưu tập</span>
                     <span class="badge library-count">0</span>
                 </button>
 
@@ -186,7 +189,7 @@
                     <div>
                         <span class="cms-newsroom-kicker">PATCH NOTES / BẢN TIN MỚI</span>
                         <h2 id="cms-newsroom-title">Tin từ kho patch.</h2>
-                        <p class="cms-newsroom-intro">Cập nhật bản dịch, hướng dẫn cài đặt và những thay đổi quan trọng từ đội VietPatch.</p>
+                        <p class="cms-newsroom-intro">Cập nhật bản dịch, kiểm thử và những thay đổi quan trọng từ đội VietPatch.</p>
                     </div>
                 </header>
                 <div class="cms-post-grid" id="cms-post-grid"></div>
@@ -196,13 +199,13 @@
             <section class="catalog-section" id="catalog">
                 <div class="section-header catalog-heading">
                     <div>
-                        <span class="section-kicker">CHỈ MỤC BẢN PHÁT HÀNH</span>
-                        <h2>Kho bản Việt hóa</h2>
-                        <p>Tra cứu theo tên game, engine, trạng thái và phiên bản patch.</p>
+                        <span class="section-kicker">LƯU TRỮ CỘNG ĐỒNG / COLLECTION 2026</span>
+                        <h2>Kho sưu tập Việt hóa</h2>
+                        <p>Mỗi tựa game là một hồ sơ riêng, có nguồn gốc, trạng thái và lịch cập nhật để bạn nhìn toàn bộ kho trong một lượt.</p>
                     </div>
                     <div class="catalog-result-summary" aria-live="polite">
                         <strong id="catalog-result-count">0</strong>
-                        <span>kết quả phù hợp</span>
+                        <span>hồ sơ đang trưng bày</span>
                     </div>
                 </div>
 
@@ -267,6 +270,16 @@
                         <strong id="overview-engine-count">0</strong>
                         <small>nhóm kỹ thuật</small>
                     </div>
+                </div>
+
+                <div class="collection-index-note">
+                    <div>
+                        <span class="collection-index-mark" aria-hidden="true">VP</span>
+                        <p><strong>Chỉ mục sống.</strong> Hồ sơ được đánh số theo kết quả hiện tại; dùng bộ lọc để tạo một kệ sưu tập riêng theo engine hoặc trạng thái.</p>
+                    </div>
+                    <button type="button" data-tab="library">
+                        Mở kệ của tôi <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                    </button>
                 </div>
 
                 <div class="catalog-state-line" id="catalog-state-line" hidden></div>
@@ -405,8 +418,8 @@
                         <p>Đối chiếu font tiếng Việt, giao diện, hội thoại, ngữ cảnh và quy trình cài đặt.</p>
                     </article>
                 </div>
-                <button class="flow-guide-btn" type="button" data-tab="guides">
-                    Đọc hướng dẫn cài đặt <i class="fa-solid fa-arrow-right"></i>
+                <button class="flow-guide-btn" type="button" data-tab="progress">
+                    Theo dõi tiến độ <i class="fa-solid fa-arrow-right"></i>
                 </button>
             </section>
 
@@ -425,103 +438,79 @@
 
         <!-- ================= PROGRESS TAB ================= -->
         <section id="tab-progress" class="tab-content">
-            <div class="page-container">
-                <div class="page-header">
-                    <h1><i class="fa-solid fa-bars-progress"></i> Dự án đang biên dịch</h1>
-                    <p>Tiến độ theo từng hạng mục do nhóm dịch cập nhật.</p>
+            <div class="page-container archive-page-shell production-page">
+                <header class="archive-masthead">
+                    <div class="archive-masthead-copy">
+                        <span class="archive-section-index">01 / XƯỞNG DỊCH</span>
+                        <h1>Những bản dịch<br>đang thành hình.</h1>
+                        <p>Tiến độ được chia theo bốn công đoạn thực tế: dịch thuật, hiệu đính, xử lý giao diện và kiểm thử trong game.</p>
+                    </div>
+                    <dl class="archive-metrics" aria-label="Tổng quan tiến độ">
+                        <div>
+                            <dt>Dự án đang mở</dt>
+                            <dd id="progress-active-count">0</dd>
+                        </div>
+                        <div>
+                            <dt>Tiến độ trung bình</dt>
+                            <dd><span id="progress-average">0</span><small>%</small></dd>
+                        </div>
+                        <div>
+                            <dt>Quy trình</dt>
+                            <dd>04<small> chặng</small></dd>
+                        </div>
+                    </dl>
+                </header>
+
+                <div class="production-legend" aria-label="Chú thích quy trình">
+                    <span><i class="stage-dot stage-translate"></i>Dịch thuật</span>
+                    <span><i class="stage-dot stage-proofread"></i>Hiệu đính</span>
+                    <span><i class="stage-dot stage-edit"></i>Giao diện &amp; font</span>
+                    <span><i class="stage-dot stage-test"></i>Kiểm thử</span>
                 </div>
-                
+
                 <div class="progress-list" id="progress-list-container">
                     <!-- Dynamic progress items -->
                 </div>
             </div>
         </section>
 
-        <!-- ================= GUIDES TAB ================= -->
-        <section id="tab-guides" class="tab-content">
-            <div class="page-container">
-                <div class="page-header">
-                    <h1><i class="fa-solid fa-book-open"></i> Hướng dẫn cài đặt patch</h1>
-                    <p>Mỗi tựa game sử dụng engine khác nhau sẽ có cấu trúc và cách cài đặt patch khác nhau.</p>
-                </div>
-
-                <div class="guides-grid">
-                    <div class="guide-card glass">
-                        <div class="guide-badge unity">Unity</div>
-                        <h3><i class="fa-solid fa-folder-tree"></i> Hướng dẫn Game chạy Unity</h3>
-                        <p class="guide-desc">Patch Unity có thể thay tài nguyên trực tiếp hoặc nạp tệp qua BepInEx/MelonLoader, tùy từng game.</p>
-                        <ul class="guide-steps">
-                            <li><span>1</span><div>Tải gói patch đúng với phiên bản game đang cài.</div></li>
-                            <li><span>2</span><div>Sao lưu các tệp gốc được nêu trong hồ sơ patch.</div></li>
-                            <li><span>3</span><div>Giải nén vào thư mục chứa tệp chạy game <code>.exe</code>, hoặc chạy <code>PatchInstaller.exe</code> nếu gói có trình cài.</div></li>
-                            <li><span>4</span><div>Mở game, kiểm tra font, giao diện và một đoạn hội thoại có dấu tiếng Việt.</div></li>
-                        </ul>
-                    </div>
-
-                    <div class="guide-card glass">
-                        <div class="guide-badge ue">Unreal Engine</div>
-                        <h3><i class="fa-solid fa-box-open"></i> Hướng dẫn Game chạy Unreal Engine (UE4/UE5)</h3>
-                        <p class="guide-desc">Patch Unreal Engine thường dùng tệp đóng gói <code>.pak</code>, <code>.ucas</code> hoặc <code>.utoc</code>.</p>
-                        <ul class="guide-steps">
-                            <li><span>1</span><div>Tải gói patch đúng với phiên bản game đang cài.</div></li>
-                            <li><span>2</span><div>Mở thư mục <code>[Thư mục game]/Content/Paks/</code> theo đường dẫn ghi trong hồ sơ.</div></li>
-                            <li><span>3</span><div>Tạo thư mục <code>~mods</code> nếu hướng dẫn riêng của game yêu cầu.</div></li>
-                            <li><span>4</span><div>Chép đủ các tệp patch vào vị trí chỉ định, sau đó mở game để kiểm tra.</div></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="faq-section">
-                    <h2><i class="fa-regular fa-circle-question"></i> Câu hỏi thường gặp</h2>
-                    <div class="faq-list">
-                        <div class="faq-item">
-                            <div class="faq-question">
-                                <span>Cài patch Việt hóa có bị ban tài khoản Steam/Epic không?</span>
-                                <i class="fa-solid fa-chevron-down"></i>
-                            </div>
-                            <div class="faq-answer">
-                                <p>Patch cho game chơi đơn thường chỉ thay tài nguyên cục bộ. Với game có chế độ mạng hoặc hệ thống chống gian lận, hãy đọc hồ sơ tương thích, giữ bản sao file gốc và không dùng patch khi vào máy chủ trực tuyến nếu chưa có xác nhận kiểm thử.</p>
-                            </div>
-                        </div>
-                        <div class="faq-item">
-                            <div class="faq-question">
-                                <span>Sau khi game cập nhật phiên bản mới (Update), patch có bị lỗi không?</span>
-                                <i class="fa-solid fa-chevron-down"></i>
-                            </div>
-                            <div class="faq-answer">
-                                <p>Có thể. Bản cập nhật game có thể thay đổi file gốc hoặc cấu trúc tài nguyên. Hãy khôi phục file gốc, đối chiếu lại phiên bản trong hồ sơ patch và chỉ cài lại khi bản game của bạn nằm trong danh sách tương thích.</p>
-                            </div>
-                        </div>
-                        <div class="faq-item">
-                            <div class="faq-question">
-                                <span>Tại sao cài patch xong game bị lỗi font chữ ô vuông/kí tự lạ?</span>
-                                <i class="fa-solid fa-chevron-down"></i>
-                            </div>
-                            <div class="faq-answer">
-                                <p>Lỗi thường xuất hiện khi font gốc thiếu glyph tiếng Việt, atlas font chưa được thay đúng hoặc patch không khớp phiên bản game. Kiểm tra lại đủ tệp trong gói, đường dẫn cài đặt và mục font được ghi trong hồ sơ trước khi cài lại.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
         <!-- ================= REQUESTS TAB ================= -->
         <section id="tab-requests" class="tab-content">
-            <div class="page-container">
-                <div class="page-header">
-                    <h1><i class="fa-solid fa-envelope-open-text"></i> Đề xuất game cần Việt hóa</h1>
-                    <p>Hãy gửi ý kiến của bạn về tựa game bạn mong muốn được trải nghiệm bằng tiếng Việt. Dự án nhận được nhiều bình chọn nhất sẽ được ưu tiên dịch.</p>
-                </div>
+            <div class="page-container archive-page-shell requests-page">
+                <header class="archive-masthead request-masthead">
+                    <div class="archive-masthead-copy">
+                        <span class="archive-section-index">02 / TÍN HIỆU CỘNG ĐỒNG</span>
+                        <h1>Cộng đồng chọn<br>tựa game tiếp theo.</h1>
+                        <p>Gửi một đề xuất có nguồn rõ ràng, sau đó bình chọn. Thứ hạng là dữ liệu tham khảo để VietPatch đánh giá nhu cầu, không phải lời hứa phát hành.</p>
+                    </div>
+                    <dl class="archive-metrics" aria-label="Tổng quan đề xuất">
+                        <div>
+                            <dt>Đề xuất đang mở</dt>
+                            <dd id="request-open-count">0</dd>
+                        </div>
+                        <div>
+                            <dt>Lượt bình chọn</dt>
+                            <dd id="request-vote-total">0</dd>
+                        </div>
+                        <div class="metric-wide">
+                            <dt>Đang dẫn đầu</dt>
+                            <dd id="request-top-name">—</dd>
+                        </div>
+                    </dl>
+                </header>
 
                 <div class="requests-layout">
                     <!-- Form -->
                     <div class="request-form-card glass">
-                        <h3><i class="fa-solid fa-paper-plane"></i> Thông tin đề xuất</h3>
+                        <header class="request-panel-head">
+                            <span>PHIẾU 01</span>
+                            <h3>Gửi một tựa game</h3>
+                            <p>Thông tin ngắn gọn, đủ để cộng đồng nhận diện đúng phiên bản game.</p>
+                        </header>
                         <form id="req-form">
                             <div class="form-group">
-                                <label for="req-title">Tên Game *</label>
-                                <input type="text" id="req-title" required placeholder="Ví dụ: Elden Ring, Black Myth Wukong...">
+                                <label for="req-title">Tên game <span>*</span></label>
+                                <input type="text" id="req-title" required placeholder="Ví dụ: Alan Wake 2">
                             </div>
                             
                             <div class="form-row">
@@ -546,29 +535,29 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="req-link">Đường dẫn cửa hàng (Steam/Epic)</label>
+                                <label for="req-link">Trang cửa hàng chính thức</label>
                                 <input type="url" id="req-link" placeholder="https://store.steampowered.com/app/...">
                             </div>
 
-                            <div class="form-group">
-                                <label for="req-logo">Logo / ảnh game</label>
-                                <input type="url" id="req-logo" placeholder="https://.../header.jpg">
-                            </div>
+                            <input type="hidden" id="req-logo" value="">
 
                             <div class="form-group">
-                                <label for="req-notes">Ghi chú / Tại sao bạn muốn dịch game này?</label>
-                                <textarea id="req-notes" rows="4" placeholder="Chia sẻ cảm nghĩ, mức độ khó dịch hoặc lượng chữ trong game..."></textarea>
+                                <label for="req-notes">Lý do đề xuất</label>
+                                <textarea id="req-notes" rows="4" placeholder="Điểm nào khiến bản Việt hóa thật sự hữu ích?"></textarea>
                             </div>
 
-                            <button type="submit" class="submit-btn"><i class="fa-solid fa-share-nodes"></i> Đăng Yêu Cầu</button>
+                            <button type="submit" class="submit-btn">Gửi đề xuất <i class="fa-solid fa-arrow-right"></i></button>
                         </form>
                     </div>
 
                     <!-- Live Request List -->
                     <div class="request-list-area">
                         <div class="area-header">
-                            <h3><i class="fa-solid fa-list-check"></i> Danh sách đề xuất</h3>
-                            <span class="sub-label">Sắp xếp theo số vote</span>
+                            <div>
+                                <span>BẢNG XẾP HẠNG CỘNG ĐỒNG</span>
+                                <h3>Những tín hiệu đang nổi bật</h3>
+                            </div>
+                            <span class="sub-label">Xếp theo lượt bình chọn</span>
                         </div>
                         <div class="req-list" id="requests-list-container">
                             <!-- Dynamic requests with Vote button -->
@@ -580,17 +569,37 @@
 
         <!-- ================= LIBRARY TAB ================= -->
         <section id="tab-library" class="tab-content">
-            <div class="page-container">
-                <div class="page-header">
-                    <h1><i class="fa-solid fa-bookmark"></i> Thư viện patch</h1>
-                    <p>Quản lý các bản patch Việt hóa bạn đã thêm hoặc mua. Tải xuống patch và xem key kích hoạt bản quyền.</p>
-                </div>
+            <div class="page-container archive-page-shell library-page">
+                <header class="archive-masthead library-masthead">
+                    <div class="archive-masthead-copy">
+                        <span class="archive-section-index">03 / BỘ SƯU TẬP CÁ NHÂN</span>
+                        <h1>Kệ Việt hóa<br>của bạn.</h1>
+                        <p>Nơi giữ những bản dịch bạn đã lưu. Mỗi hồ sơ đi kèm đúng phiên bản, dung lượng và quyền tải xuống của tài khoản.</p>
+                    </div>
+                    <dl class="archive-metrics" aria-label="Tổng quan bộ sưu tập">
+                        <div>
+                            <dt>Đang lưu giữ</dt>
+                            <dd class="library-count">0</dd>
+                        </div>
+                        <div>
+                            <dt>Kiểu hồ sơ</dt>
+                            <dd>PATCH</dd>
+                        </div>
+                        <div>
+                            <dt>Trạng thái</dt>
+                            <dd><small>Đồng bộ</small></dd>
+                        </div>
+                    </dl>
+                </header>
 
                 <div class="library-empty" id="library-empty-state">
-                    <div class="empty-icon"><i class="fa-solid fa-box-open"></i></div>
-                    <h3>Thư viện của bạn đang trống</h3>
-                    <p>Hãy duyệt kho game của chúng tôi và chọn các bản patch Việt hóa chất lượng cao để thêm vào thư viện của bạn.</p>
-                    <button class="back-home-btn" id="library-go-home"><i class="fa-solid fa-house"></i> Quay lại Kho Game</button>
+                    <div class="empty-collection-mark" aria-hidden="true">
+                        <span>VP</span><i></i><i></i><i></i>
+                    </div>
+                    <span class="empty-collection-index">KỆ 00 / CHƯA CÓ HỒ SƠ</span>
+                    <h3>Bộ sưu tập đang chờ bản đầu tiên.</h3>
+                    <p>Mở kho, chọn một bản Việt hóa phù hợp rồi lưu vào đây để tạo kệ cá nhân của bạn.</p>
+                    <button class="back-home-btn" id="library-go-home">Khám phá kho sưu tập <i class="fa-solid fa-arrow-right"></i></button>
                 </div>
 
                 <div class="library-grid" id="library-grid-container">
@@ -666,7 +675,7 @@
                     <div class="logo-icon"><i class="fa-solid fa-gamepad"></i></div>
                     <span class="logo-text">Viet<span>Patch</span></span>
                 </div>
-                <p class="footer-desc">Kho patch tiếng Việt có thông tin phiên bản, tiến độ và hướng dẫn cài đặt minh bạch cho cộng đồng game thủ Việt.</p>
+                <p class="footer-desc">Kho sưu tập patch tiếng Việt có thông tin phiên bản, tiến độ và trạng thái kiểm thử rõ ràng.</p>
             </div>
             
             <div class="footer-links">
@@ -674,8 +683,7 @@
                 <ul>
                     <li><a href="#" data-tab="home">Trang Chủ</a></li>
                     <li><a href="#" data-tab="progress">Tiến Độ</a></li>
-                    <li><a href="#" data-tab="guides">Hướng Dẫn</a></li>
-                    <li><a href="#" data-tab="requests">Yêu Cầu</a></li>
+                    <li><a href="#" data-tab="requests">Đề Xuất</a></li>
                     <li><a href="#" data-tab="profile">Hồ Sơ</a></li>
                 </ul>
             </div>
@@ -683,7 +691,6 @@
             <div class="footer-contact">
                 <h4>Cần hỗ trợ?</h4>
                 <div class="social-icons">
-                    <a href="#" class="footer-support-link" data-tab="guides"><i class="fa-solid fa-book-open"></i> Hướng dẫn</a>
                     <a href="#" class="footer-support-link" data-tab="requests"><i class="fa-solid fa-paper-plane"></i> Gửi đề xuất</a>
                 </div>
                 <p class="copyright">&copy; 2026 VietPatch. Hãy mua game bản quyền để ủng hộ nhà phát triển.</p>
@@ -775,94 +782,116 @@
     <!-- ================= AUTHENTICATION MODAL ================= -->
     <div class="modal-backdrop" id="auth-modal">
         <div class="modal-card auth-card glass">
-            <button class="close-modal-btn" id="close-auth-btn"><i class="fa-solid fa-xmark"></i></button>
-            <div class="auth-tabs">
-                <button class="auth-tab-btn active" id="tab-login-btn">Đăng Nhập</button>
-                <button class="auth-tab-btn" id="tab-register-btn">Đăng Ký</button>
-            </div>
+            <aside class="auth-collection-panel">
+                <span class="auth-collection-index">VP / MEMBER ARCHIVE</span>
+                <div>
+                    <span class="auth-vp-mark">VP</span>
+                    <h2>Một tài khoản.<br>Một kệ sưu tập.</h2>
+                    <p>Đồng bộ bản Việt hóa đã lưu, lịch sử giao dịch và quyền tải xuống trên các thiết bị của bạn.</p>
+                </div>
+                <ul>
+                    <li><i class="fa-solid fa-check"></i> Phiên đăng nhập bảo mật</li>
+                    <li><i class="fa-solid fa-check"></i> Lịch sử giao dịch rõ ràng</li>
+                    <li><i class="fa-solid fa-check"></i> Không lưu thông tin thẻ</li>
+                </ul>
+            </aside>
 
-            <a href="/api/vietpatch/auth/google" class="auth-google-btn" id="google-auth-btn">
-                <i class="fa-brands fa-google"></i>
-                <span>Đăng nhập bằng Google</span>
-            </a>
-            <div class="auth-divider"><span>hoặc dùng email</span></div>
-            
-            <!-- Login Form -->
-            <form id="login-form" class="auth-form active">
-                <div class="form-group">
-                    <label for="login-email">Email</label>
-                    <input type="email" id="login-email" required placeholder="email@vietpatch.vn">
-                </div>
-                <div class="form-group">
-                    <label for="login-pass">Mật khẩu</label>
-                    <input type="password" id="login-pass" required placeholder="Mật khẩu tài khoản">
-                </div>
-                <button type="submit" class="auth-submit-btn">ĐĂNG NHẬP</button>
-                <p class="auth-tip">Tài khoản dùng để giữ ví, thư viện patch và lịch sử thanh toán trên hệ thống.</p>
-            </form>
+            <section class="auth-entry-panel">
+                <button class="close-modal-btn" id="close-auth-btn" type="button" aria-label="Đóng cửa sổ đăng nhập"><i class="fa-solid fa-xmark"></i></button>
+                <header class="auth-entry-head">
+                    <span>TÀI KHOẢN VIETPATCH</span>
+                    <h3>Truy cập bộ sưu tập</h3>
+                </header>
 
-            <!-- Register Form -->
-            <form id="register-form" class="auth-form">
-                <div class="form-group">
-                    <label for="reg-username">Tên hiển thị</label>
-                    <input type="text" id="reg-username" required placeholder="Ví dụ: Kẻ Hủy Diệt Game">
+                <div class="auth-tabs" role="tablist" aria-label="Tài khoản">
+                    <button class="auth-tab-btn active" id="tab-login-btn" type="button">Đăng nhập</button>
+                    <button class="auth-tab-btn" id="tab-register-btn" type="button">Tạo tài khoản</button>
                 </div>
-                <div class="form-group">
-                    <label for="reg-email">Email</label>
-                    <input type="email" id="reg-email" required placeholder="game thủ@gmail.com">
-                </div>
-                <div class="form-group">
-                    <label for="reg-pass">Mật khẩu</label>
-                    <input type="password" id="reg-pass" required placeholder="Mật khẩu của bạn">
-                </div>
-                <button type="submit" class="auth-submit-btn">TẠO TÀI KHOẢN</button>
-            </form>
+                <p class="auth-service-note" id="auth-service-note" hidden>
+                    <i class="fa-solid fa-circle-info"></i>
+                    Máy chủ tài khoản chưa được kết nối với bản website này. Giao diện đã sẵn sàng nhưng chưa thể lưu tài khoản hoặc thanh toán.
+                </p>
+
+                <!-- Login Form -->
+                <form id="login-form" class="auth-form active">
+                    <div class="form-group">
+                        <label for="login-email">Email</label>
+                        <input type="email" id="login-email" required autocomplete="email" placeholder="tenban@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="login-pass">Mật khẩu</label>
+                        <input type="password" id="login-pass" required minlength="8" autocomplete="current-password" placeholder="Nhập mật khẩu">
+                    </div>
+                    <button type="submit" class="auth-submit-btn">Đăng nhập <i class="fa-solid fa-arrow-right"></i></button>
+                    <p class="auth-tip">Tài khoản chỉ dùng để đồng bộ bộ sưu tập và giao dịch của bạn.</p>
+                </form>
+
+                <!-- Register Form -->
+                <form id="register-form" class="auth-form">
+                    <div class="form-group">
+                        <label for="reg-username">Tên hiển thị</label>
+                        <input type="text" id="reg-username" required minlength="2" maxlength="40" autocomplete="nickname" placeholder="Tên bạn muốn hiển thị">
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-email">Email</label>
+                        <input type="email" id="reg-email" required autocomplete="email" placeholder="tenban@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-pass">Mật khẩu</label>
+                        <input type="password" id="reg-pass" required minlength="8" autocomplete="new-password" placeholder="Tối thiểu 8 ký tự">
+                    </div>
+                    <button type="submit" class="auth-submit-btn">Tạo tài khoản <i class="fa-solid fa-arrow-right"></i></button>
+                    <p class="auth-tip">Bằng việc đăng ký, bạn đồng ý sử dụng tài khoản cho các chức năng của VietPatch.</p>
+                </form>
+            </section>
         </div>
     </div>
 
     <!-- ================= DEPOSIT MODAL ================= -->
     <div class="modal-backdrop" id="deposit-modal">
         <div class="modal-card deposit-card glass">
-            <button class="close-modal-btn" id="close-deposit-btn"><i class="fa-solid fa-xmark"></i></button>
-            <h3><i class="fa-solid fa-wallet"></i> Nạp Tiền Ví VietPatch</h3>
-            <p class="modal-subtitle">Nạp tiền vào tài khoản để thanh toán các patch có phí phát hành.</p>
+            <button class="close-modal-btn" id="close-deposit-btn" type="button" aria-label="Đóng cửa sổ nạp tiền"><i class="fa-solid fa-xmark"></i></button>
+            <header class="payment-modal-head">
+                <span>VÍ VIETPATCH / NẠP SỐ DƯ</span>
+                <h3>Nạp tiền bằng VietQR</h3>
+                <p>Chọn số tiền, tạo mã chuyển khoản riêng và kiểm tra trạng thái ngay trong tài khoản.</p>
+            </header>
             
             <div class="deposit-presets">
-                <button class="preset-btn" data-value="50000">50.000đ</button>
-                <button class="preset-btn active" data-value="100000">100.000đ</button>
-                <button class="preset-btn" data-value="200000">200.000đ</button>
-                <button class="preset-btn" data-value="500000">500.000đ</button>
+                <button class="preset-btn" type="button" data-value="50000">50.000đ</button>
+                <button class="preset-btn active" type="button" data-value="100000">100.000đ</button>
+                <button class="preset-btn" type="button" data-value="200000">200.000đ</button>
+                <button class="preset-btn" type="button" data-value="500000">500.000đ</button>
             </div>
             
             <div class="form-group">
-                <label>Số tiền muốn nạp (đ)</label>
-                <input type="number" id="deposit-custom-amount" value="100000" min="10000">
+                <label for="deposit-custom-amount">Hoặc nhập số tiền khác</label>
+                <input type="number" id="deposit-custom-amount" value="100000" min="10000" step="1000" inputmode="numeric">
             </div>
 
             <div class="payment-methods">
-                <div class="payment-method-item active" data-method="vietqr">
+                <button class="payment-method-item active" type="button" data-method="vietqr">
                     <div class="method-icon"><i class="fa-solid fa-building-columns"></i></div>
-                    <span>VietQR (Ngân Hàng)</span>
-                </div>
-                <div class="payment-method-item" data-method="momo">
-                    <div class="method-icon"><i class="fa-solid fa-mobile-screen"></i></div>
-                    <span>Ví MoMo</span>
-                </div>
+                    <span><strong>VietQR ngân hàng</strong><small>Mã giao dịch được điền tự động</small></span>
+                    <i class="fa-solid fa-check"></i>
+                </button>
             </div>
 
-            <button class="action-btn-main" id="deposit-submit-btn">TIẾN HÀNH THANH TOÁN</button>
+            <p class="payment-safety-note"><i class="fa-solid fa-shield-halved"></i> VietPatch không yêu cầu mật khẩu ngân hàng hoặc mã OTP.</p>
+            <button class="action-btn-main" id="deposit-submit-btn" type="button">Tạo mã thanh toán <i class="fa-solid fa-arrow-right"></i></button>
         </div>
     </div>
 
     <!-- ================= TRANSACTION MODAL (DEPOSIT / BUY) ================= -->
     <div class="modal-backdrop" id="transaction-modal">
         <div class="modal-card transaction-card glass">
-            <button class="close-modal-btn" id="close-trans-btn"><i class="fa-solid fa-xmark"></i></button>
+            <button class="close-modal-btn" id="close-trans-btn" type="button" aria-label="Đóng cửa sổ thanh toán"><i class="fa-solid fa-xmark"></i></button>
             
             <div id="trans-state-paying" class="trans-view active">
                 <div class="trans-header">
-                    <h3 id="trans-title">Thanh toán đơn hàng</h3>
-                    <p id="trans-subtitle">Vui lòng quét mã QR dưới đây để hoàn tất giao dịch.</p>
+                    <span>ĐƠN THANH TOÁN VIETPATCH</span>
+                    <h3 id="trans-title">Quét VietQR để thanh toán</h3>
+                    <p id="trans-subtitle">Kiểm tra đúng số tiền và nội dung trước khi xác nhận trong ứng dụng ngân hàng.</p>
                 </div>
 
                 <div class="checkout-details">
@@ -882,18 +911,17 @@
 
                 <div class="qr-container">
                     <div class="qr-box">
-                        <!-- Simulated Beautiful QR Code using Canvas or CSS styling -->
                         <div class="qr-code-svg-mock" id="qr-code-display"></div>
                     </div>
                     <div class="qr-instruction">
-                        <p><i class="fa-solid fa-qrcode"></i> Mở ứng dụng ngân hàng hoặc MoMo quét mã QR.</p>
-                        <p class="text-muted text-sm">Hệ thống sẽ tự động xác nhận sau khi nhận được chuyển khoản.</p>
+                        <p><i class="fa-solid fa-qrcode"></i> Mở ứng dụng ngân hàng và quét mã.</p>
+                        <p class="text-muted text-sm">Sau khi chuyển khoản, bấm kiểm tra để cập nhật trạng thái đơn.</p>
                     </div>
                 </div>
 
                 <div class="payment-action-row">
                     <button class="action-btn-main" id="btn-verify-payment">
-                        <i class="fa-solid fa-rotate"></i> XÁC NHẬN ĐÃ CHUYỂN KHOẢN
+                        <i class="fa-solid fa-rotate"></i> Kiểm tra thanh toán
                     </button>
                 </div>
             </div>
@@ -911,21 +939,21 @@
                     <div class="success-icon-anim">
                         <i class="fa-solid fa-circle-check"></i>
                     </div>
-                    <h3 class="text-success">Giao Dịch Thành Công!</h3>
-                    <p id="trans-success-message">Cảm ơn bạn! Bản patch Việt hóa đã được mở khóa và thêm vào Thư viện của bạn.</p>
+                    <h3 class="text-success">Giao dịch đã xác nhận</h3>
+                    <p id="trans-success-message">Bản Việt hóa đã được thêm vào bộ sưu tập của bạn.</p>
                     
                     <div class="unlocked-details-box" id="unlocked-info-box">
                         <div class="key-row">
-                            <span>License Key kích hoạt:</span>
+                            <span>Mã hồ sơ:</span>
                             <strong id="unlocked-license-key">VPATCH-ABCD-EFGH-IJKL</strong>
                         </div>
                     </div>
 
                     <div class="success-action-buttons">
                         <button class="action-btn-main btn-green" id="btn-success-download">
-                            <i class="fa-solid fa-cloud-arrow-down"></i> TẢI FILE PATCH
+                            <i class="fa-solid fa-cloud-arrow-down"></i> Tải bản Việt hóa
                         </button>
-                        <button class="action-btn-secondary" id="btn-success-close">Đóng cửa sổ</button>
+                        <button class="action-btn-secondary" id="btn-success-close" type="button">Đóng</button>
                     </div>
                 </div>
             </div>
@@ -938,6 +966,6 @@
     <!-- Custom App Script -->
     <script src="cms-public-seed.js?v=20260724-secure1"></script>
     <script src="cms-shared.js?v=20260626-accountpay1"></script>
-    <script src="app.js?v=20260724-v6"></script>
+    <script src="app.js?v=20260724-v7"></script>
 </body>
 </html>

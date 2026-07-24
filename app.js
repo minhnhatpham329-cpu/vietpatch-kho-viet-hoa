@@ -512,6 +512,7 @@ let currentSort = "newest";
 let activeHeroSlide = 0;
 let heroRotationInterval = null;
 let detailReturnFocus = null;
+let accountServiceAvailable = null;
 
 // User Profile System (server-backed with local cache)
 let userState = {
@@ -1249,7 +1250,11 @@ async function apiRequest(path, options = {}) {
 
     const payload = await response.json().catch(() => ({}));
     if (!response.ok) {
-        const error = new Error(payload.error || "Không xử lý được yêu cầu.");
+        const serviceUnavailable = (response.status === 404 || response.status === 503)
+            && String(path).startsWith("/api/vietpatch/");
+        const error = new Error(payload.error || (serviceUnavailable
+            ? "Hệ thống tài khoản đang được kích hoạt. Vui lòng thử lại sau."
+            : "Không xử lý được yêu cầu."));
         error.status = response.status;
         error.payload = payload;
         throw error;
@@ -1283,6 +1288,8 @@ function clearAuthenticatedUserCache() {
 async function refreshUserFromServer({ silent = true } = {}) {
     try {
         const payload = await apiRequest("/api/vietpatch/me");
+        accountServiceAvailable = true;
+        updateAuthServiceNotice();
         applyServerUser(payload.user);
         updateUIForUserSession();
         if (activeTab === "library") renderUserLibrary();
@@ -1290,14 +1297,26 @@ async function refreshUserFromServer({ silent = true } = {}) {
         return userState;
     } catch (error) {
         if (error.status === 401) {
+            accountServiceAvailable = true;
+            updateAuthServiceNotice();
             clearAuthenticatedUserCache();
             updateUIForUserSession();
             if (!silent) showToast("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.", "error");
             return null;
         }
+        if (error.status === 404 || error.status === 503) {
+            accountServiceAvailable = false;
+            updateAuthServiceNotice();
+        }
         if (!silent) showToast(error.message || "Không đồng bộ được tài khoản.", "error");
         return null;
     }
+}
+
+function updateAuthServiceNotice() {
+    const notice = document.getElementById("auth-service-note");
+    if (!notice) return;
+    notice.hidden = accountServiceAvailable !== false;
 }
 
 function loadUserState() {
@@ -1623,77 +1642,72 @@ function goToSlide(index) {
 function renderProgressTracker() {
     const container = document.getElementById("progress-list-container");
     if (!container) return;
-    
+
+    const averageProgress = progressProjects.length
+        ? Math.round(progressProjects.reduce((total, project) => total + project.overallProgress, 0) / progressProjects.length)
+        : 0;
+    const activeCount = document.getElementById("progress-active-count");
+    const average = document.getElementById("progress-average");
+    if (activeCount) activeCount.textContent = String(progressProjects.length).padStart(2, "0");
+    if (average) average.textContent = String(averageProgress);
+
     container.innerHTML = "";
     
-    progressProjects.forEach(proj => {
-        const item = document.createElement("div");
+    progressProjects.forEach((proj, index) => {
+        const stage = proj.breakdown.test >= 50
+            ? { label: "Kiểm thử", className: "test" }
+            : proj.breakdown.edit >= 50
+                ? { label: "Giao diện & font", className: "edit" }
+                : proj.breakdown.proofread >= 50
+                    ? { label: "Hiệu đính", className: "proofread" }
+                    : { label: "Dịch thuật", className: "translate" };
+        const stages = [
+            ["Dịch thuật", proj.breakdown.translate, "translate"],
+            ["Hiệu đính", proj.breakdown.proofread, "proofread"],
+            ["Giao diện & font", proj.breakdown.edit, "edit"],
+            ["Kiểm thử", proj.breakdown.test, "test"]
+        ];
+
+        const item = document.createElement("article");
         item.className = "progress-card production-card glass";
         item.innerHTML = `
-            <div class="progress-top-row">
-                <div class="progress-title-area">
-                    <img class="progress-app-icon" src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${proj.appid}/header.jpg" alt="${proj.title}" onerror="this.src='https://api.dicebear.com/7.x/identicon/svg?seed=${proj.title}'">
-                    <div class="progress-title-info">
-                        <h3>${proj.title}</h3>
-                        <div class="progress-subtext">
-                            <span><i class="fa-solid fa-gamepad"></i> Engine: <strong>${proj.engine}</strong></span>
-                            <span><i class="fa-solid fa-building"></i> Phát triển: <strong>${proj.developer}</strong></span>
-                        </div>
-                    </div>
-                </div>
-                <div class="progress-right-area">
-                    <span class="badge production-badge">ĐANG DỊCH</span>
-                    <span class="progress-release-date"><i class="fa-solid fa-calendar-day"></i> ${proj.releaseDate}</span>
-                </div>
+            <div class="production-cover">
+                <span class="production-index">${String(index + 1).padStart(2, "0")}</span>
+                <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${escapeHtml(proj.appid)}/header.jpg" alt="${escapeHtml(proj.title)}" loading="lazy" onerror="this.src='${escapeHtml(getFallbackGameImage(proj))}'">
+                <span class="production-stage stage-${stage.className}">${stage.label}</span>
             </div>
-            
-            <div class="detail-progress-section" style="background: transparent; border: none; padding: 0;">
-                <div class="progress-label-row">
-                    <span>Tổng tiến độ tổng thể</span>
-                    <strong>${proj.overallProgress}%</strong>
-                </div>
-                <div class="progress-details-bar">
-                    <div class="progress-fill" style="width: ${proj.overallProgress}%;"></div>
-                </div>
-            </div>
-            
-            <div class="progress-breakdown-grid">
-                <div class="breakdown-item">
-                    <span class="breakdown-label">Biên dịch kịch bản</span>
-                    <div class="breakdown-bar-row">
-                        <div class="breakdown-track">
-                            <div class="breakdown-fill translate" style="width: ${proj.breakdown.translate}%;"></div>
-                        </div>
-                        <span class="breakdown-percent">${proj.breakdown.translate}%</span>
+
+            <div class="production-body">
+                <header class="production-card-head">
+                    <div>
+                        <span>${escapeHtml(proj.developer)} · ${escapeHtml(proj.engine)}</span>
+                        <h2>${escapeHtml(proj.title)}</h2>
                     </div>
-                </div>
-                <div class="breakdown-item">
-                    <span class="breakdown-label">Hiệu đính lời thoại</span>
-                    <div class="breakdown-bar-row">
-                        <div class="breakdown-track">
-                            <div class="breakdown-fill proofread" style="width: ${proj.breakdown.proofread}%;"></div>
-                        </div>
-                        <span class="breakdown-percent">${proj.breakdown.proofread}%</span>
+                    <div class="production-total">
+                        <strong>${proj.overallProgress}</strong><span>%</span>
+                        <small>Tổng tiến độ</small>
                     </div>
+                </header>
+
+                <div class="production-master-track" role="progressbar" aria-label="Tổng tiến độ ${escapeHtml(proj.title)}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${proj.overallProgress}">
+                    <i style="width:${proj.overallProgress}%"></i>
                 </div>
-                <div class="breakdown-item">
-                    <span class="breakdown-label">Biên tập đồ họa/font</span>
-                    <div class="breakdown-bar-row">
-                        <div class="breakdown-track">
-                            <div class="breakdown-fill edit" style="width: ${proj.breakdown.edit}%;"></div>
+
+                <div class="production-stages">
+                    ${stages.map(([label, value, className], stageIndex) => `
+                        <div class="production-stage-row">
+                            <span class="stage-number">${String(stageIndex + 1).padStart(2, "0")}</span>
+                            <span class="stage-name">${label}</span>
+                            <div class="stage-track"><i class="stage-${className}" style="width:${value}%"></i></div>
+                            <strong>${value}%</strong>
                         </div>
-                        <span class="breakdown-percent">${proj.breakdown.edit}%</span>
-                    </div>
+                    `).join("")}
                 </div>
-                <div class="breakdown-item">
-                    <span class="breakdown-label">Kiểm thử lỗi (QA)</span>
-                    <div class="breakdown-bar-row">
-                        <div class="breakdown-track">
-                            <div class="breakdown-fill test" style="width: ${proj.breakdown.test}%;"></div>
-                        </div>
-                        <span class="breakdown-percent">${proj.breakdown.test}%</span>
-                    </div>
-                </div>
+
+                <footer class="production-card-foot">
+                    <span><i class="fa-regular fa-calendar"></i>${escapeHtml(proj.releaseDate)}</span>
+                    <small>Cập nhật theo từng công đoạn</small>
+                </footer>
             </div>
         `;
         container.appendChild(item);
@@ -1717,15 +1731,24 @@ function renderRequestsList() {
     
     // Sort by votes descending
     requestsList.sort((a, b) => b.votes - a.votes);
+
+    const openCount = document.getElementById("request-open-count");
+    const voteTotal = document.getElementById("request-vote-total");
+    const topName = document.getElementById("request-top-name");
+    const totalVotes = requestsList.reduce((total, request) => total + (Number(request.votes) || 0), 0);
+    if (openCount) openCount.textContent = String(requestsList.length).padStart(2, "0");
+    if (voteTotal) voteTotal.textContent = new Intl.NumberFormat("vi-VN").format(totalVotes);
+    if (topName) topName.textContent = requestsList[0]?.title || "—";
     
     container.innerHTML = "";
     
-    requestsList.forEach(req => {
+    requestsList.forEach((req, index) => {
         const logoUrl = window.VietPatchCMS?.safeAssetUrl(req.logoUrl) || "";
         const link = window.VietPatchCMS?.safeUrl(req.link) || "";
-        const card = document.createElement("div");
+        const card = document.createElement("article");
         card.className = "req-card bulletin-card glass";
         card.innerHTML = `
+            <span class="request-rank">${String(index + 1).padStart(2, "0")}</span>
             <div class="req-logo ${logoUrl ? "has-logo" : ""}">
                 ${logoUrl
                     ? `<img src="${escapeHtml(logoUrl)}" alt="${escapeHtml(req.title)} logo" loading="lazy">`
@@ -1734,18 +1757,19 @@ function renderRequestsList() {
             <div class="req-details">
                 <div class="req-title-row">
                     <h4>${escapeHtml(req.title)}</h4>
-                    <span class="badge" style="background: rgba(255, 255, 255, 0.05); color: var(--text-secondary); border: 0.5px solid var(--border-color); font-size: 0.65rem;">${escapeHtml(req.engine)}</span>
-                    <span class="badge" style="background: rgba(6, 182, 212, 0.15); color: var(--cyan); border: 0.5px solid var(--cyan); font-size: 0.65rem;">${escapeHtml(req.platform)}</span>
+                    <span class="request-tag">${escapeHtml(req.engine)}</span>
+                    <span class="request-tag">${escapeHtml(req.platform)}</span>
                 </div>
                 <p class="req-notes">${escapeHtml(req.notes || "Không có mô tả chi tiết.")}</p>
                 <div class="req-meta">
-                    <span>Người yêu cầu: Cộng đồng</span>
-                    ${link ? `<a href="${escapeHtml(link)}" target="_blank" rel="noopener"><i class="fa-solid fa-up-right-from-square"></i> Xem liên kết cửa hàng</a>` : ''}
+                    <span>Đề xuất từ cộng đồng</span>
+                    ${link ? `<a href="${escapeHtml(link)}" target="_blank" rel="noopener noreferrer">Trang chính thức <i class="fa-solid fa-arrow-up-right-from-square"></i></a>` : ""}
                 </div>
             </div>
-            <button class="vote-btn ${req.voted ? 'voted' : ''}" data-req-id="${escapeHtml(req.id)}">
+            <button class="vote-btn ${req.voted ? "voted" : ""}" type="button" data-req-id="${escapeHtml(req.id)}" aria-pressed="${req.voted ? "true" : "false"}" aria-label="Bình chọn ${escapeHtml(req.title)}">
                 <i class="fa-solid fa-caret-up"></i>
-                <span>${escapeHtml(req.votes)}</span>
+                <span>${new Intl.NumberFormat("vi-VN").format(req.votes)}</span>
+                <small>${req.voted ? "Đã chọn" : "Bình chọn"}</small>
             </button>
         `;
         container.appendChild(card);
@@ -1792,7 +1816,7 @@ function renderUserLibrary() {
     gridContainer.innerHTML = "";
     
     // Fetch game details for all owned games
-    userState.ownedGames.forEach(gameId => {
+    userState.ownedGames.forEach((gameId, index) => {
         const game = gamesDatabase.find(g => g.id === gameId);
         if (!game) return;
         
@@ -1800,44 +1824,43 @@ function renderUserLibrary() {
         const seed = userState.email + game.id;
         const licKey = generateLicenseKey(seed);
         
-        const card = document.createElement("div");
-        card.className = "lib-card dossier-card glass";
+        const card = document.createElement("article");
+        card.className = "lib-card collection-card glass";
         card.innerHTML = `
+            <span class="library-accession">VP / ${String(index + 1).padStart(3, "0")}</span>
             <div class="lib-header-img">
                 <img src="${escapeHtml(getGameCoverImage(game))}" alt="${escapeHtml(game.title)}" onerror="this.src='${escapeHtml(getFallbackGameImage(game))}'">
                 <div class="lib-header-overlay"></div>
+                <span class="library-owned-state"><i class="fa-solid fa-check"></i> Đã lưu</span>
             </div>
             <div class="lib-body">
-                <h3 class="lib-title">${game.title}</h3>
+                <span class="library-card-kicker">${escapeHtml(game.developer)} · ${escapeHtml(game.engine)}</span>
+                <h3 class="lib-title">${escapeHtml(game.title)}</h3>
                 
                 <div class="lib-details-box">
                     <div class="lib-row">
-                        <span>Engine:</span>
-                        <strong>${game.engine}</strong>
+                        <span>Phiên bản</span>
+                        <strong>${escapeHtml(game.version)}</strong>
                     </div>
                     <div class="lib-row">
-                        <span>Phiên bản cài:</span>
-                        <strong>${game.version}</strong>
+                        <span>Dung lượng</span>
+                        <strong>${escapeHtml(game.size)}</strong>
                     </div>
                     <div class="lib-row">
-                        <span>Kích thước file:</span>
-                        <strong>${game.size}</strong>
-                    </div>
-                    <div class="lib-row">
-                        <span>License Key:</span>
+                        <span>Mã hồ sơ</span>
                         <div class="key-code">
                             <span class="key-text">${licKey}</span>
-                            <i class="fa-regular fa-copy copy-key-btn" title="Copy Key" data-key="${licKey}"></i>
+                            <button class="copy-key-btn" type="button" title="Sao chép mã hồ sơ" data-key="${licKey}" aria-label="Sao chép mã hồ sơ"><i class="fa-regular fa-copy"></i></button>
                         </div>
                     </div>
                 </div>
                 
                 <div class="lib-actions">
-                    <button class="action-btn-main btn-green btn-download-patch" data-game-id="${game.id}">
-                        <i class="fa-solid fa-cloud-arrow-down"></i> Tải Patch
+                    <button class="action-btn-main btn-green btn-download-patch" type="button" data-game-id="${escapeHtml(game.id)}">
+                        Tải bản Việt hóa <i class="fa-solid fa-arrow-down"></i>
                     </button>
-                    <button class="action-btn-secondary btn-detail" data-game-id="${game.id}">
-                        Xem Chi Tiết
+                    <button class="action-btn-secondary btn-detail" type="button" data-game-id="${escapeHtml(game.id)}">
+                        Mở hồ sơ
                     </button>
                 </div>
             </div>
@@ -1846,13 +1869,13 @@ function renderUserLibrary() {
     });
     
     // Attach listener for copying keys
-    gridContainer.querySelectorAll(".copy-key-btn").forEach(icon => {
-        icon.addEventListener("click", () => {
-            const keyText = icon.getAttribute("data-key");
+    gridContainer.querySelectorAll(".copy-key-btn").forEach(button => {
+        button.addEventListener("click", () => {
+            const keyText = button.getAttribute("data-key");
             navigator.clipboard.writeText(keyText).then(() => {
-                showToast("Đã sao chép License Key vào clipboard!", "success");
+                showToast("Đã sao chép mã hồ sơ.", "success");
             }).catch(() => {
-                showToast("Không thể sao chép tự động. Hãy bôi đen để copy.", "error");
+                showToast("Không thể sao chép tự động. Hãy chọn mã và sao chép thủ công.", "error");
             });
         });
     });
@@ -2282,7 +2305,7 @@ function closeImageLightbox() {
 }
 
 // ==========================================================================
-// CHECKOUT & PAYMENT SIMULATION FLOW
+// CHECKOUT & PAYMENT FLOW
 // ==========================================================================
 let currentCheckoutGameId = null;
 let currentTransactionType = "buy"; // "buy" or "deposit"
@@ -2542,6 +2565,7 @@ function closeDepositModal() {
 // AUTHENTICATION MODAL MANAGEMENT
 // ==========================================================================
 function openAuthModal() {
+    updateAuthServiceNotice();
     document.getElementById("auth-modal").classList.add("active");
 }
 
@@ -2550,6 +2574,11 @@ function closeAuthModal() {
 }
 
 async function handleLogin(email, password) {
+    const submitButton = document.querySelector("#login-form .auth-submit-btn");
+    if (submitButton) {
+        submitButton.disabled = true;
+        submitButton.innerHTML = `Đang đăng nhập <i class="fa-solid fa-spinner fa-spin"></i>`;
+    }
     try {
         const payload = await apiRequest("/api/vietpatch/auth/login", {
             method: "POST",
@@ -2564,10 +2593,20 @@ async function handleLogin(email, password) {
         if (currentCheckoutGameId) openGameDetails(currentCheckoutGameId);
     } catch (error) {
         showToast(error.status === 401 ? "Email hoặc mật khẩu không đúng." : (error.message || "Không đăng nhập được."), "error");
+    } finally {
+        if (submitButton) {
+            submitButton.disabled = false;
+            submitButton.innerHTML = `Đăng nhập <i class="fa-solid fa-arrow-right"></i>`;
+        }
     }
 }
 
 async function handleRegister(username, email, password) {
+    const submitButton = document.querySelector("#register-form .auth-submit-btn");
+    if (submitButton) {
+        submitButton.disabled = true;
+        submitButton.innerHTML = `Đang tạo tài khoản <i class="fa-solid fa-spinner fa-spin"></i>`;
+    }
     try {
         const payload = await apiRequest("/api/vietpatch/auth/register", {
             method: "POST",
@@ -2576,7 +2615,7 @@ async function handleRegister(username, email, password) {
         applyServerUser(payload.user);
         updateUIForUserSession();
         closeAuthModal();
-        showToast("Đăng ký thành công. Ví bắt đầu từ 0đ, hãy nạp tiền để mua patch.", "success");
+        showToast("Tài khoản đã được tạo và bộ sưu tập đã sẵn sàng.", "success");
         if (activeTab === "library") renderUserLibrary();
         if (activeTab === "home") renderGamesGrid();
     } catch (error) {
@@ -2585,8 +2624,13 @@ async function handleRegister(username, email, password) {
             WEAK_PASSWORD: "Mật khẩu cần tối thiểu 6 ký tự.",
             INVALID_EMAIL: "Email chưa hợp lệ.",
             INVALID_USERNAME: "Tên hiển thị cần tối thiểu 2 ký tự."
-        }[error.message] || "Không tạo được tài khoản.";
+        }[error.message] || error.message || "Không tạo được tài khoản.";
         showToast(message, "error");
+    } finally {
+        if (submitButton) {
+            submitButton.disabled = false;
+            submitButton.innerHTML = `Tạo tài khoản <i class="fa-solid fa-arrow-right"></i>`;
+        }
     }
 }
 

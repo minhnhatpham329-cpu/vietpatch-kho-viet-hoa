@@ -1258,12 +1258,28 @@ async function apiRequest(path, options = {}) {
 
     const payload = await response.json().catch(() => ({}));
     if (!response.ok) {
+        const errorCode = String(payload.error || "");
+        const friendlyErrors = {
+            ACCOUNT_SERVICE_NOT_CONFIGURED: "Hệ thống tài khoản chưa được cấu hình khóa bảo mật.",
+            ALREADY_OWNED: "Bản Việt hóa này đã có trong thư viện của bạn.",
+            AMOUNT_MUST_BE_AT_LEAST_10000: "Số tiền nạp tối thiểu là 10.000đ.",
+            AMOUNT_TOO_LARGE: "Mỗi lần chỉ có thể nạp tối đa 10.000.000đ.",
+            AUTH_REQUIRED: "Vui lòng đăng nhập để tiếp tục.",
+            INSUFFICIENT_BALANCE: "Số dư ví không đủ.",
+            INVALID_LOGIN: "Email hoặc mật khẩu không đúng.",
+            ORDER_NOT_FOUND: "Không tìm thấy đơn thanh toán này.",
+            PATCH_UNAVAILABLE: "Bản Việt hóa chưa sẵn sàng để tải.",
+            PAYMENT_NOT_CONFIGURED: "Thanh toán VietQR chưa được cấu hình trên máy chủ.",
+            TOO_MANY_LOGIN_ATTEMPTS: "Bạn đã thử đăng nhập quá nhiều lần. Hãy chờ 15 phút.",
+            USE_FREE_UNLOCK: "Bản Việt hóa này đang miễn phí, hãy thêm thẳng vào thư viện."
+        };
         const serviceUnavailable = (response.status === 404 || response.status === 503)
             && String(path).startsWith("/api/vietpatch/");
-        const error = new Error(payload.error || (serviceUnavailable
+        const error = new Error(friendlyErrors[errorCode] || errorCode || (serviceUnavailable
             ? "Hệ thống tài khoản đang được kích hoạt. Vui lòng thử lại sau."
             : "Không xử lý được yêu cầu."));
         error.status = response.status;
+        error.code = errorCode;
         error.payload = payload;
         throw error;
     }
@@ -2321,6 +2337,7 @@ let pendingDepositAmount = 0;
 let pendingDepositMethod = "vietqr";
 let pendingTransactionId = "";
 let pendingServerOrder = null;
+let pendingWalletPurchase = null;
 
 async function createVietPatchPaymentOrder({ amount, itemTitle, itemType, gameId }) {
     return apiRequest("/api/vietpatch/orders", {
@@ -2357,6 +2374,7 @@ async function openCheckout(gameId) {
     currentCheckoutGameId = gameId;
     currentTransactionType = "buy";
     pendingServerOrder = null;
+    pendingWalletPurchase = null;
     
     const checkoutItemName = document.getElementById("checkout-item-name");
     const checkoutAmount = document.getElementById("checkout-amount");
@@ -2368,34 +2386,15 @@ async function openCheckout(gameId) {
     const verifyBtn = document.getElementById("btn-verify-payment");
     if (userState.balance >= game.price) {
         verifyBtn.innerHTML = `<i class="fa-solid fa-wallet"></i> THANH TOÁN BẰNG VÍ (Số dư: ${formatCurrency(userState.balance)})`;
-        const txId = createTransactionId("VP");
-        pendingTransactionId = txId;
-        checkoutTxId.textContent = txId;
-        setTransactionView("loading");
+        pendingWalletPurchase = {
+            gameId: game.id,
+            amount: game.price,
+            itemTitle: `Patch Việt hóa: ${game.title}`
+        };
+        pendingTransactionId = createTransactionId("WALLET");
+        checkoutTxId.textContent = "Ví VietPatch";
+        setTransactionView("paying");
         document.getElementById("transaction-modal").classList.add("active");
-        try {
-            const payload = await apiRequest("/api/vietpatch/wallet-purchase", {
-                method: "POST",
-                body: {
-                    amount: game.price,
-                    gameId: game.id,
-                    itemTitle: `Patch Việt hóa: ${game.title}`
-                }
-            });
-            applyServerUser(payload.user);
-            updateUIForUserSession();
-            showTransactionSuccess(`Đã thanh toán ${formatCurrency(game.price)} bằng ví. Patch ${game.title} đã được thêm vào Thư viện.`);
-        } catch (error) {
-            closeTransactionModal();
-            if (error.status === 401) {
-                showToast("Vui lòng đăng nhập lại để thanh toán bằng ví.", "error");
-                openAuthModal();
-            } else if (error.status === 402) {
-                showToast("Số dư ví không đủ, hãy nạp thêm hoặc quét QR.", "error");
-            } else {
-                showToast(error.message || "Không thanh toán được bằng ví.", "error");
-            }
-        }
         return;
     } else {
         verifyBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> ĐANG TẠO VIETQR`;
@@ -2431,6 +2430,7 @@ async function openDepositCheckout(amount, method) {
     pendingDepositAmount = amount;
     pendingDepositMethod = method || "vietqr";
     pendingServerOrder = null;
+    pendingWalletPurchase = null;
     
     const checkoutItemName = document.getElementById("checkout-item-name");
     const checkoutAmount = document.getElementById("checkout-amount");
@@ -2475,6 +2475,32 @@ function setTransactionView(state) {
 
 async function processPaymentVerification() {
     setTransactionView("loading");
+
+    if (pendingWalletPurchase) {
+        try {
+            const payload = await apiRequest("/api/vietpatch/wallet-purchase", {
+                method: "POST",
+                body: pendingWalletPurchase
+            });
+            const game = gamesDatabase.find(item => item.id === pendingWalletPurchase.gameId);
+            applyServerUser(payload.user);
+            updateUIForUserSession();
+            pendingWalletPurchase = null;
+            showTransactionSuccess(
+                `Đã thanh toán ${formatCurrency(game?.price || 0)} bằng ví. Patch ${game?.title || "đã chọn"} đã được thêm vào Thư viện.`
+            );
+        } catch (error) {
+            setTransactionView("paying");
+            if (error.status === 401) {
+                closeTransactionModal();
+                showToast("Vui lòng đăng nhập lại để thanh toán bằng ví.", "error");
+                openAuthModal();
+            } else {
+                showToast(error.message || "Không thanh toán được bằng ví.", "error");
+            }
+        }
+        return;
+    }
 
     if (pendingServerOrder) {
         try {
@@ -2629,10 +2655,10 @@ async function handleRegister(username, email, password) {
     } catch (error) {
         const message = {
             EMAIL_EXISTS: "Email này đã có tài khoản.",
-            WEAK_PASSWORD: "Mật khẩu cần tối thiểu 6 ký tự.",
+            WEAK_PASSWORD: "Mật khẩu cần tối thiểu 8 ký tự.",
             INVALID_EMAIL: "Email chưa hợp lệ.",
             INVALID_USERNAME: "Tên hiển thị cần tối thiểu 2 ký tự."
-        }[error.message] || error.message || "Không tạo được tài khoản.";
+        }[error.code || error.message] || error.message || "Không tạo được tài khoản.";
         showToast(message, "error");
     } finally {
         if (submitButton) {

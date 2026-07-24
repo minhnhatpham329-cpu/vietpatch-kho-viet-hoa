@@ -1,4 +1,4 @@
-import cmsSeed from "../../cms-seed.json";
+import cmsSeed from "../../cms-server-seed.json";
 import { checksum, ensureSchema, writeAudit } from "./db.js";
 import { httpError } from "./http.js";
 
@@ -20,12 +20,56 @@ const BASE_PRICES = {
     ghost: 110000
 };
 
+const BASE_TITLES = {
+    wukong: "Black Myth: Wukong",
+    eldenring: "Elden Ring: Shadow of the Erdtree",
+    cyberpunk: "Cyberpunk 2077: Phantom Liberty",
+    residentevil4: "Resident Evil 4 Remake",
+    liesofp: "Lies of P",
+    hogwarts: "Hogwarts Legacy",
+    stray: "Stray",
+    witcher3: "The Witcher 3: Wild Hunt (Next-Gen)",
+    baldursgate3: "Baldur's Gate 3",
+    subnautica: "Subnautica",
+    rust: "Rust",
+    sekiro: "Sekiro: Shadows Die Twice",
+    rdr2: "Red Dead Redemption 2",
+    ghost: "Ghost of Tsushima"
+};
+
 function plainObject(value) {
     return value && typeof value === "object" && !Array.isArray(value) ? value : {};
 }
 
 function isFreeOffer(value) {
     return String(value?.type || "").trim().toLocaleLowerCase("en") === "free";
+}
+
+export function sanitizeGameId(value) {
+    const gameId = String(value || "").trim().toLowerCase();
+    return /^[a-z0-9][a-z0-9_-]{0,79}$/.test(gameId) ? gameId : "";
+}
+
+export function safeDownloadUrl(value) {
+    try {
+        const url = new URL(String(value || "").trim());
+        if (url.protocol !== "https:") return "";
+        const host = url.hostname.toLowerCase().replace(/^\[|\]$/g, "");
+        if (
+            !host
+            || host === "localhost"
+            || host.endsWith(".local")
+            || host === "::1"
+            || /^(?:0|10|127)\./.test(host)
+            || /^192\.168\./.test(host)
+            || /^169\.254\./.test(host)
+        ) return "";
+        const private172 = host.match(/^172\.(\d{1,3})\./);
+        if (private172 && Number(private172[1]) >= 16 && Number(private172[1]) <= 31) return "";
+        return url.href;
+    } catch {
+        return "";
+    }
 }
 
 function cleanTree(value, depth = 0) {
@@ -125,7 +169,7 @@ export function publicCmsState(input) {
     state.customGames = state.customGames.map(game => {
         const price = isFreeOffer(game) ? 0 : Math.max(0, Math.round(Number(game.price) || 0));
         game.price = price;
-        if (price > 0 && game.downloadUrl) {
+        if (game.downloadUrl) {
             game.downloadUrl = `/api/vietpatch/download/${encodeURIComponent(game.id)}`;
         }
         return game;
@@ -137,11 +181,54 @@ export function publicCmsState(input) {
                 ? (BASE_PRICES[gameId] || 0)
                 : Math.max(0, Math.round(Number(override.price) || 0)));
         override.price = price;
-        if (price > 0 && override.downloadUrl) {
+        if (override.downloadUrl) {
             override.downloadUrl = `/api/vietpatch/download/${encodeURIComponent(gameId)}`;
         }
     }
     return state;
+}
+
+export async function resolvePublishedOffer(env, gameIdValue) {
+    const gameId = sanitizeGameId(gameIdValue);
+    if (!gameId) return null;
+    const document = await getCmsDocument(env);
+    const state = document.published;
+    if (state.hiddenGameIds.map(sanitizeGameId).includes(gameId)) return null;
+
+    const custom = state.customGames.find(game => sanitizeGameId(game.id) === gameId);
+    if (custom) {
+        const price = isFreeOffer(custom) ? 0 : Math.max(0, Math.round(Number(custom.price) || 0));
+        const progress = Math.max(0, Math.min(100, Number(custom.progress) || 0));
+        const downloadUrl = safeDownloadUrl(custom.downloadUrl);
+        return {
+            id: gameId,
+            title: String(custom.title || `Patch ${gameId}`).slice(0, 180),
+            price,
+            progress,
+            downloadUrl,
+            available: progress >= 100 && Boolean(downloadUrl)
+        };
+    }
+
+    if (!(gameId in BASE_PRICES)) return null;
+    const override = plainObject(state.gameOverrides[gameId]);
+    const price = isFreeOffer(override)
+        ? 0
+        : (override.price === "" || override.price == null
+            ? BASE_PRICES[gameId]
+            : Math.max(0, Math.round(Number(override.price) || 0)));
+    const progress = override.progress === "" || override.progress == null
+        ? 100
+        : Math.max(0, Math.min(100, Number(override.progress) || 0));
+    const downloadUrl = safeDownloadUrl(override.downloadUrl);
+    return {
+        id: gameId,
+        title: String(override.title || BASE_TITLES[gameId] || `Patch ${gameId}`).slice(0, 180),
+        price,
+        progress,
+        downloadUrl,
+        available: progress >= 100 && Boolean(downloadUrl)
+    };
 }
 
 export function cmsMeta(document) {

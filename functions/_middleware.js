@@ -19,7 +19,8 @@ export async function onRequest(context) {
             url.pathname === "/admin.html"
             || url.pathname === "/admin-login.html"
             || url.pathname.startsWith("/api/admin/")
-            || url.pathname === "/api/vietpatch/cms"
+            || url.pathname.startsWith("/api/vietpatch/")
+            || url.pathname === "/api/webhooks/bank-transfer"
         ) {
             headers.set("Cache-Control", "no-store");
         }

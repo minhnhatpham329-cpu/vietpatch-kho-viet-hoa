@@ -41,9 +41,21 @@ export function json(payload, status = 200, extraHeaders = {}) {
 
 export function errorResponse(error) {
     const status = Number(error?.statusCode) || 500;
-    const safeMessage = status >= 500 ? "INTERNAL_SERVER_ERROR" : String(error?.message || "REQUEST_FAILED");
+    const serverSafeErrors = new Set([
+        "ACCOUNT_SERVICE_NOT_CONFIGURED",
+        "CMS_DATABASE_NOT_CONFIGURED",
+        "PAYMENT_NOT_CONFIGURED"
+    ]);
+    const message = String(error?.message || "REQUEST_FAILED");
+    const safeMessage = status >= 500 && !serverSafeErrors.has(message)
+        ? "INTERNAL_SERVER_ERROR"
+        : message;
     if (status >= 500) console.error(error);
-    return json({ error: safeMessage }, status);
+    const headers = {};
+    if (status === 429 && Number(error?.retryAfter) > 0) {
+        headers["Retry-After"] = String(Math.ceil(Number(error.retryAfter)));
+    }
+    return json({ error: safeMessage }, status, headers);
 }
 
 export async function readJson(request, maxBytes = 6 * 1024 * 1024) {

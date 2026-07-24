@@ -66,66 +66,6 @@ textarea {
     overflow: visible;
 }
 
-.catalog-heading {
-    min-height: 0;
-    padding: 30px 0 22px;
-    align-items: end;
-    background: transparent;
-    border-top: 0;
-    border-bottom: 1px solid var(--ink);
-}
-
-.catalog-heading::before {
-    content: none;
-    display: none;
-}
-
-.catalog-heading > div:first-child {
-    position: relative;
-    z-index: 1;
-    max-width: 760px;
-}
-
-.catalog-heading h2 {
-    max-width: 720px;
-    margin-top: 9px;
-    font-family: var(--collection-font);
-    font-size: clamp(1.8rem, 3vw, 2.75rem);
-    font-weight: 850;
-    letter-spacing: -0.05em;
-    line-height: 1.05;
-}
-
-.catalog-heading p {
-    max-width: 670px;
-    margin-top: 10px;
-    color: #5f5a52;
-    font-size: 0.72rem;
-    line-height: 1.55;
-}
-
-.catalog-result-summary {
-    min-width: 150px;
-    padding: 12px 15px;
-    align-self: end;
-    color: var(--ivory);
-    background: var(--ink);
-    border: 0;
-    border-bottom: 4px solid var(--vermilion);
-}
-
-.catalog-result-summary strong {
-    color: var(--ivory);
-    font-family: var(--collection-font);
-    font-size: 2rem;
-    font-weight: 850;
-}
-
-.catalog-result-summary span {
-    color: #bcb5aa;
-    line-height: 1.4;
-}
-
 .catalog-toolbar {
     border-top: 1px solid var(--ink);
 }
@@ -1803,18 +1743,6 @@ textarea {
 }
 
 @media (max-width: 760px) {
-    .catalog-heading {
-        display: grid;
-    }
-
-    .catalog-heading::before {
-        content: none;
-    }
-
-    .catalog-result-summary {
-        width: 100%;
-    }
-
     .collection-index-note {
         align-items: flex-start;
         flex-direction: column;
@@ -1863,14 +1791,6 @@ textarea {
     .games-grid,
     .library-grid {
         grid-template-columns: 1fr;
-    }
-
-    .catalog-heading {
-        padding: 24px 0 18px;
-    }
-
-    .catalog-heading h2 {
-        font-size: 1.9rem;
     }
 
     .archive-masthead {

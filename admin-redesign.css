@@ -1,0 +1,431 @@
+:root {
+    --paper: #080c16;
+    --paper-deep: #101827;
+    --paper-warm: #151f31;
+    --ink: #f4f7fb;
+    --ink-soft: #b5c0d2;
+    --muted: #7f8ca3;
+    --orange: #5ee9c6;
+    --red: #ff6b7a;
+    --yellow: #ffd166;
+    --green: #58ddb0;
+    --blue: #7394ff;
+    --border: 1px solid rgba(183, 203, 232, 0.14);
+    --shadow: 0 22px 60px rgba(0, 0, 0, 0.28);
+    --font-ui: "Be Vietnam Pro", system-ui, sans-serif;
+    --font-display: "Be Vietnam Pro", system-ui, sans-serif;
+}
+
+html,
+body {
+    color: var(--ink-soft);
+    background:
+        radial-gradient(circle at 92% 4%, rgba(94, 233, 198, 0.08), transparent 30rem),
+        #080c16;
+    font-family: var(--font-ui);
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 3px solid rgba(94, 233, 198, 0.36);
+    outline-offset: 2px;
+}
+
+.studio-shell {
+    grid-template-columns: 244px minmax(0, 1fr);
+}
+
+.studio-sidebar {
+    padding: 1.1rem;
+    color: var(--ink-soft);
+    background: #0b1120;
+    border-right: 1px solid rgba(183, 203, 232, 0.13);
+}
+
+.studio-brand-mark {
+    color: #07110f;
+    background: var(--orange);
+    border: 0;
+    border-radius: 13px 5px 13px 5px;
+    box-shadow: 0 10px 24px rgba(94, 233, 198, 0.16);
+}
+
+.studio-brand strong {
+    color: var(--ink);
+    font-family: var(--font-ui);
+}
+
+.studio-brand small,
+.studio-sidebar-foot a {
+    color: var(--muted);
+}
+
+.studio-nav-btn {
+    color: var(--muted);
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 11px;
+}
+
+.studio-nav-btn:hover {
+    color: var(--ink);
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.studio-nav-btn.active {
+    color: var(--orange);
+    background: rgba(94, 233, 198, 0.08);
+    border-color: rgba(94, 233, 198, 0.14);
+    box-shadow: none;
+}
+
+.local-badge {
+    color: var(--orange);
+    background: rgba(94, 233, 198, 0.07);
+    border: 1px solid rgba(94, 233, 198, 0.14);
+    border-radius: 8px;
+}
+
+.studio-main {
+    background: transparent;
+}
+
+.studio-topbar {
+    top: 0;
+    z-index: 20;
+    padding: 1.1rem clamp(1.2rem, 3vw, 2.5rem);
+    background: rgba(8, 12, 22, 0.84);
+    border-bottom: 1px solid rgba(183, 203, 232, 0.13);
+    backdrop-filter: blur(18px);
+}
+
+.studio-topbar h1,
+.section-heading h2 {
+    color: var(--ink);
+    font-family: var(--font-ui);
+    letter-spacing: -0.035em;
+}
+
+.studio-eyebrow,
+.section-heading span {
+    color: var(--orange);
+}
+
+.save-state {
+    color: var(--green);
+    background: rgba(88, 221, 176, 0.07);
+    border: 1px solid rgba(88, 221, 176, 0.15);
+    border-radius: 10px;
+}
+
+.save-state.unsynced {
+    color: var(--red);
+    background: rgba(255, 107, 122, 0.08);
+    border-color: rgba(255, 107, 122, 0.2);
+}
+
+.topbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+}
+
+.publish-command,
+.logout-command {
+    min-height: 42px;
+    border: 1px solid rgba(183, 203, 232, 0.18);
+    border-radius: 10px;
+    font: 800 0.72rem var(--font-ui);
+    cursor: pointer;
+}
+
+.publish-command {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0 0.9rem;
+    color: #07110f;
+    background: var(--orange);
+}
+
+.publish-command:hover {
+    background: #83f4d8;
+}
+
+.publish-command:disabled {
+    color: var(--muted);
+    background: #27344a;
+    cursor: not-allowed;
+}
+
+.logout-command {
+    width: 42px;
+    color: var(--muted);
+    background: transparent;
+}
+
+.logout-command:hover {
+    color: var(--red);
+    border-color: rgba(255, 107, 122, 0.3);
+}
+
+.studio-panel {
+    padding: clamp(1.2rem, 3vw, 2.5rem);
+}
+
+.metric,
+.studio-section,
+.manager-list,
+.quick-actions button,
+.backup-action,
+.manager-item,
+.trailer-preview,
+.post-preview,
+.request-preview,
+.patch-media-preview,
+.storage-stat {
+    color: var(--ink-soft);
+    background: rgba(16, 24, 39, 0.82);
+    border: 1px solid rgba(183, 203, 232, 0.13);
+    border-radius: 16px;
+    box-shadow: none;
+}
+
+.metric strong,
+.quick-actions strong,
+.backup-action strong,
+.manager-item-main strong,
+.patch-selected strong,
+.storage-stat strong {
+    color: var(--ink);
+}
+
+.metric-head,
+.quick-actions small,
+.backup-action small,
+.manager-item-main span,
+.field small,
+.section-copy,
+.storage-stat span {
+    color: var(--muted);
+}
+
+.quick-actions button:hover,
+.backup-action:hover,
+.manager-item:hover {
+    border-color: rgba(94, 233, 198, 0.28);
+    background: #151f31;
+    transform: translateY(-2px);
+}
+
+.field > span {
+    color: var(--ink-soft);
+}
+
+.field input,
+.field select,
+.field textarea,
+.search-control {
+    color: var(--ink);
+    background: #151f31;
+    border: 1px solid rgba(183, 203, 232, 0.18);
+    border-radius: 10px;
+    box-shadow: none;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus,
+.search-control:focus-within {
+    border-color: rgba(94, 233, 198, 0.5);
+    box-shadow: 0 0 0 4px rgba(94, 233, 198, 0.07);
+}
+
+.patch-fieldset {
+    border-color: rgba(183, 203, 232, 0.13);
+}
+
+.primary-command {
+    color: #07110f;
+    background: var(--orange);
+    border: 0;
+    border-radius: 10px;
+    box-shadow: none;
+}
+
+.primary-command:hover {
+    background: #83f4d8;
+    transform: translateY(-1px);
+}
+
+.secondary-command,
+.icon-command {
+    color: var(--ink-soft);
+    background: transparent;
+    border: 1px solid rgba(183, 203, 232, 0.18);
+    border-radius: 10px;
+    box-shadow: none;
+}
+
+.danger-command {
+    color: var(--red);
+    background: rgba(255, 107, 122, 0.07);
+    border-color: rgba(255, 107, 122, 0.2);
+}
+
+.manager-item.active {
+    background: rgba(94, 233, 198, 0.07);
+    border-color: rgba(94, 233, 198, 0.27);
+    box-shadow: none;
+}
+
+.manager-context {
+    max-width: 38rem;
+    margin: 0.42rem 0 0;
+    color: var(--muted);
+    font-size: 0.7rem;
+    line-height: 1.45;
+}
+
+.weekly-home-badge {
+    margin-left: 0.55rem;
+    padding: 0.18rem 0.38rem;
+    color: #07110f;
+    background: var(--orange);
+    border-radius: 999px;
+    font-size: 0.52rem;
+    font-style: normal;
+    font-weight: 800;
+    letter-spacing: 0.045em;
+    white-space: nowrap;
+}
+
+.toggle-ui {
+    background: #27344a;
+    border: 1px solid rgba(183, 203, 232, 0.18);
+}
+
+.toggle-field input:checked + .toggle-ui {
+    background: var(--orange);
+}
+
+.studio-toast {
+    color: var(--ink);
+    background: #151f31;
+    border: 1px solid rgba(183, 203, 232, 0.2);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+}
+
+.revision-section {
+    margin-top: 1.5rem;
+    padding-top: 1.3rem;
+    border-top: 1px solid rgba(183, 203, 232, 0.13);
+}
+
+.revision-list {
+    display: grid;
+    gap: 0.55rem;
+}
+
+.revision-item {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.85rem 0.95rem;
+    color: var(--ink-soft);
+    background: #151f31;
+    border: 1px solid rgba(183, 203, 232, 0.13);
+    border-radius: 12px;
+}
+
+.revision-item > div {
+    min-width: 0;
+}
+
+.revision-item strong,
+.revision-item span {
+    display: block;
+}
+
+.revision-item strong {
+    color: var(--ink);
+    font-size: 0.82rem;
+}
+
+.revision-item span {
+    margin-top: 0.22rem;
+    color: var(--muted);
+    font: 0.62rem/1.5 var(--font-mono);
+}
+
+.revision-kind {
+    display: inline-block;
+    margin-right: 0.45rem;
+    padding: 0.16rem 0.38rem;
+    color: #07110f;
+    background: var(--orange);
+    border-radius: 999px;
+    font-size: 0.52rem;
+    font-weight: 900;
+}
+
+.revision-kind.published {
+    background: #6ce4a7;
+}
+
+.revision-kind.restored {
+    background: #ffbd6f;
+}
+
+.restore-revision-btn {
+    padding: 0.45rem 0.65rem;
+    color: var(--ink-soft);
+    background: transparent;
+    border: 1px solid rgba(183, 203, 232, 0.18);
+    border-radius: 8px;
+    font: 700 0.66rem var(--font-ui);
+    cursor: pointer;
+}
+
+.restore-revision-btn:hover {
+    color: #07110f;
+    background: var(--orange);
+}
+
+@media (max-width: 900px) {
+    .studio-shell {
+        grid-template-columns: 1fr;
+    }
+
+    .studio-sidebar {
+        border-right: 0;
+    }
+
+    .topbar-actions {
+        flex-wrap: wrap;
+        justify-content: flex-end;
+    }
+}
+
+@media (max-width: 640px) {
+    .save-state span,
+    .publish-command span {
+        display: none;
+    }
+
+    .save-state,
+    .publish-command {
+        min-width: 42px;
+        justify-content: center;
+        padding: 0;
+    }
+
+    .revision-item {
+        grid-template-columns: 1fr;
+    }
+}

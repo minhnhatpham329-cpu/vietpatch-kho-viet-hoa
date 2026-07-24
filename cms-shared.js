@@ -2,6 +2,11 @@
     "use strict";
 
     const STORAGE_KEY = "vietpatch_cms_v1";
+    const syncContext = {
+        admin: false,
+        csrf: "",
+        meta: null
+    };
 
     const catalog = [
         { id: "wukong", title: "Black Myth: Wukong" },
@@ -402,21 +407,25 @@
 
     async function loadRemote(options = {}) {
         const local = load();
+        const draftScope = options.scope === "draft";
+        const endpoint = draftScope ? "/api/vietpatch/cms?scope=draft" : "/api/vietpatch/cms";
 
         try {
-            const response = await fetch("/api/vietpatch/cms", {
+            const response = await fetch(endpoint, {
                 credentials: "same-origin",
                 headers: { Accept: "application/json" }
             });
             if (!response.ok) throw new Error(`CMS_READ_${response.status}`);
 
             const payload = await response.json();
+            if (payload.meta) syncContext.meta = clone(payload.meta);
             const remote = normalize(payload.state);
-            if (options.preferLocalNewer && isNewerState(local, remote)) {
+            if (!draftScope && options.preferLocalNewer && isNewerState(local, remote)) {
                 return options.syncLocalNewer ? await saveRemote(local) : local;
             }
             return cache(remote);
         } catch (error) {
+            if (options.strict || draftScope) throw error;
             console.warn("Không đọc được CMS từ server, dùng cache local.", error);
             return local;
         }
@@ -429,24 +438,54 @@
     }
 
     async function saveRemote(state) {
-        const normalized = save(state);
+        const normalized = normalize(state);
+        normalized.updatedAt = new Date().toISOString();
+        const headers = {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+        };
+        if (syncContext.admin && syncContext.csrf) {
+            headers["X-CSRF-Token"] = syncContext.csrf;
+        }
 
         const response = await fetch("/api/vietpatch/cms", {
             method: "PUT",
             credentials: "same-origin",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ state: normalized })
+            headers,
+            body: JSON.stringify({
+                state: normalized,
+                expectedVersion: syncContext.meta?.draftVersion
+            })
         });
 
         const payload = await response.json().catch(() => ({}));
         if (!response.ok) {
-            throw new Error(payload.error || `CMS_SAVE_${response.status}`);
+            const error = new Error(payload.error || `CMS_SAVE_${response.status}`);
+            error.status = response.status;
+            error.payload = payload;
+            throw error;
         }
 
+        if (payload.meta) syncContext.meta = clone(payload.meta);
         return cache(payload.state || normalized);
+    }
+
+    function configureAdminSession(payload = {}) {
+        syncContext.admin = true;
+        syncContext.csrf = String(payload.csrf || "");
+        if (payload.meta) syncContext.meta = clone(payload.meta);
+    }
+
+    function updateSyncMeta(meta) {
+        syncContext.meta = meta ? clone(meta) : null;
+    }
+
+    function getSyncMeta() {
+        return syncContext.meta ? clone(syncContext.meta) : null;
+    }
+
+    function getCsrfToken() {
+        return syncContext.csrf;
     }
 
     function reset() {
@@ -514,6 +553,10 @@
         normalizeCredits,
         extractYouTubeId,
         createId,
-        clone
+        clone,
+        configureAdminSession,
+        updateSyncMeta,
+        getSyncMeta,
+        getCsrfToken
     };
 })();

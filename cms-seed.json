@@ -1,0 +1,900 @@
+{
+  "version": 1,
+  "updatedAt": "2026-06-26T08:39:57.701Z",
+  "site": {
+    "trailerKicker": "TRAILER BOARD / GAME HOT GẦN ĐÂY",
+    "trailerHeading": "Trailer game hot tuần này.",
+    "trailerIntro": "Theo dõi những game đang được cộng đồng nhắc nhiều để VietPatch ưu tiên khảo sát text, font và khả năng đóng gói patch.",
+    "newsroomKicker": "PATCH NOTES / BẢN TIN MỚI",
+    "newsroomHeading": "Tin từ kho patch.",
+    "newsroomIntro": "Cập nhật bản dịch, hướng dẫn cài đặt và những thay đổi quan trọng từ đội VietPatch.",
+    "patchDeskKicker": "PATCHROOM / BẢN TIN TUẦN 26",
+    "patchDeskHeading": "Trong phòng biên tập.",
+    "patchDeskIntro": "Lịch patch, tín hiệu kiểm thử và những game cộng đồng đang chờ được gom vào một bàn tin sống."
+  },
+  "trailers": [
+    {
+      "id": "trailer-mqunwslf-4102",
+      "videoId": "17thL7LTEjo",
+      "title": "dont sleep with the fishes",
+      "category": "Survival Horror,Adventure",
+      "description": "Don't Sleep With The Fishes là game kinh dị sinh tồn góc nhìn 2D, nơi bạn sống sót trên một chiếc xuồng cứu sinh giữa đại dương sau khi tàu bị một sinh vật bí ẩn đánh chìm. Thu thập tài nguyên, quản lý nhu yếu phẩm và đưa ra các lựa chọn để khám phá nhiều kết",
+      "enabled": true
+    },
+    {
+      "id": "trailer-mqunzn7g-moan",
+      "videoId": "xt--wyrTlhY",
+      "title": "BACKROOMS ANOMALY",
+      "category": "Horror",
+      "description": "BACKROOMS ANOMALY là game kinh dị tâm lý góc nhìn thứ nhất, đưa người chơi khám phá những hành lang vô tận của Backrooms để tìm ra các dị thường (anomalies) và lối thoát. Quan sát môi trường thật kỹ, ghi nhớ từng chi tiết và phát hiện những thay đổi bất thường",
+      "enabled": true
+    },
+    {
+      "id": "trailer-mquo3mj7-qucv",
+      "videoId": "R4Hdj97s7wA",
+      "title": "ESKINITA",
+      "category": "Survival Horror, Adventure",
+      "description": "ESKINITA là game kinh dị góc nhìn thứ nhất, đưa người chơi khám phá một ngôi làng hẻo lánh đầy bí ẩn và những hiện tượng siêu nhiên. Thu thập manh mối, giải các câu đố và tìm cách sống sót trước những mối đe dọa ẩn trong bóng tối khi dần hé lộ sự thật đằng sau",
+      "enabled": true
+    },
+    {
+      "id": "trailer-mquo6kus-vvor",
+      "videoId": "HCYultesGEg",
+      "title": "DAVE THE DIVER",
+      "category": "Adventure, Simulation,Underwater Explora",
+      "description": "DAVE THE DIVER là game phiêu lưu kết hợp mô phỏng quản lý, nơi bạn lặn xuống đại dương để săn bắt cá, khám phá bí mật dưới đáy biển vào ban ngày và điều hành một nhà hàng sushi vào ban đêm. Trò chơi kết hợp khám phá, chiến đấu, thu thập tài nguyên và quản lý k",
+      "enabled": true
+    }
+  ],
+  "posts": [
+    {
+      "id": "post-patch-notes-june",
+      "title": "Patch notes tháng 6: ưu tiên độ ổn định",
+      "category": "CẬP NHẬT",
+      "excerpt": "Các gói cài mới có kiểm tra phiên bản game, bản hoàn tác và ghi chú tương thích rõ ràng hơn.",
+      "cover": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1245620/library_hero.jpg",
+      "link": "",
+      "publishedAt": "2026-06-25",
+      "published": true
+    },
+    {
+      "id": "post-font-qa",
+      "title": "Bảng kiểm font Việt cho game UE5",
+      "category": "KỸ THUẬT",
+      "excerpt": "Một vòng QA riêng cho dấu tiếng Việt, text tràn khung và các màn hình dùng font atlas.",
+      "cover": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2358720/library_hero.jpg",
+      "link": "",
+      "publishedAt": "2026-06-22",
+      "published": true
+    },
+    {
+      "id": "post-community-pick",
+      "title": "Community Pick: game nào nên vào lịch để dịch?",
+      "category": "CỘNG ĐỒNG",
+      "excerpt": "Đội biên tập đang tổng hợp lượt đề xuất để chọn dự án khảo sát tiếp theo.",
+      "cover": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2054970/library_hero.jpg",
+      "link": "",
+      "publishedAt": "2026-06-19",
+      "published": true
+    }
+  ],
+  "requests": [
+    {
+      "id": "request-dragons-dogma-2",
+      "title": "Dragon's Dogma 2",
+      "logoUrl": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2054970/header.jpg",
+      "engine": "RE Engine",
+      "platform": "Steam",
+      "link": "https://store.steampowered.com/app/2054970/Dragons_Dogma_2/",
+      "notes": "Game cốt truyện sâu sắc, lời thoại phong cách cổ trang Anh ngữ khá phức tạp, cần được dịch ngữ Việt để tăng trải nghiệm.",
+      "votes": 1845,
+      "published": true
+    },
+    {
+      "id": "request-alan-wake-2",
+      "title": "Alan Wake 2",
+      "logoUrl": "https://cdn1.epicgames.com/offer/c4763f236d08423eb47b4c3008779c84/EGS_AlanWake2_RemedyEntertainment_S2_1200x1600-c7c8091ddac0f9669c8e5905bca88aaa",
+      "engine": "Northlight",
+      "platform": "Epic Games",
+      "link": "https://store.epicgames.com/vi/p/alan-wake-2",
+      "notes": "Game kinh dị tâm lý cực kì đỉnh cao của Remedy, rất nhiều tài liệu trinh thám phức tạp cần Việt hóa.",
+      "votes": 1532,
+      "published": true
+    },
+    {
+      "id": "request-dead-space-remake",
+      "title": "Dead Space Remake",
+      "logoUrl": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1693980/header.jpg",
+      "engine": "Frostbite",
+      "platform": "Steam",
+      "link": "https://store.steampowered.com/app/1693980/Dead_Space/",
+      "notes": "Muốn trải nghiệm cảm giác kinh dị ngoài vũ trụ một cách trọn vẹn hơn. Việt hóa sẽ giúp hiểu rõ nguồn gốc Marker.",
+      "votes": 945,
+      "published": true
+    },
+    {
+      "id": "request-sifu",
+      "title": "Sifu",
+      "logoUrl": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2138710/header.jpg",
+      "engine": "Unreal Engine 4",
+      "platform": "Steam",
+      "link": "https://store.steampowered.com/app/2138710/Sifu/",
+      "notes": "Game võ thuật hành động xuất sắc, mong muốn Việt hóa giao diện bảng ngọc kỹ năng và các cuộc hội thoại nói chuyện.",
+      "votes": 720,
+      "published": true
+    }
+  ],
+  "hiddenGameIds": [],
+  "customGames": [
+    {
+      "id": "game-mqtqh6iw-724i",
+      "title": "Atelier Ryza 3 Alchemist of the End & the Secret Key Việt hóa",
+      "engine": "Custom Engine",
+      "engineKey": "other",
+      "developer": "Gust, Koei Tecmo Games",
+      "version": "v1.01",
+      "size": "428 MB",
+      "price": 0,
+      "type": "Free",
+      "progress": 100,
+      "downloads": "10000",
+      "date": "2026-06-25",
+      "description": "Atelier Ryza 3: Alchemist of the End & the Secret Key là tựa game nhập vai Nhật Bản (JRPG) được phát triển bởi Gust và phát hành bởi Koei Tecmo. Đây là phần game thứ 24 của toàn bộ thương hiệu Atelier, đồng thời là chương cuối kết thúc trọn vẹn bộ ba chương truyện \"Secret\" (Secret Trilogy) gắn liền với hành trình của cô nàng giả kim thuật sư trẻ tuổi Reisalin \"Ryza\" Stout.",
+      "notes": "Thông tin cài đặt sẽ được cập nhật trong hồ sơ patch.",
+      "downloadUrl": "https://drive.google.com/file/d/1SAuDW_WrWonaW4VRlOiGbWrF0wG6TIr6/view?usp=sharing",
+      "imageUrl": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2156252/capsule_616x353.jpg?t=1681347613",
+      "tags": [],
+      "credits": {
+        "translator": "PỏnGG",
+        "editor": "PỏnGG",
+        "technical": "PỏnGG",
+        "qa": "PỏnGG"
+      },
+      "screenshots": [
+        "https://nintendoeverything.com/wp-content/uploads/Atelier-Ryza-3-gets-Japanese-gameplay-overview.jpg",
+        "https://images.rpgsite.net/image/da49c9a1/119052/original/Atelier-Ryza-3_20221013_31.jpg",
+        "https://gamingbolt.com/wp-content/uploads/2023/03/Atelier-Ryza-3-Alchemist-of-the-End-and-the-Secret-Key_05.jpg",
+        "https://storage.ghost.io/c/50/c6/50c61f91-0165-4605-93bc-f8598149e466/content/images/2025/02/atelier-ryza-3-alchemist-of-the-end-and-the-secret-key_2022_11-29-22_024-scaled.jpg?ref=gamingtrend.com"
+      ]
+    },
+    {
+      "id": "game-mqula5hi-h872",
+      "title": "LEGO Batman 3: Beyond Gotham Việt hóa",
+      "engine": "Nu2 Engine",
+      "engineKey": "other",
+      "developer": "TT Games",
+      "version": "v1.0.0",
+      "size": "708 MB",
+      "price": 0,
+      "type": "Free",
+      "progress": 100,
+      "downloads": "0",
+      "date": "2026-06-26",
+      "description": "LEGO Batman 3: Beyond Gotham là phần thứ ba trong series LEGO Batman, đưa cuộc phiêu lưu vượt ra khỏi thành phố Gotham để tiến vào không gian vũ trụ rộng lớn của DC Comics. Lần này, Batman buộc phải hợp tác cùng các thành viên của Justice League và nhiều siêu anh hùng khác nhằm ngăn chặn âm mưu của Brainiac, kẻ đang thu nhỏ và sưu tập các hành tinh trên khắp thiên hà để phục vụ bộ sưu tập bệnh hoạn của mình.\n\nNgười chơi sẽ được điều khiển hơn 150 nhân vật nổi tiếng từ vũ trụ DC, bao gồm Batman, Superman, Wonder Woman, The Flash, Green Lantern, Cyborg, Aquaman cùng rất nhiều siêu anh hùng và siêu phản diện khác. Mỗi nhân vật đều sở hữu kỹ năng và năng lực riêng, tạo nên nhiều cách giải đố, chiến đấu và khám phá các màn chơi đầy sáng tạo.\n\nBên cạnh những trận chiến vui nhộn đậm chất LEGO, trò chơi còn đưa người chơi đến nhiều địa điểm biểu tượng như Hall of Justice, Batcave, Watchtower và hàng loạt hành tinh thuộc Lantern Corps. Hệ thống trang phục mới cho Batman và các nhân vật khác mang đến nhiều khả năng đặc biệt, giúp mở khóa khu vực bí mật và vượt qua các thử thách đa dạng. Với phong cách hài hước đặc trưng, những màn cắt cảnh dí dỏm cùng lối chơi phù hợp với mọi lứa tuổi, LEGO Batman 3: Beyond Gotham là một cuộc phiêu lưu hấp dẫn dành cho cả người hâm mộ LEGO lẫn vũ trụ DC.",
+      "notes": "Chép thư mục vào game để trải nghiệm",
+      "downloadUrl": "https://drive.google.com/file/d/1J6TaHnrG1lYl44XDTptm4Khbldp1wBN_/view?usp=sharing",
+      "imageUrl": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/313690/capsule_616x353.jpg?t=1780597097",
+      "tags": [],
+      "credits": {
+        "translator": "PỏnGG",
+        "editor": "PỏnGG",
+        "technical": "PỏnGG",
+        "qa": "PỏnGG"
+      },
+      "screenshots": [
+        "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/327172/ss_bc954eff29cd033882cea9f945e6fd45fc74909a.1920x1080.jpg?t=1563791302",
+        "https://im.ziffdavisinternational.com/ign_nl/screenshot/default/lego-batman-4_4k6d.jpg",
+        "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/313690/ss_67bb5a7afd535cfe43dd382a342a5964d6fc74e0.1920x1080.jpg?t=1780597097"
+      ]
+    },
+    {
+      "id": "game-mqullqnq-n496",
+      "title": "Lego the lord of the rings Việt hóa",
+      "engine": "Nu2 Engine",
+      "engineKey": "other",
+      "developer": "TT Games",
+      "version": "v1.0.0",
+      "size": "1.4 G",
+      "price": 0,
+      "type": "Free",
+      "progress": 100,
+      "downloads": "0",
+      "date": "2026-06-26",
+      "description": "LEGO The Lord of the Rings là tựa game hành động phiêu lưu tái hiện trọn vẹn ba phần phim điện ảnh The Fellowship of the Ring, The Two Towers và The Return of the King dưới phong cách LEGO hài hước đặc trưng. Người chơi sẽ đồng hành cùng Frodo Baggins và Hội Đồng Nhẫn trong hành trình mang Chiếc Nhẫn Chúa (One Ring) đến Núi Doom để tiêu diệt nó, qua đó ngăn chặn âm mưu thống trị Trung Địa của Chúa tể Bóng tối Sauron.\n\nTrong suốt cuộc phiêu lưu, người chơi sẽ được điều khiển hơn 80 nhân vật quen thuộc như Aragorn, Gandalf, Legolas, Gimli, Samwise Gamgee, Boromir và nhiều nhân vật khác trong vũ trụ The Lord of the Rings. Mỗi nhân vật đều sở hữu kỹ năng riêng, từ chiến đấu, bắn cung, sử dụng phép thuật đến giải đố và mở khóa các khu vực bí mật, mang đến lối chơi đa dạng và khuyến khích phối hợp giữa các nhân vật.\n\nBên cạnh việc tái hiện những trận chiến nổi tiếng như Helm's Deep, Mines of Moria hay Pelennor Fields, trò chơi còn cho phép người chơi tự do khám phá thế giới Middle-earth rộng lớn với nhiều địa điểm biểu tượng như The Shire, Rivendell, Minas Tirith, Isengard và Mount Doom. Những đoạn hội thoại được lồng ghép trực tiếp từ phim kết hợp với phong cách hài hước của LEGO tạo nên một trải nghiệm vừa quen thuộc vừa mới mẻ dành cho người hâm mộ.",
+      "notes": "Chép file vào game để trải nghiệm",
+      "downloadUrl": "https://drive.google.com/file/d/1ROHCrefms8lXPP_TX5z6UMhPqkp09Qfr/view?usp=sharing",
+      "imageUrl": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/214510/capsule_616x353.jpg?t=1780599831",
+      "tags": [],
+      "credits": {
+        "translator": "PỏnGG",
+        "editor": "PỏnGG",
+        "technical": "PỏnGG",
+        "qa": "PỏnGG"
+      },
+      "screenshots": [
+        "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/214510/ss_7d5376b98dd550d4902eaff82c7fa9a86e1b0382.1920x1080.jpg?t=1780599831",
+        "https://m.media-amazon.com/images/M/MV5BZjVjMjliYzEtNjRmNC00OTJmLWFkNTAtMmMyY2Q2MmVkNTk2XkEyXkFqcGc@._V1_.jpg",
+        "https://images.gog-statics.com/b0af2752be6eaa324b8b003ada92341ad14bc007de21e43ccb5ffcb4fec3e4a8_product_card_v2_mobile_slider_639.jpg"
+      ]
+    },
+    {
+      "id": "game-mqulspau-68q0",
+      "title": "Scale the Depths Việt Hóa",
+      "engine": "Unity",
+      "engineKey": "unity",
+      "developer": "Glass Gecko Games",
+      "version": "v1.0.0",
+      "size": "29.8 MB",
+      "price": 0,
+      "type": "Free",
+      "progress": 100,
+      "downloads": "0",
+      "date": "2026-06-26",
+      "description": "Scale the Depths là tựa game mô phỏng kết hợp phiêu lưu và quản lý, đưa người chơi vào vai một người bán cá điều hành cửa hàng hải sản nhỏ ngay bên bờ biển. Ban ngày, bạn sẽ dong thuyền ra khơi để câu những loài cá quý hiếm, khám phá các vùng biển sâu và tìm kiếm nguồn tài nguyên mới. Khi màn đêm buông xuống, công việc chuyển sang chế biến, trưng bày và phục vụ khách hàng, từng bước phát triển cửa hàng từ một quầy bán cá khiêm tốn thành một doanh nghiệp hải sản nổi tiếng.\n\nThế giới trong Scale the Depths chứa đựng nhiều vùng biển với hệ sinh thái đa dạng, từ những rạn san hô đầy màu sắc đến các vực sâu bí ẩn, nơi sinh sống của những sinh vật kỳ lạ và quý hiếm. Người chơi sẽ phải nâng cấp tàu thuyền, dụng cụ đánh bắt và trang thiết bị để có thể vươn tới những khu vực nguy hiểm hơn, đồng thời quản lý thời gian, tài chính và nguồn nguyên liệu nhằm đáp ứng nhu cầu ngày càng cao của khách hàng.\n\nKhông chỉ tập trung vào yếu tố mô phỏng, trò chơi còn lồng ghép nhiều bí ẩn dưới lòng đại dương. Trong quá trình khám phá, bạn sẽ bắt gặp những di tích cổ, sinh vật huyền bí và các hiện tượng kỳ lạ đang chờ được giải mã. Sự kết hợp giữa nhịp chơi thư giãn, quản lý cửa hàng và khám phá đại dương tạo nên một trải nghiệm hấp dẫn, phù hợp với cả những người yêu thích game mô phỏng lẫn phiêu lưu.",
+      "notes": "Đọc hướng dẫn trong thư mục",
+      "downloadUrl": "https://drive.google.com/file/d/1O2f7dsWpm7NYSG4b3LEh9Zu8aquIeDaj/view?usp=sharing",
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8NPFlRt4DE1z-p-eMqOGqWB-gUFGu6FSp2w&s",
+      "tags": [],
+      "credits": {
+        "translator": "PỏnGG",
+        "editor": "PỏnGG",
+        "technical": "PỏnGG",
+        "qa": "PỏnGG"
+      },
+      "screenshots": [
+        "https://img.itch.zone/aW1hZ2UvMjkxMjExMi8xNzQxOTIyNS5wbmc=/original/nbXGhG.png",
+        "https://img.itch.zone/aW1nLzE5NzM3NTYwLnBuZw==/original/RdyJrB.png",
+        "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3198890/6a4d24825b6a4f61f9b8dbe3a4661dc93442e4d4/ss_6a4d24825b6a4f61f9b8dbe3a4661dc93442e4d4.600x338.jpg?t=1778876775",
+        "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3198890/b9130cb73a4fdb34a4600d95b5b3eb9de341583a/ss_b9130cb73a4fdb34a4600d95b5b3eb9de341583a.1920x1080.jpg?t=1759392903"
+      ]
+    },
+    {
+      "id": "game-mqum24qd-h7x6",
+      "title": "Outlast 1 Việt hóa",
+      "engine": "Unreal Engine 3",
+      "engineKey": "ue",
+      "developer": "Red Barrels",
+      "version": "v1.0.0",
+      "size": "3.9 MB",
+      "price": 0,
+      "type": "Free",
+      "progress": 100,
+      "downloads": "0",
+      "date": "2026-06-26",
+      "description": "Outlast là một trong những tựa game kinh dị sinh tồn nổi tiếng nhất, đưa người chơi vào trải nghiệm đầy căng thẳng và ám ảnh trong vai Miles Upshur, một nhà báo điều tra nhận được nguồn tin bí mật về những sự kiện kỳ lạ xảy ra tại Bệnh viện tâm thần Mount Massive Asylum. Sau khi đột nhập vào cơ sở bị bỏ hoang này, Miles nhanh chóng phát hiện nơi đây đã biến thành địa ngục với những bệnh nhân điên loạn, các thí nghiệm vô nhân đạo và những bí mật kinh hoàng bị chôn giấu phía sau cánh cửa đóng kín.\n\nKhác với nhiều tựa game kinh dị khác, Outlast gần như không cho phép người chơi chống trả. Không có súng hay vũ khí để tự vệ, bạn chỉ có thể chạy trốn, ẩn nấp hoặc tìm cách đánh lạc hướng kẻ thù để sống sót. Chiếc máy quay cầm tay với chế độ Night Vision trở thành công cụ không thể thiếu để quan sát trong bóng tối, nhưng việc sử dụng cũng tiêu hao pin, buộc người chơi phải liên tục tìm kiếm nguồn pin mới giữa những hành lang đầy hiểm nguy.\n\nBầu không khí u ám, thiết kế âm thanh xuất sắc cùng những màn truy đuổi nghẹt thở đã giúp Outlast trở thành tượng đài của dòng game kinh dị hiện đại. Câu chuyện dần hé lộ những thí nghiệm bí mật, âm mưu của tập đoàn Murkoff và sự thật đáng sợ ẩn sau những bức tường của Mount Massive Asylum, mang đến trải nghiệm vừa hồi hộp vừa đầy ám ảnh cho người chơi.",
+      "notes": "Chạy laucher của matran999 để cài đặt",
+      "downloadUrl": "https://drive.google.com/file/d/1bRSe0tvTx9-U7Q9HxOjIv8wKgnxUtnQH/view?usp=sharing",
+      "imageUrl": "https://hiepsibaotap.com/wp-content/uploads/2020/07/wp1872476.jpg",
+      "tags": [],
+      "credits": {
+        "translator": "Matran999",
+        "editor": "Matran999",
+        "technical": "Matran999",
+        "qa": "Matran999"
+      },
+      "screenshots": [
+        "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/238320/page_bg_raw.jpg?t=1666817106",
+        "https://image.api.playstation.com/cdn/UP2113/CUSA00325_00/FREE_CONTENTNWqxhGxEj9uvUVieMtOR/PREVIEW_SCREENSHOT1_51923.jpg",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcShYh2TsOCuFM-6ujiRsutnbXzRDlu7mYWl7w&s"
+      ]
+    },
+    {
+      "id": "game-mqum87vz-haex",
+      "title": "Outlast 2 Việt hóa",
+      "engine": "Unreal Engine 3",
+      "engineKey": "ue",
+      "developer": "Red Barrels",
+      "version": "v1.0.0",
+      "size": "4.8 MB",
+      "price": 0,
+      "type": "Free",
+      "progress": 100,
+      "downloads": "0",
+      "date": "2026-06-26",
+      "description": "Outlast 2 là phần tiếp theo của dòng game kinh dị sinh tồn nổi tiếng đến từ Red Barrels, mang đến một câu chuyện hoàn toàn mới với bầu không khí rùng rợn và tâm lý căng thẳng hơn bao giờ hết. Người chơi sẽ vào vai Blake Langermann, một phóng viên điều tra cùng vợ là Lynn Langermann trên hành trình tìm hiểu cái chết bí ẩn của một phụ nữ mang thai. Cuộc điều tra nhanh chóng biến thành cơn ác mộng khi trực thăng của họ gặp nạn tại vùng hẻo lánh thuộc bang Arizona, nơi bị kiểm soát bởi một giáo phái cực đoan cuồng tín.\n\nLạc giữa những ngôi làng biệt lập và khu rừng tối tăm, Blake phải tìm cách giải cứu Lynn trong khi liên tục bị truy đuổi bởi các tín đồ cuồng tín cùng những sinh vật đáng sợ. Trò chơi khai thác sâu yếu tố kinh dị tâm lý, đan xen giữa hiện thực và những ký ức méo mó về quá khứ, khiến người chơi không thể phân biệt đâu là sự thật và đâu chỉ là ảo giác. Câu chuyện dần hé lộ những bí mật đen tối về đức tin, sự cuồng tín và những thí nghiệm bí ẩn ẩn sau các sự kiện kinh hoàng.\n\nTiếp nối lối chơi đặc trưng của Outlast, người chơi hoàn toàn không có khả năng chiến đấu. Muốn sống sót, bạn chỉ có thể chạy trốn, ẩn nấp hoặc lợi dụng môi trường để đánh lạc hướng kẻ thù. Chiếc máy quay với chế độ Night Vision vẫn là công cụ quan trọng giúp quan sát trong bóng tối, nhưng nguồn pin luôn có hạn, tạo nên cảm giác căng thẳng trong từng bước di chuyển. Hệ thống âm thanh chân thực, thiết kế màn chơi rộng lớn và những pha truy đuổi nghẹt thở khiến Outlast 2 trở thành một trong những tựa game kinh dị đáng sợ nhất của thế hệ mình.",
+      "notes": "Mở laucher để cài",
+      "downloadUrl": "https://drive.google.com/file/d/1TfsRv535LWakHe112hbpwLl1UrSGqVCo/view?usp=sharing",
+      "imageUrl": "https://hoanghamobile.com/tin-tuc/wp-content/uploads/2023/12/outlast-2.jpg",
+      "tags": [],
+      "credits": {
+        "translator": "Gametiengviet",
+        "editor": "Gametiengviet",
+        "technical": "Gametiengviet",
+        "qa": "Gametiengviet"
+      },
+      "screenshots": [
+        "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/414700/ss_d190ff947f5529d6e47c918afe7e6ee4fbccbce3.1920x1080.jpg?t=1618944453",
+        "https://image.api.playstation.com/vulcan/img/rnd/202010/1520/m88d4I6Tqm2P2EPOpFyBQIpz.png",
+        "https://static0.thegamerimages.com/wordpress/wp-content/uploads/2021/05/Outlast-2-10-Tips-For-Playing-On-Nightmare.jpg?w=1600&h=900&fit=crop",
+        "https://www.dsogaming.com/wp-content/uploads/2014/02/Outlast-feature-672x372.jpg"
+      ]
+    },
+    {
+      "id": "game-mqumpa0a-epk7",
+      "title": "007 First Light Việt Hóa",
+      "engine": "Glacier Engine",
+      "engineKey": "other",
+      "developer": "IO Interactive",
+      "version": "v1.0.0",
+      "size": "33 MB",
+      "price": 0,
+      "type": "Free",
+      "progress": 100,
+      "downloads": "0",
+      "date": "2026-06-26",
+      "description": "007 First Light là tựa game hành động – phiêu lưu hoàn toàn mới do IO Interactive, cha đẻ của series HITMAN, phát triển. Trò chơi kể lại câu chuyện nguồn gốc của James Bond, mang đến một góc nhìn hoàn toàn mới về hành trình trở thành điệp viên mang mật danh 007. Không dựa trên bất kỳ bộ phim nào, First Light xây dựng một cốt truyện nguyên bản, đưa người chơi theo chân một Bond trẻ tuổi, tài năng nhưng còn nhiều thiếu sót, từng bước chứng minh bản thân để gia nhập hàng ngũ tinh nhuệ của MI6.\n\nTrong vai James Bond, người chơi sẽ tham gia vào những nhiệm vụ trải dài trên nhiều quốc gia, từ các thành phố hiện đại, căn cứ bí mật đến những địa điểm xa hoa của giới thượng lưu. Trò chơi kết hợp linh hoạt giữa hành động, lén lút, điều tra và xâm nhập, cho phép người chơi lựa chọn nhiều cách tiếp cận khác nhau để hoàn thành mục tiêu. Bên cạnh những màn đấu súng nghẹt thở, Bond còn phải sử dụng trí thông minh, kỹ năng cải trang, đàm phán và hàng loạt thiết bị công nghệ cao đặc trưng của MI6 để vượt qua các thử thách.\n\nĐược xây dựng trên Glacier Engine, 007 First Light mang đến môi trường rộng lớn, AI thông minh và mức độ tương tác cao với thế giới xung quanh. Mỗi nhiệm vụ đều được thiết kế với nhiều hướng giải quyết, khuyến khích người chơi quan sát, lên kế hoạch và tận dụng môi trường để hoàn thành mục tiêu theo phong cách của riêng mình. Với kinh nghiệm từ dòng game HITMAN, IO Interactive hứa hẹn sẽ mang đến một trải nghiệm điệp viên chân thực, điện ảnh và giàu chiều sâu.",
+      "notes": "chép file vào game để trải",
+      "downloadUrl": "https://drive.google.com/file/d/1XEhUw3Ba6kcq0HLSMHuf6C2Q8TL-Sc5Q/view?usp=sharing",
+      "imageUrl": "https://meviethoa.com/wp-content/uploads/2026/06/007FirstLight-viethoa.jpg",
+      "tags": [],
+      "credits": {
+        "translator": "SnapeVN",
+        "editor": "SnapeVN",
+        "technical": "SnapeVN",
+        "qa": "SnapeVN"
+      },
+      "screenshots": [
+        "https://tedishop.vn/wp-content/uploads/2026/05/007FirstLight-4-tedishop.vn_.jpg",
+        "https://hoanghamobile.com/tin-tuc/wp-content/uploads/2026/01/007-first-light-3.jpg",
+        "https://cdn2.fptshop.com.vn/unsafe/800x0/007_first_light_04_db1734853f.jpg",
+        "https://i0.wp.com/cdn.vietgame.asia/wp-content/uploads/20260620074751/007-first-light-danh-gia-game-8-1140x641.jpg?resize=1140%2C641&ssl=1"
+      ]
+    },
+    {
+      "id": "game-mqun1xm0-octq",
+      "title": "DYING LIGHT: THE BEAST Việt",
+      "engine": "C-Engine",
+      "engineKey": "other",
+      "developer": "Techland",
+      "version": "v1.0.0",
+      "size": "1.1 G",
+      "price": 0,
+      "type": "Free",
+      "progress": 100,
+      "downloads": "0",
+      "date": "2026-06-26",
+      "description": "DYING LIGHT: THE BEAST là chương hoàn toàn mới trong vũ trụ Dying Light, đánh dấu sự trở lại của Kyle Crane – nhân vật chính trong phần game đầu tiên. Sau nhiều năm bị giam cầm và trở thành đối tượng của các thí nghiệm tàn nhẫn, Kyle cuối cùng cũng trốn thoát. Tuy nhiên, những biến đổi trong cơ thể đã khiến anh sở hữu một sức mạnh đáng sợ, đồng thời phải đối mặt với bản năng quái vật đang dần trỗi dậy. Mang trong mình lòng căm thù và khát khao báo thù, Kyle bước vào hành trình truy tìm kẻ đã hủy hoại cuộc đời mình.\n\nLấy bối cảnh tại Castor Woods, một vùng thung lũng rộng lớn từng là điểm du lịch nổi tiếng nhưng giờ đã trở thành vùng đất chết sau đại dịch zombie, người chơi sẽ được khám phá nhiều khu vực đa dạng như thị trấn đổ nát, rừng rậm, khu công nghiệp, đầm lầy và các cơ sở nghiên cứu bị bỏ hoang. Ban ngày, bạn sẽ thu thập tài nguyên, chế tạo trang bị và hoàn thành nhiệm vụ; còn khi màn đêm buông xuống, những sinh vật bị nhiễm trở nên hung hãn và nguy hiểm hơn gấp nhiều lần, biến mỗi chuyến khám phá thành cuộc chiến sinh tồn thực sự.\n\nDYING LIGHT: THE BEAST tiếp tục phát huy thế mạnh của dòng game với hệ thống parkour mượt mà, chiến đấu cận chiến đầy uy lực và khả năng tận dụng môi trường để sinh tồn. Bên cạnh đó, trò chơi còn bổ sung nhiều loại vũ khí mới, phương tiện di chuyển, kỹ năng chiến đấu và cơ chế khai thác sức mạnh quái vật của Kyle, cho phép người chơi tung ra những đòn tấn công hủy diệt trong các tình huống quyết định. Chế độ co-op trực tuyến cũng quay trở lại, giúp người chơi có thể cùng bạn bè khám phá thế giới hậu tận thế và đối đầu với những mối đe dọa khủng khiếp.",
+      "notes": "Mật khẩu giải nén: Theredteam.vn (Chữ T đầu tiên viết hoa).\n\nMở bộ cài lên ấn vào logo chữ R nhỏ và chọn đường dẫn đến thư mục game Dying Light: The Beast của bạn, sau đó ấn Cài Đặt và chờ cho quá trình cài thành công! Hoàn Tất!\n\nĐể xoá Việt Hoá: Verify lại game.",
+      "downloadUrl": "https://drive.google.com/file/d/112goayiG62k4Oidz2F6yzxPFQ3HKol3v/view?usp=sharing",
+      "imageUrl": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3008130/875657316c2358dc7b34651ca8f495c154e28c1b/capsule_616x353.jpg?t=1777373421",
+      "tags": [],
+      "credits": {
+        "translator": "Theredteam",
+        "editor": "Theredteam",
+        "technical": "Theredteam",
+        "qa": "Theredteam"
+      },
+      "screenshots": [
+        "https://sm.pcmag.com/t/pcmag_me/review/d/dying-ligh/dying-light-the-beast_4c84.1920.jpg",
+        "https://gaming.komputronik.pl/wp-content/uploads/2025/09/dying-light-the-beast-przeciwnicy.jpg",
+        "https://dyinglightgame.com/img/mods/the-beast/day_3840.jpg",
+        "https://gamingbolt.com/wp-content/uploads/2024/10/dying-light-the-beast-image-4.jpg"
+      ]
+    },
+    {
+      "id": "game-mqun8clh-cj0r",
+      "title": "silent hill 2 remake việt hóa",
+      "engine": "Unreal Engine 5",
+      "engineKey": "ue",
+      "developer": "Bloober Team",
+      "version": "v1.0.0",
+      "size": "295 KB",
+      "price": 0,
+      "type": "Free",
+      "progress": 100,
+      "downloads": "0",
+      "date": "2026-06-26",
+      "description": "Silent Hill 2 Remake là phiên bản làm lại của kiệt tác kinh dị tâm lý từng làm nên tên tuổi của dòng game Silent Hill. Được phát triển bởi Bloober Team trên nền Unreal Engine 5, trò chơi tái hiện thị trấn sương mù Silent Hill với đồ họa thế hệ mới, âm thanh chân thực và lối chơi được hiện đại hóa, đồng thời vẫn giữ nguyên bầu không khí ám ảnh cùng chiều sâu tâm lý của nguyên tác.\n\nNgười chơi sẽ vào vai James Sunderland, một người đàn ông bất ngờ nhận được lá thư từ người vợ Mary đã qua đời ba năm trước. Lá thư dẫn anh quay trở lại thị trấn Silent Hill, nơi chất chứa những ký ức đau buồn và vô số bí mật chưa từng được hé lộ. Trên hành trình tìm kiếm sự thật, James phải đối mặt với những sinh vật kỳ dị, các nhân vật bí ẩn và những nỗi ám ảnh được phản chiếu từ chính nội tâm của mình.\n\nSilent Hill 2 Remake không chỉ mang đến những màn khám phá, giải đố và chiến đấu đầy căng thẳng mà còn khai thác sâu các chủ đề về mất mát, tội lỗi, sự dằn vặt và khát khao được tha thứ. Hệ thống camera góc nhìn qua vai, cơ chế chiến đấu được cải tiến cùng thiết kế môi trường chi tiết giúp người chơi đắm chìm hơn vào bầu không khí ngột ngạt và u ám của thị trấn. Mỗi con quái vật, mỗi địa điểm và mỗi cuộc gặp gỡ đều mang ý nghĩa biểu tượng, góp phần tạo nên một trong những câu chuyện sâu sắc và đáng nhớ nhất lịch sử ngành game.",
+      "notes": "Giải nén trực tiếp vào thư mục \\SHProto\\Content\\Paks của game.",
+      "downloadUrl": "https://drive.google.com/file/d/1pdK9MyaFMQm5Uf4KMg1EVbjy6BOKyOY3/view?usp=sharing",
+      "imageUrl": "https://bmgamingshop.com/wp-content/uploads/2025/08/silent-hill-2-2024-3840x2160-18255-scaled.jpg",
+      "tags": [],
+      "credits": {
+        "translator": "MeViethoa",
+        "editor": "MeViethoa",
+        "technical": "MeViethoa",
+        "qa": "MeViethoa"
+      },
+      "screenshots": [
+        "https://m.media-amazon.com/images/M/MV5BMjE5ODMxOWQtYWQ2OS00ZjcyLWFmODQtMTFlM2Q2Y2QyYTVmXkEyXkFqcGdeQVRoaXJkUGFydHlJbmdlc3Rpb25Xb3JrZmxvdw@@._V1_.jpg",
+        "https://www.denofgeek.com/wp-content/uploads/2024/10/silent-hill-2-remake-pyramid-head.jpg?resize=768%2C432",
+        "https://sm.ign.com/ign_nordic/gallery/s/silent-hil/silent-hill-2-remake_vu7p.png",
+        "https://www.newgamenetwork.com/app/uploads/2025/10/sh2_02_3.jpg"
+      ]
+    },
+    {
+      "id": "game-mqunohrl-k1ux",
+      "title": "Silent Hill f Việt Hóa",
+      "engine": "Unreal Engine 5",
+      "engineKey": "ue",
+      "developer": "NeoBards Entertainment",
+      "version": "v1.0.0",
+      "size": "44 MB",
+      "price": 0,
+      "type": "Free",
+      "progress": 100,
+      "downloads": "0",
+      "date": "2026-06-26",
+      "description": "Silent Hill f là chương hoàn toàn mới của dòng game kinh dị huyền thoại Silent Hill, đánh dấu lần đầu tiên loạt game đưa bối cảnh chính sang Nhật Bản. Câu chuyện diễn ra vào thập niên 1960, tại ngôi làng miền núi hư cấu Ebisugaoka, nơi cuộc sống yên bình bỗng bị nuốt chửng bởi màn sương dày đặc và những đóa hoa đỏ kỳ dị lan rộng khắp mọi ngóc ngách. Trong vai Shimizu Hinako, một nữ sinh trung học bình thường, người chơi sẽ phải tìm cách sinh tồn giữa thế giới đang dần biến dạng và khám phá sự thật đằng sau thảm kịch đang bao trùm ngôi làng.\n\nKhác với các phần trước, Silent Hill f khai thác sâu văn hóa dân gian Nhật Bản, kết hợp giữa vẻ đẹp mong manh của thiên nhiên và nỗi kinh hoàng ẩn giấu phía sau những đóa hoa nở rộ. Trò chơi mang đến hàng loạt sinh vật quái dị, các câu đố đòi hỏi tư duy, những màn khám phá đầy căng thẳng và các cuộc chạm trán khiến người chơi luôn phải cân nhắc giữa chiến đấu và tìm đường sống. Mỗi địa điểm, mỗi nhân vật và mỗi sự kiện đều góp phần hé lộ một câu chuyện nhuốm màu bi kịch về nỗi đau, sự hối tiếc và những lựa chọn không thể thay đổi.\n\nĐược xây dựng trên Unreal Engine 5, Silent Hill f tái hiện một thế giới vừa đẹp đến mê hoặc vừa rùng rợn đến ám ảnh với công nghệ đồ họa hiện đại, hiệu ứng ánh sáng chân thực và thiết kế âm thanh xuất sắc. Kịch bản được chấp bút bởi Ryukishi07, tác giả nổi tiếng của loạt visual novel When They Cry, mang đến một câu chuyện giàu chiều sâu tâm lý, nhiều tầng ý nghĩa và đậm chất kinh dị Nhật Bản.",
+      "notes": "Mật khẩu giải nén: Theredteam.vn (Chữ T đầu tiên viết hoa).\n\nMở bộ cài lên ấn vào logo SILENT HILL f để chọn đường dẫn đến thư mục game SILENT HILL f của bạn, sau đó ấn Cài Đặt! Hoàn Tất!\nĐối với bản PS5 có file hướng dẫn kèm theo, giải nén ra là thấy.\n\nĐể xoá Việt Hoá: Vào theo đường dẫn SHf/Content/Paks và xoá thư mục ~mod là được.",
+      "downloadUrl": "https://drive.google.com/file/d/1q8cjrWq7TZbRA3i6hhX24uWvuhjvyaCO/view?usp=sharing",
+      "imageUrl": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2947440/7e5d923ac622bd1775ebc9b5d4b5b0a24bf5ed40/header.jpg?t=1770169624",
+      "tags": [],
+      "credits": {
+        "translator": "Theredteam",
+        "editor": "Theredteam",
+        "technical": "Theredteam",
+        "qa": "Theredteam"
+      },
+      "screenshots": [
+        "https://www.slantmagazine.com/wp-content/uploads/2025/09/silenthillf.jpg",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFK1fidLPEX0ASEMiTkWG8_Fr19tRkuzMQoQ&s",
+        "https://i0.wp.com/jvmag.ch/wp-content/uploads/2025/06/silent-hill-f.webp?ssl=1",
+        "https://forum.theredteam.vn/attachments/z7042819981722_6c3ab6dca89e2d90738f9e38e0516dfa-jpg.3365/"
+      ]
+    },
+    {
+      "id": "game-mquojddk-zvkt",
+      "title": "Don't Sleep With The Fishes Việt hóa",
+      "engine": "Unity",
+      "engineKey": "unity",
+      "developer": "Taiki",
+      "version": "v1.0.0",
+      "size": "Đang cập nhật",
+      "price": 30000,
+      "type": "Premium",
+      "progress": 100,
+      "downloads": "0",
+      "date": "2026-06-26",
+      "description": "Don't Sleep With The Fishes là tựa game kinh dị sinh tồn kết hợp lối chơi point & click và quản lý tài nguyên, đưa người chơi vào một cuộc chiến sinh tồn giữa đại dương đầy bí ẩn. Trong vai thuyền trưởng của một con tàu vận chuyển bí mật, bạn và thủy thủ đoàn bất ngờ gặp tai nạn sau khi con tàu bị một thế lực vô hình tấn công. Khi con tàu bắt đầu chìm dần, thời gian trở thành kẻ thù lớn nhất và mỗi quyết định đều có thể quyết định sự sống còn của cả đoàn.\n\nNgười chơi sẽ phải nhanh chóng thu thập vật tư, cứu vớt những gì còn sót lại trên con tàu và quản lý nguồn tài nguyên ít ỏi để kéo dài sự sống qua từng ngày. Thức ăn, nước uống, thuốc men và các vật dụng sinh tồn đều vô cùng quý giá, trong khi những sự kiện ngẫu nhiên và các mối đe dọa bí ẩn dưới mặt biển liên tục xuất hiện, buộc bạn phải đưa ra những lựa chọn đầy khó khăn. Mỗi thành viên thủy thủ đoàn đều có tính cách và vai trò riêng, tạo nên nhiều hướng phát triển và kết cục khác nhau trong suốt hành trình.",
+      "notes": "Chờ Cập nhập",
+      "downloadUrl": "",
+      "imageUrl": "https://img.itch.zone/aW1nLzI3MDQ4NzM2LnBuZw==/original/q7j9ve.png",
+      "tags": [
+        "New",
+        "Hot"
+      ],
+      "credits": {
+        "translator": "PỏnGG",
+        "editor": "PỏnGG",
+        "technical": "PỏnGG",
+        "qa": "PỏnGG"
+      },
+      "screenshots": [
+        "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/4834070/8587f0ab97b9ae3dc2fb8695d9aca7b06669cc60/ss_8587f0ab97b9ae3dc2fb8695d9aca7b06669cc60.1920x1080.jpg?t=1781953972",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBpFcJh5AxGEpJw00INaXf-6qV9CbAV-mhlw&s",
+        "https://i.redd.it/you-guys-should-try-dont-sleep-with-the-fishes-its-an-v0-qpn4he7xab6h1.png?width=1918&format=png&auto=webp&s=72d7f78fa8065e3163c6468cea131261a6de7e9d",
+        "https://preview.redd.it/dont-sleep-with-the-fishes-released-a-sea-themed-survival-v0-j770767l633h1.gif?width=640&crop=smart&auto=webp&s=017a2da4cf430234c7dab998f0119a14e92a71b5"
+      ]
+    }
+  ],
+  "gameOverrides": {
+    "wukong": {
+      "title": "Black Myth: Wukong Việt Hóa",
+      "engine": "",
+      "engineKey": "",
+      "developer": "",
+      "version": "",
+      "size": "579.2 MB",
+      "price": "",
+      "type": "Free",
+      "progress": "",
+      "downloads": "",
+      "date": "2026-06-26",
+      "description": "Bản Việt hóa bao gồm hội thoại, cốt truyện, nhiệm vụ, giao diện và các nội dung chính. Câu chữ được hiệu đính theo ngữ cảnh, đồng thời giữ lại thuật ngữ và sắc thái văn hóa liên quan đến Tây Du Ký. Font trong game đã được kiểm tra để hiển thị đầy đủ dấu tiếng Việt.",
+      "notes": "Giải nén coppy đè vào thư mục",
+      "downloadUrl": "https://drive.google.com/file/d/1qiZOC9xpMHOmqDA7fEn7ekzaMJk7Srkx/view?usp=sharing",
+      "imageUrl": "https://cdn2.fptshop.com.vn/unsafe/800x0/black_myth_wukong_viet_hoa_1_a0e68ea2b2.jpg",
+      "tags": [],
+      "credits": {
+        "translator": "CanhCutTeam",
+        "editor": "CCT",
+        "technical": "CCT",
+        "qa": "CCT"
+      },
+      "screenshots": [
+        "https://www.lacuarta.com/resizer/v2/WY5NLCFRFBBJXFORWL7RLRTCWM.jpg?auth=6d6e647fb1dd6afe638da846cd545e29acd3dfaccd3eb42f65edec17939803ff&smart=true&width=800&height=558&quality=70",
+        "https://static0.polygonimages.com/wordpress/wp-content/uploads/2024/08/black-myth-wukong-secret-ending-guide-6.jpg?w=1600&h=900&fit=crop",
+        "https://i.ytimg.com/vi/frq_Twi1FD0/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLChHleIbacf5HVeZIALGouUDx3apA",
+        "https://cdn.dlcompare.com/others_jpg/upload/news/image/chiem-nguong-do-hoa-va-gameplay-e181742e-image-446727419.jpg.webp"
+      ]
+    },
+    "eldenring": {
+      "title": "Elden Ring: Shadow of the Erdtree Việt Hóa",
+      "engine": "Custom Engine",
+      "engineKey": "other",
+      "developer": "From Software",
+      "version": "",
+      "size": "195.3 MB",
+      "price": "",
+      "type": "Free",
+      "progress": "",
+      "downloads": "",
+      "date": "2026-06-26",
+      "description": "Tiếp nối cuộc phiêu lưu tại Vùng Đất Trung Gian, Elden Ring: Shadow of the Erdtree đưa người chơi đến Vùng Đất Bóng Tối (Land of Shadow) – nơi từng bị che giấu khỏi lịch sử và gắn liền với những bí mật về Miquella, một trong những nhân vật bí ẩn nhất của thế giới Elden Ring. Trên hành trình lần theo dấu chân Miquella, bạn sẽ khám phá những vùng đất hoàn toàn mới, đối mặt với các kẻ thù đáng sợ, những con trùm hùng mạnh cùng vô số bí ẩn đang chờ được hé lộ.\n\nBản mở rộng mang đến một bản đồ rộng lớn với hệ thống hầm ngục, lâu đài và khu vực khám phá được thiết kế công phu theo phong cách đặc trưng của FromSoftware. Người chơi sẽ được trải nghiệm nhiều loại vũ khí, giáp, phép thuật, kỹ năng chiến đấu và trang bị hoàn toàn mới, đồng thời thử sức với những trận chiến có độ khó cao, đòi hỏi khả năng quan sát, phản xạ và chiến thuật.",
+      "notes": "Mật khẩu giải nén: Theredteam.vn (Chữ T đầu tiên viết hoa).\nMở bộ cài lên rồi ấn vào thanh trắng phía trên nút cài đặt để chọn đường dẫn đến thư mục trò chơi bạn đã cài (vd: X:\\SteamLibrary\\steamapps\\common\\ELDEN RING), sau đó ấn Cài Đặt! Xong!\nSau khi cài xong chạy game thông qua file \"Elden_Ring_VHTRT.bat\" ở thư mục \"Game\" của trò chơi (vd: X:\\SteamLibrary\\steamapps\\common\\ELDEN RING\\Game).\nTrường hợp không chạy được thì chạy thông qua \"modengine2_launcher.exe\" cùng thư mục luôn để vào game.\nVới CỜ RẮC, đổi tên folder chứa file \"eldenring.exe\" thành \"Game\", sau đó đổi thư mục chứa thư mục \"Game\" thành \"ELDEN RING\" trước khi cài.\nTrường hợp file exe của CỜ RẮC không phải là \"eldenring.exe\" thì đổi lại thành \"eldenring.exe\" rồi cài.\nVới CỜ RẮC, phải chạy game thông qua file \"modengine2_launcher.exe\" ở thư mục \"Game\" của trò chơi (vd: X:\\SteamLibrary\\steamapps\\common\\ELDEN RING\\Game).\nCó file \"Gỡ Việt Hóa.exe\" ở thư mục \"Game\" của trò chơi (vd: X:\\SteamLibrary\\steamapps\\common\\ELDEN RING\\Game), nếu không muốn dùng việt hóa nữa thì dùng.",
+      "downloadUrl": "https://drive.google.com/file/d/177CBF-y8eOtubDrHBW4IjNJ3iL09RWAq/view?usp=sharing",
+      "imageUrl": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2778580/capsule_616x353.jpg?t=1763403045",
+      "tags": [],
+      "credits": {
+        "translator": "Theredteam",
+        "editor": "Theredteam",
+        "technical": "Theredteam",
+        "qa": "Theredteam"
+      },
+      "screenshots": [
+        "https://assetsio.gnwcdn.com/elden-ring-shadow-of-the-erdtree-alleged-release-february-listing-01.jpg?width=1600&height=900&fit=crop&quality=100&format=png&enable=upscale&auto=webp",
+        "https://assetsio.gnwcdn.com/Elden-Ring-Shadow-of-Erdtree-How-Long-to-Beat-Header.jpg?width=1600&height=900&fit=crop&quality=100&format=png&enable=upscale&auto=webp",
+        "https://cdn.mos.cms.futurecdn.net/D4HXimZQuZx3X4Hg3y5oQE.jpg",
+        "https://static0.srcdn.com/wordpress/wp-content/uploads/2024/02/swamp-and-a-hero-riding-a-horse-in-elden-ring-shadow-of-the-erdtree-dlc.jpg"
+      ]
+    },
+    "cyberpunk": {
+      "title": "Cyberpunk 2077: Phantom Liberty Việt Hóa",
+      "engine": "",
+      "engineKey": "",
+      "developer": "CD Projekt",
+      "version": "",
+      "size": "82 MB",
+      "price": "",
+      "type": "Free",
+      "progress": "",
+      "downloads": "",
+      "date": "2026-06-26",
+      "description": "Quay trở lại Night City trong Cyberpunk 2077: Phantom Liberty, bản mở rộng gián điệp – hành động đưa người chơi đến Dogtown, khu vực vô pháp nằm dưới sự kiểm soát của các thế lực quân sự và lính đánh thuê. Trong vai V, bạn sẽ nhận nhiệm vụ giải cứu Tổng thống của New United States of America (NUSA) sau một vụ rơi chuyên cơ, từ đó bị cuốn vào mạng lưới âm mưu, phản bội và những cuộc đấu trí giữa các tổ chức tình báo quyền lực.\n\nPhantom Liberty mang đến một chiến dịch cốt truyện hoàn toàn mới với nhiều nhân vật đáng nhớ, các lựa chọn ảnh hưởng trực tiếp đến diễn biến và kết thúc câu chuyện. Bên cạnh đó là hàng loạt vũ khí, phương tiện, kỹ năng, cyberware, nhiệm vụ phụ và hoạt động mới, kết hợp cùng những cải tiến lớn về hệ thống chiến đấu và phát triển nhân vật, mang lại trải nghiệm nhập vai sâu sắc và hấp dẫn hơn bao giờ hết.",
+      "notes": "Mật khẩu giải nén: Theredteam.vn (Chữ T đầu tiên viết hoa).\n\nMở bộ cài lên nó sẽ tự quét thư mục game CYBERPUNK 2077 của bạn nên chỉ cần ấn CÀI ĐẶT là xong, nếu nó không quét thì ấn vào icon >>> để chọn đường dẫn đến thư mục game CYBERPUNK 2077 của bạn sau đó ấn CÀI ĐẶT là xong.\nLưu Ý: bản dịch ưu tiên nhân vật NỮ, nhân vật NAM chỉ là bổ sung",
+      "downloadUrl": "https://drive.google.com/file/d/1QyrXaWacPoEsMQkm1p5ebjlHJduvdX36/view?usp=sharing",
+      "imageUrl": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2138330/4fc31975413513de4f1ca313b8459f7606b0112f/capsule_616x353.jpg?t=1768305060",
+      "tags": [],
+      "credits": {
+        "translator": "Theredteam",
+        "editor": "Theredteam",
+        "technical": "Theredteam",
+        "qa": "Theredteam"
+      },
+      "screenshots": [
+        "https://cdn.vietgame.asia/wp-content/uploads/20231001172247/cyberpunk-2077-phantom-liberty-danh-gia-game.jpg",
+        "https://tedishop.vn/wp-content/uploads/2025/03/Cyberpunk-2077-DLC-Phantom-Liberty-4-Tedi-Shop.jpg",
+        "https://www.cdkeynl.nl/wp-content/uploads/showcase-ps-plus-extra-cyberpunk-2077-free-premium-dlc-complete-experience-phantom-liberty.webp",
+        "https://preview.redd.it/i-just-returned-to-the-game-to-finish-off-phantom-liberty-v0-qvm9hgk6lq1e1.jpeg?width=1920&format=pjpg&auto=webp&s=b864b6735dc9da84e62c34a86cc8f429b7db0d6c",
+        "https://sm.pcmag.com/t/pcmag_me/review/c/cyberpunk-/cyberpunk-2077-phantom-liberty_tvtm.1200.jpg"
+      ]
+    },
+    "residentevil4": {
+      "title": "Resident Evil 4 Remake Việt Hóa",
+      "engine": "RE Engine",
+      "engineKey": "other",
+      "developer": "",
+      "version": "",
+      "size": "69 MB",
+      "price": "",
+      "type": "Free",
+      "progress": "",
+      "downloads": "",
+      "date": "2026-06-26",
+      "description": "Resident Evil 4 Remake là phiên bản làm lại hoàn chỉnh của kiệt tác kinh dị sinh tồn ra mắt năm 2005, được xây dựng trên RE Engine với nền đồ họa hiện đại, lối chơi cải tiến và cốt truyện được mở rộng, mang đến trải nghiệm vừa quen thuộc vừa mới mẻ. Người chơi sẽ vào vai Leon S. Kennedy, đặc vụ của Chính phủ Hoa Kỳ, nhận nhiệm vụ giải cứu Ashley Graham – con gái của Tổng thống – sau khi cô bị một giáo phái bí ẩn bắt cóc tại một ngôi làng hẻo lánh ở châu Âu.\n\nTrên hành trình giải cứu Ashley, Leon phải đối đầu với những cư dân bị nhiễm ký sinh trùng Las Plagas, các sinh vật đột biến đáng sợ cùng những thủ lĩnh cuồng tín đầy quyền lực. Game kết hợp hoàn hảo giữa yếu tố kinh dị, hành động và giải đố, với hệ thống chiến đấu được nâng cấp, cơ chế đỡ đòn bằng dao, quản lý tài nguyên, khám phá môi trường và những trận đấu trùm đầy căng thẳng. Bầu không khí u ám, âm thanh chân thực và cách kể chuyện điện ảnh giúp Resident Evil 4 Remake trở thành một trong những tựa game xuất sắc nhất của dòng game kinh dị hiện đại.",
+      "notes": "Mật khẩu giải nén: Theredteam.vn (Chữ T đầu tiên viết hoa).\n\nMở bộ cài lên bấm vào biểu tượng bàn tay đen, chọn đường dẫn tới thư mục game của bạn sau đó ấn Cài Đặt là xong.\nĐối với PS4: có hướng dẫn kèm theo, giải nén ra là thấy.\n\nĐể xoá Việt Hoá: Vào thư mục của game xoá 2 file re_chunk_000.pak.patch_007.pak và re_chunk_000.pak.patch_008.pak là được.",
+      "downloadUrl": "https://drive.google.com/file/d/1A0tgN4-f7Nvd424b_y8zO6NBuaYKehB_/view?usp=sharing",
+      "imageUrl": "https://herogame.vn/ad-min/assets/js/libs/kcfinder/upload/images/Herogame_RE4Remake_01.jpg",
+      "tags": [],
+      "credits": {
+        "translator": "Theredteam",
+        "editor": "Theredteam",
+        "technical": "Theredteam",
+        "qa": "Theredteam"
+      },
+      "screenshots": [
+        "https://sm.ign.com/ign_nordic/preview/r/resident-e/resident-evil-4-remake-8-exciting-new-details_bvbv.jpg",
+        "https://i0.wp.com/paulsemel.com/wp-content/uploads/2023/03/Resident-Evil-4-main.jpg?fit=800%2C450&ssl=1",
+        "https://sm.pcmag.com/pcmag_uk/review/r/resident-e/resident-evil-4-remake_2n35.jpg",
+        "https://c4.wallpaperflare.com/wallpaper/738/716/891/resident-evil-4-remake-resident-evil-leon-s-kennedy-salvador-gaming-series-hd-wallpaper-preview.jpg",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjEGu-MB2nuoTTCfaHFtI-RzgFmsqmEygcrPrmcqW_aMS-dKzlyb7Y5AVnNMgViCtmvHEZdanO0zgUsq5znDVc9LVg8A1TcwwJfAAujm1Y5VdCEQEOyU6Ux6Zq-wxdPWyWH92agS4Vzk67ELRuPK0R0ExUswcW8rqkREptIOgLGteb3mWPCyuFh_QGz5w/s3840/RE4_Gigantes_png_jpgcopy.jpg"
+      ]
+    },
+    "liesofp": {
+      "title": "Lies of P Việt Hóa",
+      "engine": "Unreal Engine 4",
+      "engineKey": "ue",
+      "developer": "Round 8 Studio, NEOWIZ",
+      "version": "",
+      "size": "",
+      "price": "",
+      "type": "Free",
+      "progress": "",
+      "downloads": "",
+      "date": "",
+      "description": "Lies of P là tựa game hành động nhập vai phong cách soulslike lấy cảm hứng từ câu chuyện cổ tích Pinocchio, nhưng được tái hiện dưới góc nhìn đen tối, trưởng thành và đầy bi kịch. Bối cảnh diễn ra tại thành phố Krat, một đô thị từng rực rỡ nhờ công nghệ người máy nhưng giờ đã chìm trong hỗn loạn khi những con rối đồng loạt nổi loạn và gieo rắc nỗi kinh hoàng. Trong vai P, một con rối đặc biệt được tạo ra bởi Geppetto, người chơi sẽ dấn thân vào hành trình tìm kiếm sự thật về thảm họa đang nhấn chìm thành phố, đồng thời khám phá ý nghĩa thực sự của việc trở thành con người.\n\nLies of P mang đến hệ thống chiến đấu có chiều sâu với nhịp độ nhanh, yêu cầu người chơi thành thạo né tránh, đỡ đòn hoàn hảo và tận dụng thời cơ để phản công. Điểm nổi bật của trò chơi là cơ chế kết hợp lưỡi kiếm và chuôi vũ khí để tạo nên hàng chục kiểu chiến đấu khác nhau, cùng Legion Arm – cánh tay cơ khí có thể thay đổi thành nhiều loại vũ khí và công cụ hỗ trợ độc đáo. Bên cạnh đó, hệ thống lựa chọn nói dối hoặc nói thật sẽ ảnh hưởng đến diễn biến câu chuyện và quá trình phát triển của nhân vật, tạo nên nhiều hướng tiếp cận và kết thúc khác nhau.",
+      "notes": "Mật khẩu giải nén: Theredteam.vn (Chữ T đầu tiên viết hoa).\n\nMở bộ cài lên ấn vào logo Lies Of P sau đó chọn đường dẫn đến thư mục game của bạn, ấn Cài Đặt và chọn phiên bản Giữ Tên hoặc Dịch Full! Xong!\nRiêng Xbox thư mục chính của nó phải qua thêm 1 thư mục Content nhé!\nĐối với bản PS4, có hướng dẫn kèm trong file, giải nén ra là thấy.\n\nĐể xoá Việt Hoá: Vào theo đường dẫn LiesofP/Content/Paks và xoá file pakchunk0-WindowsNoEditor_P.pak là được.",
+      "downloadUrl": "https://drive.google.com/file/d/1-YKd0j4bzxky_UGWGbP_qfrLAfyX5zo7/view?usp=sharing",
+      "imageUrl": "https://cdn2.fptshop.com.vn/unsafe/1920x0/filters:format(webp):quality(75)/2024_5_15_638514068825360183_lies-of-p-thum.jpg",
+      "tags": [],
+      "credits": {
+        "translator": "Theredteam",
+        "editor": "Theredteam",
+        "technical": "Theredteam",
+        "qa": "Theredteam"
+      },
+      "screenshots": [
+        "https://hoanghamobile.com/tin-tuc/lies-of-p/lies-of-p-6/",
+        "https://hoanghamobile.com/tin-tuc/lies-of-p/lies-of-p-8/",
+        "https://www.psu.com/wp/wp-content/uploads/2024/03/LiesOfP-1.jpeg",
+        "https://assetsio.gnwcdn.com/lies-of-p-boss.jpg?width=1600&height=900&fit=crop&quality=100&format=png&enable=upscale&auto=webp",
+        "https://gamewave.fr/static/images/news/headers/thumbs/87893-lies-of-p-editions-890x500.webp"
+      ]
+    },
+    "hogwarts": {
+      "title": "Hogwarts Legacy Việt Hóa",
+      "engine": "Unreal Engine 4",
+      "engineKey": "ue",
+      "developer": "Avalanche Software, Shiver Entertainment",
+      "version": "",
+      "size": "69.7 MB",
+      "price": "",
+      "type": "",
+      "progress": "",
+      "downloads": "",
+      "date": "2026-06-26",
+      "description": "Hogwarts Legacy là tựa game hành động nhập vai thế giới mở lấy bối cảnh vũ trụ Harry Potter, nhưng diễn ra vào thế kỷ 19, hàng trăm năm trước những sự kiện quen thuộc trong loạt tiểu thuyết. Người chơi sẽ vào vai một học sinh năm năm sở hữu năng lực phép thuật đặc biệt, bắt đầu cuộc sống tại Trường Phù thủy và Pháp sư Hogwarts, nơi những bí mật cổ xưa cùng một mối đe dọa nguy hiểm đang dần được hé lộ.\n\nTrong suốt hành trình, bạn sẽ được tự do khám phá lâu đài Hogwarts rộng lớn với vô số căn phòng bí mật, các hành lang ma thuật và những địa danh nổi tiếng như Rừng Cấm, Làng Hogsmeade hay các hầm ngục cổ xưa. Người chơi có thể tham gia các lớp học để học phép thuật, pha chế độc dược, chăm sóc sinh vật huyền bí, thuần hóa và cưỡi các loài sinh vật phép thuật, giải đố, hoàn thành nhiệm vụ phụ và xây dựng phong cách chiến đấu của riêng mình thông qua hàng chục loại bùa chú, tài năng và trang bị.\n\nBên cạnh hệ thống chiến đấu thời gian thực đầy mãn nhãn, Hogwarts Legacy còn sở hữu cốt truyện hấp dẫn với nhiều lựa chọn, các nhân vật được xây dựng có chiều sâu cùng hàng loạt bí mật gắn liền với nền lịch sử của thế giới phù thủy. Thế giới mở được thiết kế sống động, kết hợp giữa khám phá, phiêu lưu và yếu tố nhập vai, mang đến cảm giác như thực sự được sống trong ngôi trường phép thuật nổi tiếng nhất thế giới.",
+      "notes": "Mật khẩu giải nén: Theredteam.vn (Chữ T đầu tiên viết hoa).\n\nMở bộ cài lên ấn vào quả cầu phép để chọn đường dẫn tới thư mục game và ấn cài đặt. Cài xong các bạn vào game chơi bình thường.\nĐối với bản SWITCH và PS5: trong file việt hóa có hướng dẫn, giải nén ra là thấy.\n\nĐể xoá Việt Hoá: Vào theo đường dẫn Phoenix/Content/Paks và xoá file pakchunk0-WindowsNoEditor_P.pak là được.",
+      "downloadUrl": "https://drive.google.com/file/d/1y_G5JJkjsp0guyqkXhCd2IK6x6pDISCX/view?usp=sharing",
+      "imageUrl": "https://hanoicomputercdn.com/media/lib/10-02-2023/dia-game-ps5-hogwarts-legacy-eu1.jpg",
+      "tags": [],
+      "credits": {
+        "translator": "Theredteam",
+        "editor": "Theredteam",
+        "technical": "Theredteam",
+        "qa": "Theredteam"
+      },
+      "screenshots": [
+        "https://sm.pcmag.com/t/pcmag_uk/review/h/hogwarts-l/hogwarts-legacy_nfcv.1920.jpg",
+        "https://substackcdn.com/image/fetch/$s_!fCdM!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F0fbb5358-f216-48e4-a180-53b3834de86d_3840x2160.jpeg",
+        "https://multiplayer.net-cdn.it/thumbs/images/2025/06/15/hogwarts-legacy-nintendo-switch-2_14_jpg_800x0_crop_upscale_q85.jpg",
+        "https://cdn.tgdd.vn/GameApp/4/302698/Screentshots/hogwarts-legacy-vu-tru-cua-harry-potter-va-cuoc-phieu-15-02-2023-0.png"
+      ]
+    },
+    "stray": {
+      "title": "Stray Việt Hóa",
+      "engine": "Unreal Engine 4",
+      "engineKey": "ue",
+      "developer": "Blue Twelve Studio",
+      "version": "",
+      "size": "45.4 MB",
+      "price": "",
+      "type": "Free",
+      "progress": "",
+      "downloads": "",
+      "date": "2026-06-26",
+      "description": "Stray là tựa game phiêu lưu góc nhìn thứ ba độc đáo, nơi người chơi hóa thân thành một chú mèo hoang vô tình bị lạc vào một thành phố ngầm bí ẩn, tách biệt hoàn toàn với thế giới bên ngoài. Nơi đây là mái nhà của những robot có ý thức, các cỗ máy tự động cùng những sinh vật nguy hiểm đang ẩn mình trong bóng tối. Để tìm được đường trở về, chú mèo phải đồng hành cùng người bạn drone nhỏ bé B-12, từng bước khám phá những bí mật bị chôn giấu và số phận của nền văn minh đã biến mất.\n\nLấy bối cảnh trong một thế giới cyberpunk đầy màu sắc với những con hẻm ngập ánh đèn neon, khu ổ chuột chật hẹp và các công trình công nghệ đổ nát, Stray mang đến trải nghiệm khám phá nhẹ nhàng nhưng giàu cảm xúc. Người chơi sẽ leo trèo, giải đố, tương tác với môi trường theo đúng bản năng của một chú mèo, đồng thời né tránh những sinh vật nguy hiểm và hỗ trợ các robot cư dân trong thành phố. Những hành động nhỏ như cào móng lên đồ vật, làm đổ chai lọ hay cuộn tròn ngủ trên ghế cũng góp phần tạo nên sức hút rất riêng của trò chơi.\n\nKhông chỉ gây ấn tượng bởi lối chơi sáng tạo, Stray còn kể một câu chuyện sâu lắng về sự cô đơn, hy vọng, tình bạn và khát vọng tự do. Thông qua góc nhìn của một chú mèo vô danh, người chơi sẽ dần khám phá lịch sử của thành phố ngầm, những bí mật về loài người và ý nghĩa của sự sống trong một thế giới chỉ còn lại những cỗ máy.",
+      "notes": "Mật khẩu giải nén: Theredteam.vn (Chữ T đầu tiên viết hoa).\n\nMở bộ cài lên nó sẽ tự động quét thư mục game STRAY nên chỉ cần ấn MEOW là xong nếu không hiện thì ấn vào biểu tượng BÀN TAY MỒN LÈO NHỎ trong thanh trắng để chọn đường dẫn tới thư mục game STRAY của bạn sau đó ấn MEOW và chờ nó hiện thông báo Thành Công là xong.\n\nĐể xoá Việt Hoá: Vào theo đường dẫn Hk_project/Content/Paks và xoá file TheRedTeam_P.pak đi là được.",
+      "downloadUrl": "https://drive.google.com/file/d/1OrOutGc0QIKv3yILwBQL5NmADMM645IX/view?usp=sharing",
+      "imageUrl": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1332010/71daca1910d664d31240b9623a495e0c0828807f/header.jpg?t=1779927784",
+      "tags": [],
+      "credits": {
+        "translator": "Theredteam",
+        "editor": "Theredteam",
+        "technical": "Theredteam",
+        "qa": "Theredteam"
+      },
+      "screenshots": [
+        "https://kamikey.com/wp-content/uploads/2025/02/Stray-1.jpg",
+        "https://s01.riotpixels.net/data/14/93/1493f123-9554-49f3-b19d-061174be4720.jpg/screenshot.stray.1920x1080.2022-08-18.34.jpg",
+        "https://images.gamethuanviet.com/wp-content/uploads/2025/07/Stray_Viet_Hoa_1.webp",
+        "https://www.svg.com/img/gallery/the-untold-truth-of-stray/b12-was-introduced-to-complement-the-cat-1660051959.jpg",
+        "https://imagedelivery.net/WLUarKbmUXuuhDC7PG5_Qw/articles/c8426601a981185b735b73c92dd48dc2.jpeg/public"
+      ]
+    },
+    "witcher3": {
+      "title": "Octopath traveler 0 việt hóa",
+      "engine": "Unreal Engine 4",
+      "engineKey": "ue",
+      "developer": "Square Enix, DOKIDOKI GROOVE WORKS (Team Asano)",
+      "version": "",
+      "size": "29.3 MB",
+      "price": "",
+      "type": "Free",
+      "progress": "",
+      "downloads": "",
+      "date": "2026-06-26",
+      "description": "OCTOPATH TRAVELER 0 là phần tiền truyện hoàn toàn mới của dòng game JRPG nổi tiếng OCTOPATH TRAVELER, đưa người chơi trở về lục địa Orsterra để khám phá nguồn gốc của những truyền thuyết và sự kiện diễn ra trước các phần trước. Với phong cách đồ họa HD-2D đặc trưng, trò chơi kết hợp nghệ thuật pixel cổ điển cùng hiệu ứng ánh sáng và môi trường hiện đại, tạo nên một thế giới vừa hoài niệm vừa đầy sức sống.\n\nLần này, người chơi sẽ bắt đầu hành trình từ con số 0, tự tạo nhân vật của riêng mình và dấn thân vào câu chuyện xoay quanh những Chiếc Nhẫn Thần Thánh (Divine Rings), cuộc chiến giữa các thế lực hùng mạnh và công cuộc khôi phục một vùng đất đã bị chiến tranh tàn phá. Bên cạnh hệ thống chiến đấu theo lượt quen thuộc với cơ chế Break & Boost, game còn bổ sung nhiều tính năng mới như xây dựng và phát triển thị trấn, mở rộng khả năng tùy biến nhân vật và nhiều nội dung khám phá hấp dẫn hơn.\n\nOCTOPATH TRAVELER 0 vẫn giữ nguyên chiều sâu chiến thuật của dòng game, cho phép người chơi xây dựng đội hình với nhiều nghề nghiệp, kỹ năng và cách kết hợp khác nhau để vượt qua những trận chiến đầy thử thách. Cùng với dàn nhân vật mới, cốt truyện giàu cảm xúc và nhiều bí mật đang chờ được khám phá, trò chơi hứa hẹn mang đến một cuộc phiêu lưu hoành tráng dành cho cả người hâm mộ lâu năm lẫn những ai lần đầu đặt chân vào thế giới Orsterra.",
+      "notes": "chạy laucher chọn đường dẫn để việt hóa",
+      "downloadUrl": "https://drive.google.com/file/d/1JMgMGk7K6hT-ODLdoVHxV6Lyz5AZuPbj/view?usp=sharing",
+      "imageUrl": "https://voz.vn/proxy.php?image=https%3A%2F%2Fi.imgur.com%2FaJ6AN87.png&hash=75d3793fbea75e4f08d89168f61d346b",
+      "tags": [],
+      "credits": {
+        "translator": "PỏnGG",
+        "editor": "PỏnGG",
+        "technical": "PỏnGG",
+        "qa": "PỏnGG"
+      },
+      "screenshots": [
+        "https://tedishop.vn/wp-content/uploads/2026/01/octopath-traveler-0-7-tedishop-vn.jpg",
+        "https://tedishop.vn/wp-content/uploads/2026/01/octopath-traveler-0-2-tedishop-vn.jpg",
+        "https://static0.gamerantimages.com/wordpress/wp-content/uploads/2025/12/octopath-traveler-0-combat-laughing-hyaena-and-lloris.jpg?q=49&fit=crop&w=1300&dpr=2",
+        "https://nookgaming.com/wp-content/uploads/2025/12/octopath-traveler-0-image-for-review-09.webp"
+      ]
+    },
+    "baldursgate3": {
+      "title": "The Adventures of Elliot: The Millennium Tales Việt Hóa",
+      "engine": "Unreal Engine 5",
+      "engineKey": "ue",
+      "developer": "Square Enix (Team Asano)",
+      "version": "",
+      "size": "47.2",
+      "price": "",
+      "type": "Free",
+      "progress": 100,
+      "downloads": "",
+      "date": "2026-06-26",
+      "description": "The Adventures of Elliot: The Millennium Tales là tựa game hành động nhập vai hoàn toàn mới của Square Enix, được phát triển bởi Team Asano – đội ngũ đứng sau thành công của các series OCTOPATH TRAVELER và BRAVELY DEFAULT. Trò chơi mang phong cách đồ họa HD-2D thế hệ mới, kết hợp giữa nghệ thuật pixel cổ điển với công nghệ đồ họa hiện đại, tạo nên một thế giới giả tưởng sống động và giàu chiều sâu.\n\nNgười chơi sẽ vào vai Elliot, một nhà thám hiểm trẻ tuổi dấn thân vào cuộc hành trình xuyên qua những vùng đất cổ đại để khám phá các di tích thất lạc và giải mã những bí ẩn đã bị chôn vùi suốt hàng nghìn năm. Đồng hành cùng Elliot là nàng tiên Faie, người sở hữu những năng lực đặc biệt có thể hỗ trợ trong chiến đấu, giải đố và khám phá môi trường. Trên hành trình ấy, cả hai sẽ đối mặt với những quái vật hùng mạnh, các nền văn minh đã biến mất và những bí mật có thể thay đổi vận mệnh của cả thế giới.\n\nKhác với những tựa JRPG theo lượt trước đây của Team Asano, The Adventures of Elliot: The Millennium Tales sở hữu hệ thống chiến đấu hành động thời gian thực, cho phép người chơi né tránh, phản công, sử dụng nhiều loại vũ khí và phối hợp kỹ năng với Faie để vượt qua các thử thách. Thế giới game được thiết kế với nhiều khu vực rộng lớn, hầm ngục, câu đố môi trường và những bí mật khuyến khích người chơi khám phá trong suốt cuộc phiêu lưu.",
+      "notes": "Chạy laucher chọn đường dẫn để cài",
+      "downloadUrl": "https://drive.google.com/file/d/1NjYLCXM0mx2XtVwfjsY9UhV8EBe4ns7F/view?usp=sharing",
+      "imageUrl": "https://img-eshop.cdn.nintendo.net/i/652c24cafd167df2ffd134ed1a786aefce5a782863a1f35fcf8218dff422b4da.jpg",
+      "tags": [],
+      "credits": {
+        "translator": "PỏnGG",
+        "editor": "PỏnGG",
+        "technical": "PỏnGG",
+        "qa": "PỏnGG"
+      },
+      "screenshots": [
+        "https://sm.ign.com/t/ign_ap/video/t/the-advent/the-adventures-of-elliot-the-millennium-tales-official-relea_hdzv.1200.jpg",
+        "https://cdn11.bigcommerce.com/s-iuhtpd9hym/images/stencil/1280x1280/products/3403/16644/01_Event_en__30305.1770283330.png?c=1",
+        "https://rpgamer.com/wp-content/uploads/2025/07/the-adventures-of-elliot-the-millennium-tales_2025-07-31_001.jpg",
+        "https://gaming-cdn.com/images/products/19910/screenshot/the-adventures-of-elliot-the-millennium-tales-switch-2-nintendo-eshop-wallpaper-4.jpg?v=1770905819"
+      ]
+    },
+    "subnautica": {
+      "title": "Subnautica 2 Việt hóa",
+      "engine": "",
+      "engineKey": "ue",
+      "developer": "Unknown Worlds Entertainment",
+      "version": "",
+      "size": "49.4 MB",
+      "price": "",
+      "type": "Free",
+      "progress": "",
+      "downloads": "",
+      "date": "2026-06-26",
+      "description": "Subnautica 2 là phần tiếp theo của dòng game sinh tồn khám phá đại dương nổi tiếng, đưa người chơi đến một hành tinh đại dương hoàn toàn mới với hệ sinh thái rộng lớn, đa dạng và đầy bí ẩn. Tại đây, bạn sẽ phải tìm cách sinh tồn giữa môi trường khắc nghiệt, thu thập tài nguyên, chế tạo trang bị, xây dựng căn cứ và khám phá những vùng biển sâu chưa từng có dấu chân con người.\n\nThế giới trong Subnautica 2 được xây dựng với quy mô lớn hơn, sở hữu nhiều quần xã sinh vật độc đáo, các loài sinh vật ngoài hành tinh kỳ lạ cùng vô số bí mật đang chờ được khám phá. Người chơi sẽ phải cân bằng giữa việc quản lý oxy, thức ăn, nước uống và tài nguyên, đồng thời đối mặt với những sinh vật khổng lồ ẩn mình dưới đáy biển sâu. Mỗi chuyến lặn đều mang đến cảm giác vừa kỳ thú, vừa hồi hộp khi ranh giới giữa khám phá và hiểm nguy luôn rất mong manh.\n\nBên cạnh trải nghiệm chơi đơn đặc trưng, Subnautica 2 còn bổ sung chế độ co-op trực tuyến, cho phép nhiều người cùng hợp tác xây dựng căn cứ, chế tạo phương tiện, chia sẻ tài nguyên và khám phá đại dương rộng lớn. Đây là bước tiến đáng chú ý của dòng game, mang đến nhiều cách tiếp cận và trải nghiệm sinh tồn phong phú hơn so với các phiên bản trước.",
+      "notes": "Mật khẩu giải nén: Theredteam.vn (Chữ T đầu tiên viết hoa).\n\nMở bộ cài lên nó sẽ tự động quét thư mục game SUBNAUTICA 2 nên chỉ cần ấn Cài Đặt là xong nếu không hiện thì ấn vào con bạch tuộc để chọn đường dẫn tới thư mục game SUBNAUTICA 2 của bạn sau đó ấn Cài Đặt và chờ nó hiện thông báo Thành Công là xong.\n\nĐể xoá Việt Hoá: Vào theo đường dẫn Subnautica2/Content/Paks và xoá các file _TRT đi hết là xong.",
+      "downloadUrl": "https://drive.google.com/file/d/1bhFHBPhmNQiDbeT5VfZDFvDDN81M9LPa/view?usp=sharing",
+      "imageUrl": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1962700/header.jpg?t=1780372044",
+      "tags": [],
+      "credits": {
+        "translator": "Theredteam",
+        "editor": "Theredteam",
+        "technical": "Theredteam",
+        "qa": "Theredteam"
+      },
+      "screenshots": [
+        "https://unknownworlds.com/_next/image?url=https%3A%2F%2Fd17c72h1ypygg7.cloudfront.net%2FSN_2_Gameplay_Reveal_43219f73f4.png&w=3840&q=75",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgC7NOl-4e7UvQcCXqZVJ19iJThyzkwQYl3A&s",
+        "https://sm.ign.com/t/ign_nl/video/s/subnautica/subnautica-2-official-diving-together-in-multiplayer-develop_w2v3.1200.png",
+        "https://unknownworlds.com/_next/image?url=https%3A%2F%2Fd17c72h1ypygg7.cloudfront.net%2FHighres_Screenshot00024_51c1e90f10.png&w=3840&q=75",
+        "https://cdn.dlcompare.com/others_jpg/upload/news/image/subnautica-2-tops-steam-s-most-w-4834f262-image-69579f250.jpg.webp"
+      ]
+    },
+    "rust": {
+      "title": "Gothic 1 remake Việt hóa",
+      "engine": "",
+      "engineKey": "",
+      "developer": "Alkimia Interactive",
+      "version": "",
+      "size": "90 MB",
+      "price": "",
+      "type": "Free",
+      "progress": "",
+      "downloads": "",
+      "date": "2026-06-26",
+      "description": "Gothic 1 Remake là phiên bản làm lại hoàn chỉnh của tựa game nhập vai kinh điển Gothic ra mắt năm 2001. Được xây dựng trên nền Unreal Engine 5, trò chơi tái hiện thế giới thuộc địa hình sự Valley of Mines với đồ họa hiện đại, lối chơi được cải tiến và cốt truyện trung thành với nguyên tác. Người chơi sẽ tiếp tục vào vai Người Hùng Vô Danh (Nameless Hero) – một tù nhân bị ném vào Thuộc địa Hình sự Khorinis, nơi mọi quy tắc của xã hội đã sụp đổ và sức mạnh là luật lệ duy nhất.\n\nBị giam cầm bên trong Rào Chắn Ma Thuật (The Barrier), bạn phải tìm cách sinh tồn giữa ba phe phái quyền lực gồm Old Camp, New Camp và Swamp Camp, mỗi phe đều sở hữu lý tưởng, mục tiêu và con đường phát triển riêng. Những quyết định của người chơi sẽ ảnh hưởng đến các mối quan hệ, nhiệm vụ và diễn biến của cuộc phiêu lưu, tạo nên trải nghiệm nhập vai đầy tự do và giàu tính lựa chọn.\n\nGothic 1 Remake vẫn giữ nguyên tinh thần khám phá không cầm tay chỉ việc đã làm nên tên tuổi của bản gốc. Người chơi sẽ phải tự tìm hiểu thế giới, chiến đấu với quái vật, học các kỹ năng mới, chế tạo trang bị, hoàn thành nhiệm vụ và từng bước khám phá những bí mật đằng sau Thuộc địa Hình sự. Hệ thống chiến đấu, hoạt ảnh, AI và cơ chế điều khiển đều được làm mới để phù hợp với tiêu chuẩn hiện đại, trong khi vẫn giữ được bản sắc đặc trưng của dòng game Gothic.",
+      "notes": "Chạy laucher chọn đường dẫn để cài",
+      "downloadUrl": "https://drive.google.com/file/d/1XxhrkrkwG_mhWCd1f8bu5fE2AX4N8fbJ/view?usp=sharing",
+      "imageUrl": "https://herogame.vn/ad-min/assets/js/libs/kcfinder/upload_img2/images/6Herogame-Viet/T3.2026/Herogame_Gothic1RemakePs5_01.jpg",
+      "tags": [],
+      "credits": {
+        "translator": "PỏnGG",
+        "editor": "PỏnGG",
+        "technical": "PỏnGG",
+        "qa": "PỏnGG"
+      },
+      "screenshots": [
+        "https://i.ytimg.com/vi/PRdtDVKjIME/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLAuyc9OM4JOrygFMlXoG-XwHu7fUA",
+        "https://image.api.playstation.com/vulcan/ap/rnd/202501/2201/1c4eb948c843095dc33f8301f526ec529c0aa86e05814d1b.jpg",
+        "https://static.android.com.pl/uploads/2022/08/Gothic-remake.jpg",
+        "https://assetsio.gnwcdn.com/gothic-playable-teaser.jpg?width=1200&height=900&fit=crop&quality=100&format=png&enable=upscale&auto=webp",
+        "https://jpgames.de/wp-content/uploads/2026/02/gothic-1-remake-launch-date-840x480.jpg"
+      ]
+    },
+    "sekiro": {
+      "title": "Sekiro: Shadows Die Twice Việt Hóa",
+      "engine": "Proprietary Engine",
+      "engineKey": "other",
+      "developer": "FromSoftware",
+      "version": "",
+      "size": "1.4 MB",
+      "price": "",
+      "type": "Free",
+      "progress": "",
+      "downloads": "",
+      "date": "2026-06-26",
+      "description": "Sekiro: Shadows Die Twice là tựa game hành động – phiêu lưu từng đoạt danh hiệu Game of the Year 2019, được phát triển bởi FromSoftware. Lấy bối cảnh Nhật Bản vào cuối thời kỳ Sengoku, trò chơi đưa người chơi vào vai Sói (Wolf) – một shinobi trung thành mang trên mình lời thề bảo vệ Kuro, vị Thiếu chủ sở hữu dòng máu bất tử. Sau khi thất bại trong nhiệm vụ và mất đi cánh tay trái, Sói được trao cho một cánh tay giả cơ khí đặc biệt, mở ra hành trình báo thù, chuộc lỗi và khám phá những bí mật đen tối xoay quanh quyền năng bất tử.\n\nKhác với các tựa game Souls truyền thống, Sekiro tập trung vào hệ thống chiến đấu tốc độ cao với cơ chế Posture, nơi việc đỡ đòn, phản đòn và phá vỡ thế phòng thủ của đối phương quan trọng không kém việc gây sát thương. Cánh tay giả Shinobi còn được trang bị nhiều công cụ đặc biệt như phi tiêu, rìu, thương, pháo hay móc kéo, giúp người chơi linh hoạt trong cả chiến đấu lẫn di chuyển. Bên cạnh đó, yếu tố lén lút, leo trèo và khám phá môi trường được mở rộng, mang đến nhiều cách tiếp cận trong từng trận chiến.\n\nThế giới của Sekiro kết hợp giữa lịch sử Nhật Bản và những truyền thuyết dân gian, tạo nên một hành trình đầy bi tráng với các samurai, ninja, yêu quái và những sinh vật huyền bí. Mỗi trận đấu trùm đều là một thử thách thực sự về kỹ năng, phản xạ và khả năng quan sát, đồng thời góp phần khắc họa một câu chuyện sâu sắc về danh dự, lòng trung thành, sự hy sinh và cái giá của quyền lực.",
+      "notes": "Download file Việt hóa về.\nGiải nén (extract here) vào thư mục cài game.",
+      "downloadUrl": "https://drive.google.com/file/d/1iKhBZXfK6jD66MXSgJ8-l_Cxbzcyljg_/view?usp=sharing",
+      "imageUrl": "https://cdn.vietgame.asia/wp-content/uploads/20190408000529/sekiro-shadow-die-twice-danh-gia-game-161.jpg",
+      "tags": [],
+      "credits": {
+        "translator": "Du_hý_tức_Bồ_đề, Reishiki",
+        "editor": "",
+        "technical": "",
+        "qa": ""
+      },
+      "screenshots": [
+        "https://static.wixstatic.com/media/0c6381_f0ed6b5c481945aabd27ce691359eb9b~mv2_d_2560_1440_s_2.jpg/v1/fill/w_978,h_562,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/20190322174510_1.jpg",
+        "https://static0.polygonimages.com/wordpress/wp-content/uploads/chorus/uploads/chorus_asset/file/15863148/Sekiro_35.jpg?w=1600&h=900&fit=crop",
+        "https://image.api.playstation.com/vulcan/img/rnd/202010/1700/P0pFPnLeOA3CYSluXboFS5nh.jpg",
+        "https://m.media-amazon.com/images/M/MV5BYzAyZjhmN2EtYzc2Ny00YTUzLTg2YzktZDdiYmY3MmIyZGIwXkEyXkFqcGc@._V1_.jpg"
+      ]
+    },
+    "rdr2": {
+      "title": "Red Dead Redemption 2 Việt hóa",
+      "engine": "RAGE",
+      "engineKey": "other",
+      "developer": "Rockstar Games",
+      "version": "",
+      "size": "1.1 G",
+      "price": "",
+      "type": "Free",
+      "progress": "",
+      "downloads": "",
+      "date": "2026-06-26",
+      "description": "Red Dead Redemption 2 là siêu phẩm hành động thế giới mở do Rockstar Games phát triển, lấy bối cảnh miền Tây nước Mỹ vào năm 1899 – thời kỳ hoàng kim của những tay cao bồi đang dần đi đến hồi kết. Người chơi sẽ vào vai Arthur Morgan, một thành viên kỳ cựu của băng đảng Van der Linde, cùng đồng đội rong ruổi khắp vùng biên giới để sinh tồn sau một vụ cướp thất bại, đồng thời đối mặt với sự truy đuổi gắt gao của lực lượng hành pháp và các băng nhóm đối địch.\n\nSở hữu một thế giới mở rộng lớn và sống động, Red Dead Redemption 2 cho phép người chơi tự do khám phá những thị trấn nhộn nhịp, dãy núi tuyết hùng vĩ, cánh rừng nguyên sinh, vùng đầm lầy u ám và các sa mạc rộng lớn. Mỗi nhân vật, loài động vật và sự kiện trong game đều được xây dựng tỉ mỉ, tạo nên một thế giới chân thực với hệ sinh thái phong phú, chu kỳ ngày đêm, thời tiết động và vô số hoạt động như săn bắn, câu cá, đánh bài, cưỡi ngựa, săn tiền thưởng hay khám phá những bí ẩn ẩn giấu.\n\nKhông chỉ gây ấn tượng bởi đồ họa và quy mô, Red Dead Redemption 2 còn được đánh giá là một trong những tựa game có cốt truyện xuất sắc nhất mọi thời đại. Hành trình của Arthur Morgan khắc họa sâu sắc tình bạn, lòng trung thành, sự phản bội và khát vọng tìm kiếm ý nghĩa cuộc sống trong một thế giới đang thay đổi. Những lựa chọn của người chơi cũng sẽ ảnh hưởng đến danh dự của Arthur, tác động đến cách các nhân vật khác đối xử với anh và dẫn đến nhiều diễn biến khác nhau trong câu chuyện.",
+      "notes": "Mật khẩu giải nén: Theredteam.vn (Chữ T đầu tiên viết hoa).\n\nĐỌC VÀ LÀM THẬT KỸ THEO HƯỚNG DẪN KHÔNG SẼ LỖI:\n*Nếu bạn đang dùng VH cũ, hãy vào thư mục game và gỡ việt hóa cũ trước khi cài update 1.0.8*\nMở bộ cài lên ấn vào logo R để chọn đường dẫn đến thư mục game, sau đó ấn Cài Đặt và chờ cho thông báo hiện Thành Công là xong!\nNếu bạn chơi crack bị crash game, hãy tải file fix này.\nĐối với các bạn cài xong vào game vẫn tiếng Anh (Nếu cài không bị gì thì bỏ qua bước này): Cập nhật quyền cho ổ đĩa (Nếu cài game ổ C chung với ổ win thì bắt buộc bạn phải cấp quyền cả ổ đĩa lẫn thư mục game), hướng dẫn tại đây.\nPatch không tương thích với bản LND. Việc drop fps trong game chủ yếu do cấu hình máy của các bạn.\n\nĐể xoá Việt Hoá: Đối với những bạn muốn chơi online thì có file Gỡ Việt Hóa RDR2.exe đi kèm, chạy file đó là sẽ gỡ hết các file liên quan để có thể chơi online được!",
+      "downloadUrl": "https://drive.google.com/file/d/1ggu4JLInxzO8PNdC84foLLTUG1ECY9jq/view?usp=sharing",
+      "imageUrl": "https://hoanghamobile.com/tin-tuc/wp-content/uploads/2024/09/red-dead-redemption-thumb.jpg",
+      "tags": [],
+      "credits": {
+        "translator": "Theredteam",
+        "editor": "Theredteam",
+        "technical": "Theredteam",
+        "qa": "Theredteam"
+      },
+      "screenshots": [
+        "https://cdn.dlcompare.com/others_jpg/upload/news/image/en-red-dead-redemption-2-becomes-b1d6f34d-image-b1d6f33a.jpg.webp",
+        "https://m.media-amazon.com/images/M/MV5BOTE2ZjhiYzgtMWExNi00YmU5LTk0M2MtYjkxMjdlYjE5YjM0XkEyXkFqcGdeQWpoYW5uYXk@._V1_.jpg",
+        "https://gamingbolt.com/wp-content/uploads/2018/09/D2748F4F-5F0F-46D7-956C-B032645E8481.jpeg",
+        "https://ovicio.com.br/wp-content/uploads/red_dead_redemption_2_trailer_3_screencap_25_1920.0.jpg"
+      ]
+    },
+    "ghost": {
+      "title": "LEGO Batman: Legacy of the Dark Knight Việt Hóa",
+      "engine": "Unreal Engine5",
+      "engineKey": "ue",
+      "developer": "TT Games",
+      "version": "",
+      "size": "69.2 MB",
+      "price": "",
+      "type": "Free",
+      "progress": "",
+      "downloads": "",
+      "date": "",
+      "description": "LEGO Batman: Legacy of the Dark Knight là tựa game phiêu lưu hành động mới lấy cảm hứng từ vũ trụ Batman của DC, được tái hiện theo phong cách LEGO hài hước đặc trưng của TT Games. Người chơi sẽ đồng hành cùng Batman và những đồng minh quen thuộc trong cuộc chiến chống lại hàng loạt siêu phản diện nguy hiểm đang đe dọa thành phố Gotham, đồng thời khám phá những câu chuyện trải dài xuyên suốt lịch sử của Kỵ sĩ Bóng đêm.\n\nTrò chơi mang đến lối chơi giải đố, chiến đấu và khám phá quen thuộc của dòng game LEGO, kết hợp với các màn hành động vui nhộn, những pha rượt đuổi bằng Batmobile cùng hàng trăm nhân vật có thể mở khóa từ vũ trụ DC. Mỗi nhân vật đều sở hữu kỹ năng riêng, cho phép người chơi phối hợp để vượt qua các câu đố, thu thập vật phẩm và khám phá những khu vực bí mật trong Gotham cũng như nhiều địa điểm biểu tượng khác.\n\nĐược phát triển trên Unreal Engine 5, trò chơi hứa hẹn mang đến bước tiến lớn về đồ họa, hiệu ứng ánh sáng, hoạt ảnh và quy mô môi trường so với các phiên bản LEGO trước đây. Bên cạnh chế độ chơi đơn, game còn hỗ trợ co-op, cho phép hai người cùng trải nghiệm và phối hợp vượt qua các thử thách trong suốt hành trình.",
+      "notes": "Chạy laucher chọn đường dẫn để việt hóa",
+      "downloadUrl": "https://drive.google.com/file/d/1GeqU7FDI4Z9HlMT8u1tk723WUCAek0Lj/view?fbclid=IwY2xjawSq-E5leHRuA2FlbQIxMABicmlkETFIUDdiOFNZUXJ5NEs0RDZtc3J0YwZhcHBfaWQQMjIyMDM5MTc4ODIwMDg5MgABHs8pwzlcofgMTf8FX6qJwq9uTos5-5ao6d2_ThbIaOwRsDB8uizpcUQeb4uU_aem_n-w_7b_VTffDpkz9fhCnfg",
+      "imageUrl": "https://cdn.dlcompare.com/others_jpg/upload/news/image/lego-batman-legacy-of-the-dark-k-dece0247-image-77122022f.jpg.webp",
+      "tags": [],
+      "credits": {
+        "translator": "PỏnGG",
+        "editor": "PỏnGG",
+        "technical": "PỏnGG",
+        "qa": "PỏnGG"
+      },
+      "screenshots": [
+        "https://images.immediate.co.uk/production/volatile/sites/3/2026/05/lego-batman-legacy-of-the-dark-knight-review-045c96e.jpg?quality=90&resize=980,654",
+        "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/4468750/3c98a7a4d4624f8799d553a58fdb31d33ce1e494/ss_3c98a7a4d4624f8799d553a58fdb31d33ce1e494.1920x1080.jpg?t=1780501986",
+        "https://www.hollywoodreporter.com/wp-content/uploads/2026/04/LEGO-Batman-Legacy-of-the-Dark-Knight-Official-Absolute-Batman-Reveal-H-2026.jpg?w=1296&h=730&crop=1",
+        "https://www.allkeyshop.com/blog/wp-content/uploads/LEGO-Batman-Legacy-of-the-Dark-Knight-Switch-2.webp",
+        "https://cdn.mos.cms.futurecdn.net/CafCKPHyLMWpmwVDr97qid.jpg"
+      ]
+    }
+  }
+}

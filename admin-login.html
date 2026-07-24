@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex,nofollow,noarchive">
+    <meta name="description" content="Đăng nhập khu quản trị nội dung VietPatch.">
+    <title>Đăng nhập quản trị | VietPatch</title>
+    <link rel="icon" href="favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="admin-login.css?v=20260724-1">
+</head>
+<body>
+    <main class="login-shell">
+        <section class="login-card" aria-labelledby="login-title">
+            <a class="login-brand" href="/" aria-label="Về trang chủ VietPatch">
+                <img src="assets/brand/vietpatch-mark.png" alt="" width="52" height="52">
+                <span><strong>VIETPATCH</strong><small>CONTENT STUDIO</small></span>
+            </a>
+
+            <div class="login-copy">
+                <span class="login-kicker">KHU VỰC NỘI BỘ</span>
+                <h1 id="login-title">Đăng nhập quản trị</h1>
+                <p>Nội dung được lưu trên máy chủ, có lịch sử thay đổi và chỉ xuất hiện ngoài website sau khi bạn bấm xuất bản.</p>
+            </div>
+
+            <form id="admin-login-form" novalidate>
+                <label>
+                    <span>Mật khẩu quản trị</span>
+                    <input
+                        id="admin-password"
+                        name="password"
+                        type="password"
+                        minlength="12"
+                        autocomplete="current-password"
+                        required
+                        autofocus
+                    >
+                </label>
+                <button type="submit">
+                    <span>Vào Content Studio</span>
+                    <span aria-hidden="true">→</span>
+                </button>
+                <p class="login-error" id="login-error" role="alert" aria-live="polite"></p>
+            </form>
+
+            <div class="login-security">
+                <span>Mã hóa phiên đăng nhập</span>
+                <span>Giới hạn thử sai</span>
+                <span>Không lưu mật khẩu trên trình duyệt</span>
+            </div>
+        </section>
+    </main>
+    <script src="admin-login.js?v=20260724-1"></script>
+</body>
+</html>

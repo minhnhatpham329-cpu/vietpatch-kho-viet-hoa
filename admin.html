@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="VietPatch Studio - công cụ quản trị nội dung, trailer, bài viết và link tải patch.">
+    <title>VietPatch Studio | Quản trị nội dung</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="admin.css?v=20260626-trailerfix1">
+    <link rel="stylesheet" href="admin-redesign.css?v=20260724-v3">
+</head>
+<body>
+    <div class="studio-shell">
+        <aside class="studio-sidebar">
+            <a class="studio-brand" href="admin.html" aria-label="VietPatch Studio">
+                <span class="studio-brand-mark">VP</span>
+                <span>
+                    <strong>VietPatch</strong>
+                    <small>Content Studio</small>
+                </span>
+            </a>
+
+            <nav class="studio-nav" aria-label="Điều hướng quản trị">
+                <button class="studio-nav-btn active" type="button" data-panel="dashboard">
+                    <i class="fa-solid fa-table-columns"></i><span>Tổng quan</span>
+                </button>
+                <button class="studio-nav-btn" type="button" data-panel="homepage">
+                    <i class="fa-solid fa-pen-ruler"></i><span>Trang chủ</span>
+                </button>
+                <button class="studio-nav-btn" type="button" data-panel="trailers">
+                    <i class="fa-solid fa-film"></i><span>Trailer tuần</span>
+                </button>
+                <button class="studio-nav-btn" type="button" data-panel="requests">
+                    <i class="fa-solid fa-envelope-open-text"></i><span>Yêu cầu</span>
+                </button>
+                <button class="studio-nav-btn" type="button" data-panel="posts">
+                    <i class="fa-solid fa-newspaper"></i><span>Bài đăng</span>
+                </button>
+                <button class="studio-nav-btn" type="button" data-panel="patches">
+                    <i class="fa-solid fa-box-archive"></i><span>Kho patch</span>
+                </button>
+                <button class="studio-nav-btn" type="button" data-panel="backup">
+                    <i class="fa-solid fa-floppy-disk"></i><span>Sao lưu</span>
+                </button>
+            </nav>
+
+            <div class="studio-sidebar-foot">
+                <span class="local-badge" id="server-status"><i class="fa-solid fa-cloud"></i> ĐANG KẾT NỐI</span>
+                <a href="index.html" target="_blank" rel="noopener">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i> Mở website
+                </a>
+            </div>
+        </aside>
+
+        <main class="studio-main">
+            <header class="studio-topbar">
+                <button class="sidebar-toggle" id="sidebar-toggle" type="button" aria-label="Mở menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <div>
+                    <span class="studio-eyebrow">VIETPATCH / EDITOR DESK</span>
+                    <h1 id="panel-title">Tổng quan nội dung</h1>
+                </div>
+                <div class="topbar-actions">
+                    <div class="save-state" id="save-state">
+                        <i class="fa-solid fa-circle-check"></i>
+                        <span>Bản nháp đã đồng bộ</span>
+                    </div>
+                    <button class="publish-command" id="publish-btn" type="button">
+                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                        <span>Xuất bản</span>
+                    </button>
+                    <button class="logout-command" id="logout-btn" type="button" title="Đăng xuất" aria-label="Đăng xuất">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    </button>
+                </div>
+            </header>
+
+            <section class="studio-panel active" id="panel-dashboard">
+                <div class="metric-grid" id="dashboard-metrics"></div>
+
+                <div class="dashboard-layout">
+                    <section class="studio-section">
+                        <div class="section-heading">
+                            <div>
+                                <span>QUICK ACTIONS</span>
+                                <h2>Cập nhật nhanh</h2>
+                            </div>
+                        </div>
+                        <div class="quick-actions">
+                            <button type="button" data-open-panel="trailers">
+                                <i class="fa-solid fa-circle-play"></i>
+                                <span><strong>Đổi trailer tuần</strong><small>Thêm YouTube URL và sắp thứ tự</small></span>
+                            </button>
+                            <button type="button" data-open-panel="requests">
+                                <i class="fa-solid fa-square-poll-vertical"></i>
+                                <span><strong>Sửa bảng yêu cầu</strong><small>Logo game, vote, link cửa hàng</small></span>
+                            </button>
+                            <button type="button" data-open-panel="posts">
+                                <i class="fa-solid fa-file-circle-plus"></i>
+                                <span><strong>Đăng bản tin</strong><small>Ảnh bìa, nội dung và liên kết</small></span>
+                            </button>
+                            <button type="button" data-open-panel="patches">
+                                <i class="fa-solid fa-link"></i>
+                                <span><strong>Gắn link tải</strong><small>Chọn game và cập nhật file patch</small></span>
+                            </button>
+                        </div>
+                    </section>
+
+                    <section class="studio-section activity-section">
+                        <div class="section-heading">
+                            <div>
+                                <span>STATUS</span>
+                                <h2>Tình trạng nội dung</h2>
+                            </div>
+                        </div>
+                        <div class="content-health" id="content-health"></div>
+                    </section>
+                </div>
+            </section>
+
+            <section class="studio-panel" id="panel-homepage">
+                <form class="studio-section editor-form" id="homepage-form">
+                    <div class="section-heading">
+                        <div>
+                            <span>HOME COPY</span>
+                            <h2>Chữ hiển thị trên trang chủ</h2>
+                        </div>
+                        <button class="primary-command" type="submit">
+                            <i class="fa-solid fa-floppy-disk"></i> Lưu thay đổi
+                        </button>
+                    </div>
+
+                    <fieldset>
+                        <legend>Khối trailer</legend>
+                        <div class="field-grid">
+                            <label class="field">
+                                <span>Nhãn nhỏ</span>
+                                <input name="trailerKicker" maxlength="80" required>
+                            </label>
+                            <label class="field">
+                                <span>Tiêu đề</span>
+                                <input name="trailerHeading" maxlength="90" required>
+                            </label>
+                            <label class="field field-wide">
+                                <span>Đoạn giới thiệu</span>
+                                <textarea name="trailerIntro" rows="3" maxlength="260" required></textarea>
+                            </label>
+                        </div>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Khu bài đăng</legend>
+                        <div class="field-grid">
+                            <label class="field">
+                                <span>Nhãn nhỏ</span>
+                                <input name="newsroomKicker" maxlength="80" required>
+                            </label>
+                            <label class="field">
+                                <span>Tiêu đề</span>
+                                <input name="newsroomHeading" maxlength="90" required>
+                            </label>
+                            <label class="field field-wide">
+                                <span>Đoạn giới thiệu</span>
+                                <textarea name="newsroomIntro" rows="3" maxlength="260" required></textarea>
+                            </label>
+                        </div>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Bàn biên tập</legend>
+                        <div class="field-grid">
+                            <label class="field">
+                                <span>Nhãn nhỏ</span>
+                                <input name="patchDeskKicker" maxlength="80" required>
+                            </label>
+                            <label class="field">
+                                <span>Tiêu đề</span>
+                                <input name="patchDeskHeading" maxlength="90" required>
+                            </label>
+                            <label class="field field-wide">
+                                <span>Đoạn giới thiệu</span>
+                                <textarea name="patchDeskIntro" rows="3" maxlength="260" required></textarea>
+                            </label>
+                        </div>
+                    </fieldset>
+                </form>
+            </section>
+
+            <section class="studio-panel" id="panel-trailers">
+                <div class="manager-layout">
+                    <section class="manager-list">
+                        <div class="section-heading">
+                            <div>
+                                <span>PLAYLIST</span>
+                                <h2>Trailer đang dùng</h2>
+                                <p class="manager-context">Trailer đang bật ở vị trí đầu tiên sẽ xuất hiện trong mục Trailer tuần trên trang chủ.</p>
+                            </div>
+                            <button class="icon-command" id="new-trailer-btn" type="button" title="Thêm trailer">
+                                <i class="fa-solid fa-plus"></i>
+                            </button>
+                        </div>
+                        <div class="item-list" id="trailer-list"></div>
+                    </section>
+
+                    <form class="studio-section editor-form" id="trailer-form">
+                        <input type="hidden" name="id">
+                        <div class="section-heading">
+                            <div>
+                                <span>TRAILER EDITOR</span>
+                                <h2 id="trailer-editor-title">Thêm trailer</h2>
+                            </div>
+                            <button class="primary-command" type="submit">
+                                <i class="fa-solid fa-floppy-disk"></i> Lưu trailer
+                            </button>
+                        </div>
+
+                        <div class="trailer-preview" id="trailer-preview">
+                            <i class="fa-brands fa-youtube"></i>
+                            <span>Dán link YouTube để xem thumbnail</span>
+                        </div>
+
+                        <div class="field-grid">
+                            <label class="field field-wide">
+                                <span>Link YouTube hoặc Video ID</span>
+                                <input name="videoId" placeholder="https://youtube.com/watch?v=..." required>
+                            </label>
+                            <label class="field">
+                                <span>Tên game</span>
+                                <input name="title" maxlength="100" required>
+                            </label>
+                            <label class="field">
+                                <span>Thể loại / nhãn</span>
+                                <input name="category" maxlength="40" placeholder="Action RPG" required>
+                            </label>
+                            <label class="field field-wide">
+                                <span>Mô tả ngắn</span>
+                                <textarea name="description" rows="4" maxlength="260"></textarea>
+                            </label>
+                            <label class="toggle-field">
+                                <input type="checkbox" name="enabled" checked>
+                                <span class="toggle-ui"></span>
+                                <span>Hiển thị trong playlist</span>
+                            </label>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <section class="studio-panel" id="panel-requests">
+                <div class="manager-layout">
+                    <section class="manager-list">
+                        <div class="section-heading">
+                            <div>
+                                <span>COMMUNITY BOARD</span>
+                                <h2>Danh sách yêu cầu</h2>
+                            </div>
+                            <button class="icon-command" id="new-request-btn" type="button" title="Thêm yêu cầu">
+                                <i class="fa-solid fa-plus"></i>
+                            </button>
+                        </div>
+                        <div class="item-list" id="request-list"></div>
+                    </section>
+
+                    <form class="studio-section editor-form" id="request-form">
+                        <input type="hidden" name="id">
+                        <div class="section-heading">
+                            <div>
+                                <span>REQUEST EDITOR</span>
+                                <h2 id="request-editor-title">Thêm yêu cầu</h2>
+                            </div>
+                            <button class="primary-command" type="submit">
+                                <i class="fa-solid fa-floppy-disk"></i> Lưu yêu cầu
+                            </button>
+                        </div>
+
+                        <div class="request-preview" id="request-preview">
+                            <span>COMMUNITY PIN</span>
+                            <strong>Tên game yêu cầu</strong>
+                        </div>
+
+                        <div class="field-grid">
+                            <label class="field field-wide">
+                                <span>Tên game</span>
+                                <input name="title" maxlength="120" required>
+                            </label>
+                            <label class="field field-wide">
+                                <span>Logo / ảnh game</span>
+                                <input name="logoUrl" placeholder="https://.../header.jpg">
+                                <small>Dán link ảnh trực tiếp. Nếu để trống, web sẽ tự hiện chữ viết tắt.</small>
+                            </label>
+                            <label class="field">
+                                <span>Game engine</span>
+                                <input name="engine" maxlength="60" placeholder="RE Engine">
+                            </label>
+                            <label class="field">
+                                <span>Nền tảng</span>
+                                <input name="platform" maxlength="60" placeholder="Steam">
+                            </label>
+                            <label class="field">
+                                <span>Số vote</span>
+                                <input type="number" name="votes" min="0" step="1" placeholder="0">
+                            </label>
+                            <label class="field">
+                                <span>Link cửa hàng</span>
+                                <input type="url" name="link" placeholder="https://store.steampowered.com/...">
+                            </label>
+                            <label class="field field-wide">
+                                <span>Ghi chú / lý do cần dịch</span>
+                                <textarea name="notes" rows="5" maxlength="420"></textarea>
+                            </label>
+                            <label class="toggle-field">
+                                <input type="checkbox" name="published" checked>
+                                <span class="toggle-ui"></span>
+                                <span>Hiển thị trên bảng bình chọn</span>
+                            </label>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <section class="studio-panel" id="panel-posts">
+                <div class="manager-layout">
+                    <section class="manager-list">
+                        <div class="section-heading">
+                            <div>
+                                <span>NEWSROOM</span>
+                                <h2>Danh sách bài đăng</h2>
+                            </div>
+                            <button class="icon-command" id="new-post-btn" type="button" title="Thêm bài đăng">
+                                <i class="fa-solid fa-plus"></i>
+                            </button>
+                        </div>
+                        <div class="item-list" id="post-list"></div>
+                    </section>
+
+                    <form class="studio-section editor-form" id="post-form">
+                        <input type="hidden" name="id">
+                        <div class="section-heading">
+                            <div>
+                                <span>POST EDITOR</span>
+                                <h2 id="post-editor-title">Tạo bài đăng</h2>
+                            </div>
+                            <button class="primary-command" type="submit">
+                                <i class="fa-solid fa-paper-plane"></i> Đăng bài
+                            </button>
+                        </div>
+
+                        <div class="post-preview" id="post-preview">
+                            <span>PREVIEW</span>
+                            <strong>Tiêu đề bài đăng</strong>
+                            <p>Nội dung xem trước sẽ hiện ở đây.</p>
+                        </div>
+
+                        <div class="field-grid">
+                            <label class="field field-wide">
+                                <span>Tiêu đề bài</span>
+                                <input name="title" maxlength="120" required>
+                            </label>
+                            <label class="field">
+                                <span>Chuyên mục</span>
+                                <input name="category" maxlength="30" placeholder="CẬP NHẬT" required>
+                            </label>
+                            <label class="field">
+                                <span>Ngày đăng</span>
+                                <input type="date" name="publishedAt" required>
+                            </label>
+                            <label class="field field-wide">
+                                <span>Tóm tắt</span>
+                                <textarea name="excerpt" rows="4" maxlength="320" required></textarea>
+                            </label>
+                            <label class="field field-wide">
+                                <span>Link ảnh bìa</span>
+                                <input type="url" name="cover" placeholder="https://...">
+                            </label>
+                            <label class="field field-wide">
+                                <span>Link đọc tiếp / trang đích</span>
+                                <input type="url" name="link" placeholder="https://...">
+                            </label>
+                            <label class="toggle-field">
+                                <input type="checkbox" name="published" checked>
+                                <span class="toggle-ui"></span>
+                                <span>Xuất bản trên website</span>
+                            </label>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <section class="studio-panel" id="panel-patches">
+                <div class="manager-layout patch-manager-layout">
+                    <section class="manager-list">
+                        <div class="section-heading">
+                            <div>
+                                <span>PATCH CATALOG</span>
+                                <h2>Chọn game để sửa</h2>
+                            </div>
+                            <button class="primary-command" id="new-game-btn" type="button">
+                                <i class="fa-solid fa-plus"></i> Thêm game
+                            </button>
+                        </div>
+                        <label class="search-control">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input id="game-search" type="search" placeholder="Tìm tên game...">
+                        </label>
+                        <div class="item-list game-item-list" id="game-list"></div>
+                    </section>
+
+                    <form class="studio-section editor-form" id="patch-form">
+                        <input type="hidden" name="gameId">
+                        <div class="section-heading">
+                            <div>
+                                <span>PATCH EDITOR</span>
+                                <h2 id="patch-editor-title">Thông tin tải patch</h2>
+                            </div>
+                            <div class="command-row">
+                                <button class="secondary-command danger-command" id="delete-game-btn" type="button" hidden>
+                                    <i class="fa-solid fa-trash"></i> Xóa game
+                                </button>
+                                <button class="secondary-command" id="reset-patch-btn" type="button">
+                                    <i class="fa-solid fa-rotate-left"></i> Mặc định
+                                </button>
+                                <button class="primary-command" type="submit">
+                                    <i class="fa-solid fa-floppy-disk"></i> Lưu patch
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="patch-selected" id="patch-selected">
+                            <span>GAME DOSSIER</span>
+                            <strong>Chọn một game ở danh sách bên trái</strong>
+                        </div>
+
+                        <div class="patch-media-preview" id="patch-media-preview">
+                            <span>PATCH COVER</span>
+                            <strong>Ảnh kho patch sẽ hiện ở đây</strong>
+                        </div>
+
+                        <div class="field-grid">
+                            <label class="field field-wide">
+                                <span>Tên game</span>
+                                <input name="title" maxlength="120" placeholder="Tên game hiển thị trong kho patch">
+                            </label>
+                            <label class="field">
+                                <span>Studio / Nhà phát triển</span>
+                                <input name="developer" maxlength="80" placeholder="FromSoftware, Capcom...">
+                            </label>
+                            <label class="field">
+                                <span>Engine</span>
+                                <input name="engine" maxlength="80" placeholder="Unreal Engine 5">
+                            </label>
+                            <label class="field">
+                                <span>Nhóm engine</span>
+                                <select name="engineKey">
+                                    <option value="">Giữ mặc định</option>
+                                    <option value="ue">Unreal Engine</option>
+                                    <option value="unity">Unity</option>
+                                    <option value="other">Khác</option>
+                                </select>
+                            </label>
+                            <label class="field">
+                                <span>Loại patch</span>
+                                <select name="type">
+                                    <option value="">Giữ mặc định</option>
+                                    <option value="Free">Free</option>
+                                    <option value="Premium">Premium</option>
+                                </select>
+                            </label>
+                            <label class="field">
+                                <span>Phiên bản patch</span>
+                                <input name="version" placeholder="v1.0.0">
+                            </label>
+                            <label class="field">
+                                <span>Dung lượng</span>
+                                <input name="size" placeholder="850 MB">
+                            </label>
+                            <label class="field">
+                                <span>Giá bán (VNĐ)</span>
+                                <input type="number" name="price" min="0" step="1000" placeholder="0">
+                            </label>
+                            <label class="field">
+                                <span>Tiến độ (%)</span>
+                                <input type="number" name="progress" min="0" max="100" step="1" placeholder="100">
+                            </label>
+                            <label class="field">
+                                <span>Lượt tải</span>
+                                <input name="downloads" maxlength="20" placeholder="12.5k">
+                            </label>
+                            <label class="field">
+                                <span>Ngày cập nhật</span>
+                                <input type="date" name="date">
+                            </label>
+                            <label class="field field-wide">
+                                <span>Mác / tag trên card</span>
+                                <input name="tags" maxlength="120" placeholder="HOT, UE5, Việt hóa 100%, Có link tải">
+                                <small>Ngăn cách bằng dấu phẩy. Tối đa 6 mác.</small>
+                            </label>
+                            <label class="field field-wide">
+                                <span>Ảnh cover kho patch</span>
+                                <input name="imageUrl" placeholder="https://... hoặc upload ảnh bên dưới">
+                                <small>Ảnh này thay ảnh card, thư viện và hồ sơ chi tiết. Hỗ trợ link HTTPS hoặc ảnh upload.</small>
+                            </label>
+                            <label class="field field-wide">
+                                <span>Upload ảnh từ máy</span>
+                                <input type="file" id="patch-image-file" accept="image/png,image/jpeg,image/webp,image/gif">
+                                <small>Nên dùng JPG/WebP dưới 2MB để đồng bộ nhanh và nhẹ.</small>
+                            </label>
+                            <label class="field field-wide">
+                                <span>Link tải patch</span>
+                                <input type="url" name="downloadUrl" placeholder="https://drive.google.com/...">
+                                <small>Hỗ trợ Google Drive, MediaFire, OneDrive hoặc link HTTPS trực tiếp.</small>
+                            </label>
+                            <label class="field field-wide">
+                                <span>Mô tả bản dịch</span>
+                                <textarea name="description" rows="5" placeholder="Để trống nếu muốn giữ nội dung gốc."></textarea>
+                            </label>
+                            <fieldset class="field-wide patch-fieldset">
+                                <legend>Nhân sự thực hiện</legend>
+                                <div class="field-grid">
+                                    <label class="field">
+                                        <span>Biên dịch kịch bản</span>
+                                        <input name="creditTranslator" maxlength="120" placeholder="Để trống nếu giữ mặc định">
+                                    </label>
+                                    <label class="field">
+                                        <span>Hiệu đính nội dung</span>
+                                        <input name="creditEditor" maxlength="120" placeholder="Để trống nếu giữ mặc định">
+                                    </label>
+                                    <label class="field">
+                                        <span>Kỹ thuật & đóng gói</span>
+                                        <input name="creditTechnical" maxlength="120" placeholder="Để trống nếu giữ mặc định">
+                                    </label>
+                                    <label class="field">
+                                        <span>Kiểm tra lỗi (QA)</span>
+                                        <input name="creditQa" maxlength="120" placeholder="Để trống nếu giữ mặc định">
+                                    </label>
+                                </div>
+                            </fieldset>
+                            <label class="field field-wide">
+                                <span>Hình ảnh bản dịch Việt hóa</span>
+                                <textarea name="screenshots" rows="5" placeholder="Mỗi dòng một link ảnh. Ví dụ: https://shared.akamai.steamstatic.com/.../ss_xxx.jpg"></textarea>
+                                <small>Dán nhiều URL ảnh, mỗi dòng một ảnh. Web công khai sẽ hiển thị gallery và bấm ảnh để xem lớn.</small>
+                            </label>
+                            <label class="field field-wide">
+                                <span>Lưu ý cài đặt</span>
+                                <textarea name="notes" rows="4" placeholder="Để trống nếu muốn giữ nội dung gốc."></textarea>
+                            </label>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <section class="studio-panel" id="panel-backup">
+                <section class="studio-section backup-section">
+                    <div class="section-heading">
+                        <div>
+                            <span>SERVER HISTORY</span>
+                            <h2>Sao lưu và lịch sử thay đổi</h2>
+                        </div>
+                    </div>
+                    <p class="section-copy">Dữ liệu được lưu tập trung trên máy chủ. Mỗi lần lưu và xuất bản đều tạo một mốc để bạn có thể quay lại khi cần.</p>
+
+                    <div class="backup-actions">
+                        <button class="backup-action export" id="export-btn" type="button">
+                            <i class="fa-solid fa-file-export"></i>
+                            <span><strong>Xuất dữ liệu JSON</strong><small>Tải trailer, yêu cầu, bài đăng và link patch</small></span>
+                        </button>
+                        <label class="backup-action import" for="import-input">
+                            <i class="fa-solid fa-file-import"></i>
+                            <span><strong>Nhập dữ liệu JSON</strong><small>Khôi phục từ tệp đã sao lưu</small></span>
+                            <input id="import-input" type="file" accept="application/json,.json">
+                        </label>
+                        <button class="backup-action reset" id="reset-cms-btn" type="button">
+                            <i class="fa-solid fa-trash-can-arrow-up"></i>
+                            <span><strong>Khôi phục mặc định</strong><small>Xóa các chỉnh sửa nội dung trong CMS</small></span>
+                        </button>
+                    </div>
+
+                    <div class="storage-report" id="storage-report"></div>
+
+                    <div class="revision-section">
+                        <div class="section-heading">
+                            <div>
+                                <span>CHANGE LOG</span>
+                                <h2>Các bản gần đây</h2>
+                            </div>
+                            <button class="secondary-command" id="refresh-revisions-btn" type="button">
+                                <i class="fa-solid fa-rotate"></i> Làm mới
+                            </button>
+                        </div>
+                        <div class="revision-list" id="revision-list">
+                            <p>Đang tải lịch sử…</p>
+                        </div>
+                    </div>
+                </section>
+            </section>
+        </main>
+    </div>
+
+    <div class="studio-toast-wrap" id="studio-toast-wrap"></div>
+
+    <script src="cms-public-seed.js?v=20260724-secure1"></script>
+    <script src="cms-shared.js?v=20260724-servercms1"></script>
+    <script src="admin.js?v=20260724-servercms1"></script>
+</body>
+</html>

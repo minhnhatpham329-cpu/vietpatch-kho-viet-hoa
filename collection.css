@@ -67,28 +67,17 @@ textarea {
 }
 
 .catalog-heading {
-    min-height: 250px;
-    padding: clamp(28px, 4vw, 54px);
+    min-height: 0;
+    padding: 30px 0 22px;
     align-items: end;
-    background:
-        linear-gradient(90deg, rgba(255, 253, 247, 0.96) 0 67%, rgba(255, 253, 247, 0.66) 67% 100%),
-        repeating-linear-gradient(90deg, transparent 0 46px, rgba(17, 17, 15, 0.06) 46px 47px);
-    border-top: 1px solid var(--ink);
-    border-bottom: 0;
+    background: transparent;
+    border-top: 0;
+    border-bottom: 1px solid var(--ink);
 }
 
 .catalog-heading::before {
-    content: "ARCHIVE";
-    position: absolute;
-    top: 22px;
-    right: clamp(22px, 4vw, 54px);
-    color: rgba(17, 17, 15, 0.055);
-    font-family: var(--collection-font);
-    font-size: clamp(3.8rem, 9vw, 9.2rem);
-    font-weight: 900;
-    letter-spacing: -0.09em;
-    line-height: 0.8;
-    pointer-events: none;
+    content: none;
+    display: none;
 }
 
 .catalog-heading > div:first-child {
@@ -99,38 +88,36 @@ textarea {
 
 .catalog-heading h2 {
     max-width: 720px;
-    margin-top: 12px;
+    margin-top: 9px;
     font-family: var(--collection-font);
-    font-size: clamp(2.5rem, 5.7vw, 5.8rem);
+    font-size: clamp(1.8rem, 3vw, 2.75rem);
     font-weight: 850;
-    letter-spacing: -0.065em;
-    line-height: 0.98;
+    letter-spacing: -0.05em;
+    line-height: 1.05;
 }
 
 .catalog-heading p {
     max-width: 670px;
-    margin-top: 18px;
+    margin-top: 10px;
     color: #5f5a52;
-    font-size: clamp(0.78rem, 1.2vw, 0.92rem);
-    line-height: 1.7;
+    font-size: 0.72rem;
+    line-height: 1.55;
 }
 
 .catalog-result-summary {
-    position: relative;
-    z-index: 2;
-    min-width: 172px;
-    padding: 18px 20px;
+    min-width: 150px;
+    padding: 12px 15px;
     align-self: end;
     color: var(--ivory);
     background: var(--ink);
     border: 0;
-    border-bottom: 5px solid var(--vermilion);
+    border-bottom: 4px solid var(--vermilion);
 }
 
 .catalog-result-summary strong {
     color: var(--ivory);
     font-family: var(--collection-font);
-    font-size: 3.2rem;
+    font-size: 2rem;
     font-weight: 850;
 }
 
@@ -1817,12 +1804,11 @@ textarea {
 
 @media (max-width: 760px) {
     .catalog-heading {
-        min-height: 0;
         display: grid;
     }
 
     .catalog-heading::before {
-        font-size: 4rem;
+        content: none;
     }
 
     .catalog-result-summary {
@@ -1880,11 +1866,11 @@ textarea {
     }
 
     .catalog-heading {
-        padding: 28px 20px;
+        padding: 24px 0 18px;
     }
 
     .catalog-heading h2 {
-        font-size: 2.55rem;
+        font-size: 1.9rem;
     }
 
     .archive-masthead {

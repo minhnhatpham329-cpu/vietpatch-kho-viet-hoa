@@ -9,6 +9,7 @@ let weeklyTrailerPlayer = null;
 let weeklyTrailerApiPromise = null;
 let weeklyTrailerFailureCount = 0;
 let weeklyTrailerMuted = true;
+let weeklyTrailerMetadataTimer = null;
 
 // 1. GAME CATALOGUE DATABASE
 const gamesDatabase = [
@@ -841,6 +842,7 @@ function renderWeeklyTrailer() {
 
     if (!trailer) {
         section.classList.add("is-empty");
+        stopWeeklyTrailerMetadataTracking();
         weeklyTrailerPlayer?.stopVideo?.();
         player.hidden = true;
         if (!weeklyTrailerPlayer) player.removeAttribute("src");
@@ -946,6 +948,32 @@ function syncWeeklyTrailerSound() {
     if (!weeklyTrailerMuted) send("setVolume", [75]);
 }
 
+function syncWeeklyTrailerMetadataFromPlayer(player = weeklyTrailerPlayer) {
+    if (!player?.getVideoData) return;
+    if (window.YT?.PlayerState && player.getPlayerState?.() !== window.YT.PlayerState.PLAYING) return;
+
+    const videoId = String(player.getVideoData()?.video_id || "").trim();
+    if (!videoId) return;
+    const nextIndex = weeklyTrailerItems.findIndex(item => String(item.videoId).trim() === videoId);
+    if (nextIndex < 0 || nextIndex === weeklyTrailerIndex) return;
+
+    weeklyTrailerIndex = nextIndex;
+    renderWeeklyTrailerItem(nextIndex);
+}
+
+function startWeeklyTrailerMetadataTracking() {
+    stopWeeklyTrailerMetadataTracking();
+    weeklyTrailerMetadataTimer = window.setInterval(() => {
+        syncWeeklyTrailerMetadataFromPlayer();
+    }, 650);
+}
+
+function stopWeeklyTrailerMetadataTracking() {
+    if (!weeklyTrailerMetadataTimer) return;
+    window.clearInterval(weeklyTrailerMetadataTimer);
+    weeklyTrailerMetadataTimer = null;
+}
+
 function startWeeklyTrailerPlayback(index = weeklyTrailerIndex) {
     const trailer = weeklyTrailerItems[index];
     const playerFrame = document.getElementById("weekly-trailer-player");
@@ -963,6 +991,7 @@ function startWeeklyTrailerPlayback(index = weeklyTrailerIndex) {
     if (weeklyTrailerPlayer?.loadVideoById) {
         weeklyTrailerPlayer.loadVideoById({ videoId, startSeconds: HOT_TRAILER_START_SECONDS });
         window.setTimeout(syncWeeklyTrailerSound, 120);
+        startWeeklyTrailerMetadataTracking();
         return;
     }
 
@@ -986,10 +1015,15 @@ function startWeeklyTrailerPlayback(index = weeklyTrailerIndex) {
                             event.target.setVolume(75);
                         }
                         event.target.playVideo();
+                        startWeeklyTrailerMetadataTracking();
                         event.target.getIframe()?.setAttribute("referrerpolicy", "strict-origin-when-cross-origin");
                     },
                     onStateChange(event) {
-                        if (event.data === window.YT.PlayerState.PLAYING) weeklyTrailerFailureCount = 0;
+                        if (event.data === window.YT.PlayerState.PLAYING) {
+                            weeklyTrailerFailureCount = 0;
+                            syncWeeklyTrailerMetadataFromPlayer(event.target);
+                            startWeeklyTrailerMetadataTracking();
+                        }
                         if (event.data === window.YT.PlayerState.ENDED) advanceWeeklyTrailer();
                     },
                     onError() {
@@ -1019,6 +1053,7 @@ function showWeeklyTrailerFallback() {
     const playerFrame = document.getElementById("weekly-trailer-player");
     const poster = document.getElementById("weekly-trailer-poster");
     const playButton = document.getElementById("weekly-trailer-play");
+    stopWeeklyTrailerMetadataTracking();
     weeklyTrailerPlayer?.stopVideo?.();
     if (playerFrame) playerFrame.hidden = true;
     if (poster) poster.hidden = false;

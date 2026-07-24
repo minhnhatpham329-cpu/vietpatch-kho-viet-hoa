@@ -58,8 +58,7 @@
 
     function getAdminCatalog() {
         const customGames = getCustomGames().map(game => ({
-            id: game.id,
-            title: game.title,
+            ...game,
             custom: true
         }));
 
@@ -277,7 +276,10 @@
         const publishedRequests = state.requests.filter(item => item.published).length;
         const totalGames = getAdminCatalog().length;
         const pageSize = Number(state.site.catalogPageSize) || 9;
-        const featuredGame = getAdminCatalog().find(game => game.id === state.site.featuredGameId);
+        const featuredIds = Array.isArray(state.site.featuredGameIds)
+            ? state.site.featuredGameIds
+            : [state.site.featuredGameId].filter(Boolean);
+        const featuredGames = getAdminCatalog().filter(game => featuredIds.includes(game.id));
         const linkedPatches = [
             ...Object.values(state.gameOverrides).filter(item => item.downloadUrl),
             ...getCustomGames().filter(item => item.downloadUrl)
@@ -304,8 +306,8 @@
                 <div class="health-value">${enabledTrailers ? "SẴN SÀNG" : "CHƯA CÓ"}</div>
             </div>
             <div class="health-row">
-                <div><strong>Game tiêu điểm</strong><br><span>Hồ sơ lớn trên trang chủ</span></div>
-                <div class="health-value">${escapeHtml(featuredGame?.title || "CHƯA CHỌN")}</div>
+                <div><strong>Banner luân phiên</strong><br><span>${escapeHtml(featuredGames.map(game => game.title).join(" · ") || "Chưa chọn game")}</span></div>
+                <div class="health-value">${featuredGames.length} GAME</div>
             </div>
             <div class="health-row">
                 <div><strong>Bảng yêu cầu</strong><br><span>Game cộng đồng đang bình chọn</span></div>
@@ -329,14 +331,22 @@
     function fillHomepageForm() {
         const form = byId("homepage-form");
         const games = getAdminCatalog().filter(game => !game.hidden);
-        const selectedId = games.some(game => game.id === state.site.featuredGameId)
-            ? state.site.featuredGameId
-            : (games[0]?.id || "");
-        const featuredSelect = byId("featured-game-select");
-        featuredSelect.innerHTML = games.map(game => `
-            <option value="${escapeHtml(game.id)}">${escapeHtml(game.title)}</option>
+        const configuredIds = Array.isArray(state.site.featuredGameIds)
+            ? state.site.featuredGameIds
+            : [state.site.featuredGameId].filter(Boolean);
+        const selectedIds = configuredIds.filter(id => games.some(game => game.id === id));
+        const featuredOptions = byId("featured-game-options");
+        featuredOptions.innerHTML = games.map((game, index) => `
+            <label class="featured-game-choice">
+                <input type="checkbox" value="${escapeHtml(game.id)}" ${selectedIds.includes(game.id) ? "checked" : ""}>
+                <span>
+                    <strong>${escapeHtml(game.title)}</strong>
+                    <small>${escapeHtml(game.developer || "Community")} · ${escapeHtml(game.engine || "Engine khác")}</small>
+                </span>
+                <em>${String(index + 1).padStart(2, "0")}</em>
+            </label>
         `).join("");
-        featuredSelect.value = selectedId;
+        form.elements.featuredGameIds.value = selectedIds.join(",");
         form.elements.catalogHeading.value = state.site.catalogHeading || "Thư viện Việt hóa";
         form.elements.catalogIntro.value = state.site.catalogIntro || "";
         form.elements.catalogPageSize.value = String(state.site.catalogPageSize || "9");
@@ -774,7 +784,18 @@
         byId("homepage-form").addEventListener("submit", event => {
             event.preventDefault();
             const form = event.currentTarget;
-            state.site.featuredGameId = form.elements.featuredGameId.value;
+            const featuredInputs = [...byId("featured-game-options").querySelectorAll('input[type="checkbox"]:checked')];
+            if (featuredInputs.length > 6) {
+                showToast("Banner chỉ nên dùng tối đa 6 game để tải nhanh và không bị loãng.", "error");
+                return;
+            }
+            const featuredIds = featuredInputs.map(input => input.value);
+            if (featuredIds.length < 2) {
+                showToast("Hãy chọn ít nhất 2 game để banner có thể luân phiên.", "error");
+                return;
+            }
+            state.site.featuredGameIds = featuredIds;
+            state.site.featuredGameId = featuredIds[0];
             state.site.catalogHeading = form.elements.catalogHeading.value.trim();
             state.site.catalogIntro = form.elements.catalogIntro.value.trim();
             state.site.catalogPageSize = form.elements.catalogPageSize.value;

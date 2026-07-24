@@ -8,6 +8,7 @@ let weeklyTrailerIndex = 0;
 let weeklyTrailerPlayer = null;
 let weeklyTrailerApiPromise = null;
 let weeklyTrailerFailureCount = 0;
+let weeklyTrailerMuted = true;
 
 // 1. GAME CATALOGUE DATABASE
 const gamesDatabase = [
@@ -818,6 +819,7 @@ function renderWeeklyTrailer() {
     const player = document.getElementById("weekly-trailer-player");
     const poster = document.getElementById("weekly-trailer-poster");
     const playButton = document.getElementById("weekly-trailer-play");
+    const controls = document.getElementById("weekly-trailer-controls");
     const period = document.getElementById("weekly-trailer-period");
     const category = document.getElementById("weekly-trailer-category");
     const title = document.getElementById("weekly-trailer-title");
@@ -845,6 +847,7 @@ function renderWeeklyTrailer() {
         delete media.dataset.videoId;
         if (poster) poster.hidden = true;
         if (playButton) playButton.hidden = true;
+        if (controls) controls.hidden = true;
         if (category) category.textContent = "CHƯA CÓ VIDEO";
         if (title) title.textContent = "Chưa chọn trailer tuần";
         if (description) description.textContent = "Bật một trailer trong trang quản trị để đưa lên trang chủ.";
@@ -853,6 +856,7 @@ function renderWeeklyTrailer() {
     }
 
     section.classList.remove("is-empty");
+    if (controls) controls.hidden = window.location.protocol === "file:";
     weeklyTrailerIndex = 0;
     weeklyTrailerFailureCount = 0;
     renderWeeklyTrailerItem(weeklyTrailerIndex);
@@ -877,6 +881,7 @@ function renderWeeklyTrailerItem(index) {
     const title = document.getElementById("weekly-trailer-title");
     const description = document.getElementById("weekly-trailer-description");
     const externalLink = document.getElementById("weekly-trailer-link");
+    const caption = document.querySelector(".weekly-trailer-caption");
     const trailer = weeklyTrailerItems[index];
     if (!trailer || !media || !player) return;
 
@@ -899,6 +904,46 @@ function renderWeeklyTrailerItem(index) {
         externalLink.href = `https://www.youtube.com/watch?v=${encodeURIComponent(videoId)}`;
         externalLink.setAttribute("aria-label", `Mở trailer ${trailer.title || "tuần này"} trên YouTube`);
     }
+    if (caption) {
+        caption.classList.remove("is-copy-entering");
+        void caption.offsetWidth;
+        caption.classList.add("is-copy-entering");
+    }
+}
+
+function syncWeeklyTrailerSound() {
+    const button = document.getElementById("weekly-trailer-sound");
+    const icon = button?.querySelector("i");
+    const label = button?.querySelector("span");
+
+    if (button) {
+        button.classList.toggle("is-muted", weeklyTrailerMuted);
+        button.setAttribute("aria-pressed", String(!weeklyTrailerMuted));
+        button.setAttribute("aria-label", weeklyTrailerMuted ? "Bật tiếng trailer" : "Tắt tiếng trailer");
+    }
+    if (icon) icon.className = `fa-solid ${weeklyTrailerMuted ? "fa-volume-xmark" : "fa-volume-high"}`;
+    if (label) label.textContent = weeklyTrailerMuted ? "Bật tiếng" : "Tắt tiếng";
+
+    if (weeklyTrailerPlayer) {
+        if (weeklyTrailerMuted) {
+            weeklyTrailerPlayer.mute?.();
+        } else {
+            weeklyTrailerPlayer.unMute?.();
+            weeklyTrailerPlayer.setVolume?.(75);
+            weeklyTrailerPlayer.playVideo?.();
+        }
+        return;
+    }
+
+    const frame = document.getElementById("weekly-trailer-player");
+    if (!frame?.contentWindow) return;
+    const send = (func, args = []) => frame.contentWindow.postMessage(JSON.stringify({
+        event: "command",
+        func,
+        args
+    }), "https://www.youtube-nocookie.com");
+    send(weeklyTrailerMuted ? "mute" : "unMute");
+    if (!weeklyTrailerMuted) send("setVolume", [75]);
 }
 
 function startWeeklyTrailerPlayback(index = weeklyTrailerIndex) {
@@ -917,7 +962,7 @@ function startWeeklyTrailerPlayback(index = weeklyTrailerIndex) {
 
     if (weeklyTrailerPlayer?.loadVideoById) {
         weeklyTrailerPlayer.loadVideoById({ videoId, startSeconds: HOT_TRAILER_START_SECONDS });
-        weeklyTrailerPlayer.mute?.();
+        window.setTimeout(syncWeeklyTrailerSound, 120);
         return;
     }
 
@@ -934,7 +979,12 @@ function startWeeklyTrailerPlayback(index = weeklyTrailerIndex) {
             weeklyTrailerPlayer = new window.YT.Player(currentFrame, {
                 events: {
                     onReady(event) {
-                        event.target.mute();
+                        if (weeklyTrailerMuted) {
+                            event.target.mute();
+                        } else {
+                            event.target.unMute();
+                            event.target.setVolume(75);
+                        }
                         event.target.playVideo();
                         event.target.getIframe()?.setAttribute("referrerpolicy", "strict-origin-when-cross-origin");
                     },
@@ -1008,6 +1058,7 @@ function loadWeeklyYouTubeApi() {
 function initWeeklyTrailerPlayer() {
     const media = document.getElementById("weekly-trailer-media");
     const playButton = document.getElementById("weekly-trailer-play");
+    const soundButton = document.getElementById("weekly-trailer-sound");
     if (!media || !playButton) return;
 
     playButton.addEventListener("click", () => {
@@ -1022,6 +1073,12 @@ function initWeeklyTrailerPlayer() {
 
         startWeeklyTrailerPlayback(weeklyTrailerIndex);
     });
+
+    soundButton?.addEventListener("click", () => {
+        weeklyTrailerMuted = !weeklyTrailerMuted;
+        syncWeeklyTrailerSound();
+    });
+    syncWeeklyTrailerSound();
 }
 
 function renderCmsTrailerPlaylist() {
@@ -1681,51 +1738,75 @@ function renderHeroSlider() {
     if (!sliderContainer || !dotsContainer) return;
 
     const publicGames = getPublicGames();
-    const featuredGameId = cmsState?.site?.featuredGameId || "wukong";
-    const game = publicGames.find(item => item.id === featuredGameId) || publicGames[0];
+    const configuredIds = Array.isArray(cmsState?.site?.featuredGameIds)
+        ? cmsState.site.featuredGameIds
+        : [cmsState?.site?.featuredGameId || "wukong"];
+    const featuredGames = configuredIds
+        .map(id => publicGames.find(game => game.id === id))
+        .filter(Boolean)
+        .slice(0, 6);
+    if (!featuredGames.length && publicGames[0]) featuredGames.push(...publicGames.slice(0, 3));
     sliderContainer.innerHTML = "";
     dotsContainer.innerHTML = "";
 
-    if (!game) return;
+    if (!featuredGames.length) return;
 
-    const heroImage = getGameHeroImage(game);
-    const releaseState = getGameReleaseState(game);
-    const slide = document.createElement("div");
-    slide.className = "hero-slide active";
-    slide.innerHTML = `
-        <img class="hero-slide-bg" src="${escapeHtml(heroImage)}" alt="Ảnh bìa ${escapeHtml(game.title)}" onerror="this.src='${escapeHtml(getGameCoverImage(game))}'">
-        <span class="photo-note">CẬP NHẬT · ${escapeHtml(formatGameDate(game.date))}</span>
-        <article class="feature-sheet">
-            <div class="feature-name">
-                <span>Hồ sơ cập nhật gần đây</span>
-                <h2>${escapeHtml(game.title)}</h2>
-                <p>${escapeHtml(game.developer)} · ${escapeHtml(game.engine)}</p>
-            </div>
-            <dl class="release-specs">
-                <div><dt>Phiên bản</dt><dd>${escapeHtml(game.version)}</dd></div>
-                <div><dt>Dung lượng</dt><dd>${escapeHtml(game.size)}</dd></div>
-                <div><dt>Trạng thái</dt><dd class="status-${releaseState.key}">${escapeHtml(releaseState.shortLabel)}</dd></div>
-            </dl>
-            <div class="action-zone">
-                <span class="feature-action-label">Thông tin kỹ thuật</span>
-                <button class="primary-action btn-detail" type="button" data-game-id="${escapeHtml(game.id)}">
-                    <span>Mở hồ sơ</span><i class="fa-solid fa-arrow-right"></i>
-                </button>
-            </div>
-        </article>
-    `;
-    sliderContainer.appendChild(slide);
+    featuredGames.forEach((game, index) => {
+        const heroImage = getGameHeroImage(game);
+        const releaseState = getGameReleaseState(game);
+        const slide = document.createElement("div");
+        slide.className = `hero-slide ${index === 0 ? "active" : ""}`;
+        slide.innerHTML = `
+            <img class="hero-slide-bg" src="${escapeHtml(heroImage)}" alt="Ảnh bìa ${escapeHtml(game.title)}" onerror="this.src='${escapeHtml(getGameCoverImage(game))}'">
+            <span class="photo-note">CẬP NHẬT · ${escapeHtml(formatGameDate(game.date))}</span>
+            <article class="feature-sheet">
+                <div class="feature-name">
+                    <span>Hồ sơ tuyển chọn</span>
+                    <h2>${escapeHtml(game.title)}</h2>
+                    <p>${escapeHtml(game.developer)} · ${escapeHtml(game.engine)}</p>
+                </div>
+                <dl class="release-specs">
+                    <div><dt>Phiên bản</dt><dd>${escapeHtml(game.version)}</dd></div>
+                    <div><dt>Dung lượng</dt><dd>${escapeHtml(game.size)}</dd></div>
+                    <div><dt>Trạng thái</dt><dd class="status-${releaseState.key}">${escapeHtml(releaseState.shortLabel)}</dd></div>
+                </dl>
+                <div class="action-zone">
+                    <span class="feature-action-label">Thông tin kỹ thuật</span>
+                    <button class="primary-action btn-detail" type="button" data-game-id="${escapeHtml(game.id)}">
+                        <span>Mở hồ sơ</span><i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </article>
+        `;
+        sliderContainer.appendChild(slide);
+
+        const dot = document.createElement("button");
+        dot.className = `carousel-dot ${index === 0 ? "active" : ""}`;
+        dot.type = "button";
+        dot.dataset.heroSlide = String(index);
+        dot.setAttribute("aria-label", `Hiển thị ${game.title}`);
+        dot.setAttribute("aria-current", index === 0 ? "true" : "false");
+        dotsContainer.appendChild(dot);
+    });
 
     activeHeroSlide = 0;
+    startHeroRotation();
 }
 
 function startHeroRotation() {
-    // Chuyển slide thủ công để người dùng có đủ thời gian đọc thông tin tương thích.
     stopHeroRotation();
+    const slides = document.querySelectorAll(".hero-slide");
+    if (slides.length <= 1) return;
+    heroRotationInterval = window.setInterval(() => {
+        goToSlide((activeHeroSlide + 1) % slides.length);
+    }, 8000);
 }
 
 function stopHeroRotation() {
-    if (heroRotationInterval) clearInterval(heroRotationInterval);
+    if (heroRotationInterval) {
+        clearInterval(heroRotationInterval);
+        heroRotationInterval = null;
+    }
 }
 
 function goToSlide(index) {
@@ -1736,10 +1817,11 @@ function goToSlide(index) {
     slides[activeHeroSlide]?.classList.remove("active");
     dots[activeHeroSlide]?.classList.remove("active");
     
-    activeHeroSlide = index;
+    activeHeroSlide = (index + slides.length) % slides.length;
     
     slides[activeHeroSlide]?.classList.add("active");
     dots[activeHeroSlide]?.classList.add("active");
+    dots.forEach((dot, dotIndex) => dot.setAttribute("aria-current", dotIndex === activeHeroSlide ? "true" : "false"));
 }
 
 // Render Progress Tracker Tab
@@ -3373,6 +3455,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Slider Prev/Next Controls
     const prevBtn = document.querySelector(".carousel-nav .prev");
     const nextBtn = document.querySelector(".carousel-nav .next");
+    const heroCarousel = document.querySelector(".hero-carousel");
+    const heroDots = document.getElementById("carousel-dots-container");
     if (prevBtn && nextBtn) {
         prevBtn.addEventListener("click", () => {
             let prevIndex = activeHeroSlide - 1;
@@ -3390,6 +3474,14 @@ document.addEventListener("DOMContentLoaded", async () => {
             startHeroRotation();
         });
     }
+    heroDots?.addEventListener("click", (event) => {
+        const dot = event.target.closest("[data-hero-slide]");
+        if (!dot) return;
+        goToSlide(Number(dot.dataset.heroSlide) || 0);
+        startHeroRotation();
+    });
+    heroCarousel?.addEventListener("mouseenter", stopHeroRotation);
+    heroCarousel?.addEventListener("mouseleave", startHeroRotation);
     
     // 9. Close Detail Panel Panel
     document.getElementById("close-detail-btn").addEventListener("click", closeGameDetails);

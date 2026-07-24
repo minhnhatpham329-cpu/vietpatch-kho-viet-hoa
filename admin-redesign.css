@@ -522,6 +522,83 @@ textarea:focus-visible {
     line-height: 1.6;
 }
 
+.featured-game-options {
+    margin-top: 0.55rem;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.55rem;
+}
+
+.featured-game-choice {
+    position: relative;
+    min-height: 68px;
+    padding: 0.78rem 2.5rem 0.78rem 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    color: var(--ink-soft);
+    background: #151f31;
+    border: 1px solid rgba(183, 203, 232, 0.16);
+    border-radius: 11px;
+    cursor: pointer;
+    transition: border-color 160ms ease, background-color 160ms ease, transform 160ms ease;
+}
+
+.featured-game-choice:hover {
+    border-color: rgba(94, 233, 198, 0.36);
+    transform: translateY(-1px);
+}
+
+.featured-game-choice:has(input:checked) {
+    background: rgba(94, 233, 198, 0.08);
+    border-color: rgba(94, 233, 198, 0.42);
+}
+
+.featured-game-choice input {
+    width: 18px;
+    height: 18px;
+    flex: 0 0 auto;
+    accent-color: var(--orange);
+}
+
+.featured-game-choice > span {
+    min-width: 0;
+}
+
+.featured-game-choice strong,
+.featured-game-choice small {
+    display: block;
+}
+
+.featured-game-choice strong {
+    overflow: hidden;
+    color: var(--ink);
+    font-size: 0.72rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.featured-game-choice small {
+    margin-top: 0.25rem;
+    overflow: hidden;
+    color: var(--muted);
+    font-size: 0.58rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.featured-game-choice em {
+    position: absolute;
+    top: 0.72rem;
+    right: 0.72rem;
+    color: rgba(183, 203, 232, 0.32);
+    font: 700 0.58rem var(--font-mono);
+}
+
+.featured-game-choice:has(input:checked) em {
+    color: var(--orange);
+}
+
 .manager-layout.patch-manager-layout {
     grid-template-columns: minmax(300px, 0.72fr) minmax(560px, 1.28fr);
     align-items: start;
@@ -570,5 +647,9 @@ textarea:focus-visible {
 
     #panel-homepage fieldset {
         padding: 1rem;
+    }
+
+    .featured-game-options {
+        grid-template-columns: 1fr;
     }
 }

@@ -45,7 +45,7 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="style.css?v=20260626-securepay2">
     <link rel="stylesheet" href="redesign.css?v=20260724-library1">
-    <link rel="stylesheet" href="collection.css?v=20260724-library1">
+    <link rel="stylesheet" href="collection.css?v=20260724-trailer1">
     <link rel="stylesheet" href="motion.css?v=20260724-v1">
 </head>
 <body>
@@ -142,9 +142,16 @@
                         allow="autoplay; encrypted-media"
                         hidden>
                     </iframe>
+                    <div class="weekly-trailer-controls" id="weekly-trailer-controls" hidden>
+                        <button class="weekly-trailer-sound is-muted" id="weekly-trailer-sound" type="button" aria-label="Bật tiếng trailer" aria-pressed="false">
+                            <i class="fa-solid fa-volume-xmark" aria-hidden="true"></i>
+                            <span>Bật tiếng</span>
+                        </button>
+                        <span class="weekly-trailer-playing"><i aria-hidden="true"></i> Đang phát tự động</span>
+                    </div>
                 </div>
 
-                <div class="weekly-trailer-caption">
+                <div class="weekly-trailer-caption" aria-live="polite">
                     <div class="weekly-trailer-meta">
                         <span id="weekly-trailer-category">SURVIVAL HORROR / ADVENTURE</span>
                         <a id="weekly-trailer-link" href="https://www.youtube.com/watch?v=17thL7LTEjo" target="_blank" rel="noopener noreferrer" aria-label="Mở trailer Don't Sleep With The Fishes trên YouTube">
@@ -987,8 +994,8 @@
 
     <!-- Custom App Script -->
     <script src="cms-public-seed.js?v=20260724-secure1"></script>
-    <script src="cms-shared.js?v=20260724-library2"></script>
-    <script src="app.js?v=20260724-library2"></script>
+    <script src="cms-shared.js?v=20260724-trailer1"></script>
+    <script src="app.js?v=20260724-trailer1"></script>
     <script src="motion.js?v=20260724-v1"></script>
 </body>
 </html>

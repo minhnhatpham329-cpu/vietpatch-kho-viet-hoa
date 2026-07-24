@@ -30,6 +30,7 @@
         updatedAt: null,
         site: {
             featuredGameId: "wukong",
+            featuredGameIds: ["wukong", "eldenring", "cyberpunk"],
             catalogHeading: "Thư viện Việt hóa",
             catalogIntro: "Tìm đúng game, phiên bản và trạng thái kiểm thử trong một danh mục gọn, có bộ lọc và phân trang rõ ràng.",
             catalogPageSize: "9",
@@ -173,8 +174,20 @@
         const result = {};
 
         Object.keys(defaults.site).forEach(key => {
+            if (key === "featuredGameIds") return;
             result[key] = text(source[key], defaults.site[key]) || defaults.site[key];
         });
+
+        const legacyFeaturedId = text(source.featuredGameId, defaults.site.featuredGameId);
+        const featuredSource = Array.isArray(source.featuredGameIds)
+            ? source.featuredGameIds
+            : [legacyFeaturedId, ...defaults.site.featuredGameIds];
+        result.featuredGameIds = [...new Set(featuredSource
+            .map(item => text(item))
+            .filter(item => /^[a-zA-Z0-9_-]{1,80}$/.test(item)))]
+            .slice(0, 6);
+        if (!result.featuredGameIds.length) result.featuredGameIds = clone(defaults.site.featuredGameIds);
+        result.featuredGameId = result.featuredGameIds[0] || legacyFeaturedId;
 
         return result;
     }

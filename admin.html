@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="admin.css?v=20260626-trailerfix1">
-    <link rel="stylesheet" href="admin-redesign.css?v=20260724-library1">
+    <link rel="stylesheet" href="admin-redesign.css?v=20260724-trailer1">
 </head>
 <body>
     <div class="studio-shell">
@@ -136,11 +136,12 @@
                     <fieldset>
                         <legend>Nội dung tiêu điểm</legend>
                         <div class="field-grid">
-                            <label class="field field-wide">
-                                <span>Game hiển thị lớn trên trang chủ</span>
-                                <select name="featuredGameId" id="featured-game-select" required></select>
-                                <small>Game này cũng tự nhận nhãn “Nổi bật” trong thư viện nếu chưa chọn nhãn riêng.</small>
-                            </label>
+                            <div class="field field-wide">
+                                <span>Game luân phiên trên banner trang chủ</span>
+                                <input type="hidden" name="featuredGameIds">
+                                <div class="featured-game-options" id="featured-game-options" role="group" aria-label="Chọn game luân phiên trên banner"></div>
+                                <small>Chọn từ 2–6 game. Game đầu danh sách là banner mở đầu và tự nhận nhãn “Nổi bật”.</small>
+                            </div>
                             <label class="field">
                                 <span>Tiêu đề thư viện</span>
                                 <input name="catalogHeading" maxlength="90" required>
@@ -586,7 +587,7 @@
     <div class="studio-toast-wrap" id="studio-toast-wrap"></div>
 
     <script src="cms-public-seed.js?v=20260724-secure1"></script>
-    <script src="cms-shared.js?v=20260724-library2"></script>
-    <script src="admin.js?v=20260724-library1"></script>
+    <script src="cms-shared.js?v=20260724-trailer1"></script>
+    <script src="admin.js?v=20260724-trailer1"></script>
 </body>
 </html>

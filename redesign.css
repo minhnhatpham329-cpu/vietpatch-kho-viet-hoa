@@ -549,6 +549,10 @@ img {
     border: 0;
 }
 
+.weekly-trailer-media iframe:not([hidden]) {
+    pointer-events: none;
+}
+
 .weekly-trailer-media > img {
     object-fit: cover;
 }

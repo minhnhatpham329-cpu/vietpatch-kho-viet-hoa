@@ -903,7 +903,7 @@ function startWeeklyTrailerPlayback(index = weeklyTrailerIndex) {
     const rotation = [...weeklyTrailerItems.slice(index + 1), ...weeklyTrailerItems.slice(0, index + 1)]
         .map(item => String(item.videoId).trim())
         .join(",");
-    playerFrame.src = `https://www.youtube.com/embed/${encodeURIComponent(videoId)}?rel=0&modestbranding=1&autoplay=1&mute=1&playsinline=1&controls=1&enablejsapi=1&loop=1&playlist=${encodeURIComponent(rotation)}&start=${HOT_TRAILER_START_SECONDS}&origin=${origin}`;
+    playerFrame.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(videoId)}?rel=0&autoplay=1&mute=1&playsinline=1&controls=0&disablekb=1&fs=0&iv_load_policy=3&enablejsapi=1&loop=1&playlist=${encodeURIComponent(rotation)}&start=${HOT_TRAILER_START_SECONDS}&origin=${origin}`;
 
     loadWeeklyYouTubeApi()
         .then(() => {

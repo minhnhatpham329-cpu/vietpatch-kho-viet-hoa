@@ -99,12 +99,12 @@
     animation: vp-rule-grow 900ms 220ms var(--motion-ease-out) forwards;
 }
 
-.weekly-trailer-caption > * {
+.motion-ready .weekly-trailer-caption > * {
     opacity: 0;
     transform: translateY(12px);
 }
 
-.weekly-trailer.motion-in .weekly-trailer-caption > * {
+.motion-ready .weekly-trailer.motion-in .weekly-trailer-caption > * {
     animation: vp-copy-enter 580ms var(--motion-ease-out) forwards;
 }
 
@@ -396,7 +396,7 @@ button:active,
 
     [data-motion],
     .motion-ready [data-motion]:not(.motion-in),
-    .weekly-trailer-caption > * {
+    .motion-ready .weekly-trailer-caption > * {
         opacity: 1 !important;
         transform: none !important;
         clip-path: none !important;

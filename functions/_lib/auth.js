@@ -57,14 +57,16 @@ export async function hashIdentifier(value) {
 }
 
 export async function verifyAdminPassword(password, env) {
-    const configuredHash = String(env.ADMIN_PASSWORD_HASH || "");
-    if (!configuredHash) {
-        const fallback = String(env.ADMIN_PASSWORD || "");
+    const fallback = String(env.ADMIN_PASSWORD || "");
+    if (fallback) {
         if (fallback.length < 12) throw httpError(503, "ADMIN_SECURITY_NOT_CONFIGURED");
         const left = await sha256(String(password || ""));
         const right = await sha256(fallback);
         return constantTimeEqual(left, right);
     }
+
+    const configuredHash = String(env.ADMIN_PASSWORD_HASH || "").trim();
+    if (!configuredHash) throw httpError(503, "ADMIN_SECURITY_NOT_CONFIGURED");
 
     const [algorithm, iterationsText, saltText, expectedText] = configuredHash.split("$");
     if (algorithm !== "pbkdf2-sha256") throw httpError(503, "ADMIN_PASSWORD_HASH_INVALID");
@@ -81,6 +83,9 @@ export async function verifyAdminPassword(password, env) {
     } catch {
         throw httpError(503, "ADMIN_PASSWORD_HASH_INVALID");
     }
+    if (salt.byteLength < 16 || expected.byteLength < 32) {
+        throw httpError(503, "ADMIN_PASSWORD_HASH_INVALID");
+    }
 
     const key = await crypto.subtle.importKey(
         "raw",
@@ -89,12 +94,17 @@ export async function verifyAdminPassword(password, env) {
         false,
         ["deriveBits"]
     );
-    const derived = new Uint8Array(await crypto.subtle.deriveBits({
-        name: "PBKDF2",
-        hash: "SHA-256",
-        salt,
-        iterations
-    }, key, expected.byteLength * 8));
+    let derived;
+    try {
+        derived = new Uint8Array(await crypto.subtle.deriveBits({
+            name: "PBKDF2",
+            hash: "SHA-256",
+            salt,
+            iterations
+        }, key, expected.byteLength * 8));
+    } catch {
+        throw httpError(503, "ADMIN_PASSWORD_HASH_INVALID");
+    }
     return constantTimeEqual(derived, expected);
 }
 

@@ -50,6 +50,9 @@
                 if (payload.error === "CMS_DATABASE_NOT_CONFIGURED") {
                     throw new Error("Kho dữ liệu quản trị chưa được kết nối.");
                 }
+                if (response.status >= 500) {
+                    throw new Error("Máy chủ chưa nhận đủ khóa bảo mật. Hãy kiểm tra secret Production và triển khai lại.");
+                }
                 throw new Error("Mật khẩu không đúng.");
             }
             window.location.replace(safeReturnTo);

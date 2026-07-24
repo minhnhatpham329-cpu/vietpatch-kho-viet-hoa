@@ -6,12 +6,12 @@
 
     const panelTitles = {
         dashboard: "Tổng quan nội dung",
-        homepage: "Chỉnh sửa trang chủ",
+        homepage: "Bố cục trang chủ",
         trailers: "Quản lý trailer tuần",
-        requests: "Quản lý yêu cầu cộng đồng",
+        requests: "Đề xuất từ cộng đồng",
         posts: "Quản lý bài đăng",
-        patches: "Link tải và thông tin patch",
-        backup: "Sao lưu dữ liệu"
+        patches: "Kho game và bản Việt hóa",
+        backup: "Lịch sử và sao lưu"
     };
 
     let state = CMS.load();
@@ -178,7 +178,8 @@
             progress: form.elements.progress.value,
             downloads: form.elements.downloads.value.trim(),
             date: form.elements.date.value,
-            tags: CMS.normalizeTags(form.elements.tags.value),
+            badge: ["new", "hot"].includes(form.elements.badge.value) ? form.elements.badge.value : "",
+            tags: Array.isArray(fallback.tags) ? fallback.tags : [],
             imageUrl,
             downloadUrl,
             screenshots: screenshots.items,
@@ -274,8 +275,9 @@
     function renderDashboard() {
         const enabledTrailers = state.trailers.filter(item => item.enabled).length;
         const publishedRequests = state.requests.filter(item => item.published).length;
-        const publishedPosts = state.posts.filter(item => item.published).length;
         const totalGames = getAdminCatalog().length;
+        const pageSize = Number(state.site.catalogPageSize) || 9;
+        const featuredGame = getAdminCatalog().find(game => game.id === state.site.featuredGameId);
         const linkedPatches = [
             ...Object.values(state.gameOverrides).filter(item => item.downloadUrl),
             ...getCustomGames().filter(item => item.downloadUrl)
@@ -287,7 +289,6 @@
         byId("dashboard-metrics").innerHTML = [
             ["Trailer đang bật", enabledTrailers, "fa-film"],
             ["Yêu cầu đang hiện", publishedRequests, "fa-square-poll-vertical"],
-            ["Bài đã xuất bản", publishedPosts, "fa-newspaper"],
             ["Game có link tải", linkedPatches, "fa-link"],
             ["Tổng game trong kho", totalGames, "fa-box-archive"]
         ].map(([label, value, icon]) => `
@@ -303,12 +304,16 @@
                 <div class="health-value">${enabledTrailers ? "SẴN SÀNG" : "CHƯA CÓ"}</div>
             </div>
             <div class="health-row">
-                <div><strong>Newsroom</strong><br><span>Bài đang hiển thị trên trang chủ</span></div>
-                <div class="health-value">${publishedPosts} BÀI</div>
+                <div><strong>Game tiêu điểm</strong><br><span>Hồ sơ lớn trên trang chủ</span></div>
+                <div class="health-value">${escapeHtml(featuredGame?.title || "CHƯA CHỌN")}</div>
             </div>
             <div class="health-row">
                 <div><strong>Bảng yêu cầu</strong><br><span>Game cộng đồng đang bình chọn</span></div>
                 <div class="health-value">${publishedRequests} GAME</div>
+            </div>
+            <div class="health-row">
+                <div><strong>Phân trang thư viện</strong><br><span>Số game hiển thị trong mỗi trang</span></div>
+                <div class="health-value">${pageSize} GAME</div>
             </div>
             <div class="health-row">
                 <div><strong>Link tải</strong><br><span>Patch đã gắn nguồn tải thực tế</span></div>
@@ -323,9 +328,18 @@
 
     function fillHomepageForm() {
         const form = byId("homepage-form");
-        Object.entries(state.site).forEach(([key, value]) => {
-            if (form.elements[key]) form.elements[key].value = value;
-        });
+        const games = getAdminCatalog().filter(game => !game.hidden);
+        const selectedId = games.some(game => game.id === state.site.featuredGameId)
+            ? state.site.featuredGameId
+            : (games[0]?.id || "");
+        const featuredSelect = byId("featured-game-select");
+        featuredSelect.innerHTML = games.map(game => `
+            <option value="${escapeHtml(game.id)}">${escapeHtml(game.title)}</option>
+        `).join("");
+        featuredSelect.value = selectedId;
+        form.elements.catalogHeading.value = state.site.catalogHeading || "Thư viện bản Việt hóa";
+        form.elements.catalogIntro.value = state.site.catalogIntro || "";
+        form.elements.catalogPageSize.value = String(state.site.catalogPageSize || "9");
     }
 
     function renderTrailerManager() {
@@ -515,7 +529,9 @@
                 : state.gameOverrides[game.id];
             const hasLink = Boolean(entry?.downloadUrl);
             const hasImage = Boolean(entry?.imageUrl);
-            const hasTags = Array.isArray(entry?.tags) && entry.tags.length > 0;
+            const badge = entry?.badge === "new"
+                ? "Mới"
+                : (entry?.badge === "hot" ? "Nổi bật" : "");
             const hasGallery = Array.isArray(entry?.screenshots) && entry.screenshots.length > 0;
             const hasCredits = entry?.credits && Object.values(entry.credits).some(Boolean);
             const hasOverride = Boolean(entry);
@@ -526,13 +542,13 @@
                 hasImage ? "Có ảnh" : "",
                 hasGallery ? "Gallery" : "",
                 hasCredits ? "Nhân sự" : "",
-                hasTags ? "Có mác" : ""
+                badge ? `Nhãn ${badge}` : ""
             ].filter(Boolean).join(" / ");
             return `
                 <div class="manager-item ${game.id === selectedGameId ? "active" : ""}">
                     <button class="manager-item-main" type="button" data-edit-game="${escapeHtml(game.id)}">
                         <strong>${escapeHtml(game.title)}</strong>
-                        <span><i class="status-dot ${game.hidden || hasLink || hasImage || hasGallery || hasCredits || hasTags ? "" : "off"}"></i> ${status || (hasOverride ? "Đã chỉnh nội dung" : "Dùng dữ liệu gốc")}</span>
+                        <span><i class="status-dot ${game.hidden || hasLink || hasImage || hasGallery || hasCredits || badge ? "" : "off"}"></i> ${status || (hasOverride ? "Đã chỉnh nội dung" : "Dùng dữ liệu gốc")}</span>
                     </button>
                 </div>
             `;
@@ -559,7 +575,7 @@
         form.elements.progress.value = entry.progress === "" || entry.progress == null ? "" : entry.progress;
         form.elements.downloads.value = entry.downloads || "";
         form.elements.date.value = entry.date || "";
-        form.elements.tags.value = Array.isArray(entry.tags) ? entry.tags.join(", ") : "";
+        form.elements.badge.value = ["new", "hot"].includes(entry.badge) ? entry.badge : "";
         form.elements.imageUrl.value = entry.imageUrl || "";
         form.elements.downloadUrl.value = entry.downloadUrl || "";
         form.elements.description.value = entry.description || "";
@@ -758,10 +774,11 @@
         byId("homepage-form").addEventListener("submit", event => {
             event.preventDefault();
             const form = event.currentTarget;
-            Object.keys(state.site).forEach(key => {
-                state.site[key] = form.elements[key].value.trim();
-            });
-            persist("Đã cập nhật nội dung trang chủ.");
+            state.site.featuredGameId = form.elements.featuredGameId.value;
+            state.site.catalogHeading = form.elements.catalogHeading.value.trim();
+            state.site.catalogIntro = form.elements.catalogIntro.value.trim();
+            state.site.catalogPageSize = form.elements.catalogPageSize.value;
+            persist("Đã cập nhật bố cục trang chủ và thư viện.");
         });
 
         byId("new-trailer-btn").addEventListener("click", () => {
@@ -1047,6 +1064,7 @@
                     progress: payload.progress === "" ? 100 : payload.progress,
                     downloads: payload.downloads || "0",
                     date: payload.date || new Date().toISOString().slice(0, 10),
+                    badge: payload.badge,
                     tags: payload.tags,
                     imageUrl: payload.imageUrl,
                     downloadUrl: payload.downloadUrl,
@@ -1068,7 +1086,7 @@
                 else state.customGames.push(customGame);
 
                 selectedGameId = id;
-                persist(isNew ? "Đã thêm game mới vào kho patch." : "Đã cập nhật game tự thêm.");
+                persist(isNew ? "Đã thêm game mới vào kho game." : "Đã cập nhật game tự thêm.");
             } else {
                 const baseGame = CMS.catalog.find(game => game.id === gameId);
                 const override = compactPatchData({
@@ -1094,11 +1112,11 @@
 
             if (isCustomGame(selectedGameId)) {
                 const game = getCustomGames().find(item => item.id === selectedGameId);
-                if (!game || !window.confirm(`Xóa game tự thêm "${game.title}" khỏi kho patch?`)) return;
+                if (!game || !window.confirm(`Xóa game tự thêm "${game.title}" khỏi kho game?`)) return;
 
                 state.customGames = getCustomGames().filter(item => item.id !== selectedGameId);
                 selectedGameId = CMS.catalog[0]?.id || "";
-                persist("Đã xóa game tự thêm khỏi kho patch.");
+                persist("Đã xóa game tự thêm khỏi kho game.");
                 renderGameList();
                 fillPatchForm(selectedGameId);
                 return;
@@ -1111,7 +1129,7 @@
                 state.hiddenGameIds = getHiddenGameIds().filter(id => id !== selectedGameId);
                 persist(`Đã hiện lại "${baseGame.title}" trên web công khai.`);
             } else {
-                if (!window.confirm(`Ẩn "${baseGame.title}" khỏi kho patch trên web công khai?`)) return;
+                if (!window.confirm(`Ẩn "${baseGame.title}" khỏi kho game trên web công khai?`)) return;
                 state.hiddenGameIds = [...getHiddenGameIds(), selectedGameId];
                 persist(`Đã ẩn "${baseGame.title}" khỏi web công khai.`);
             }

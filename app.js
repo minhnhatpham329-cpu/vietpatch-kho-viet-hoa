@@ -509,6 +509,7 @@ let searchQuery = "";
 let currentFilter = "all";
 let currentAvailability = "all";
 let currentSort = "newest";
+let currentCatalogPage = 1;
 let activeHeroSlide = 0;
 let heroRotationInterval = null;
 let detailReturnFocus = null;
@@ -676,6 +677,7 @@ function resetCatalogFilters() {
     currentFilter = "all";
     currentAvailability = "all";
     currentSort = "newest";
+    currentCatalogPage = 1;
     syncCatalogControls();
     renderGamesGrid();
 }
@@ -727,6 +729,7 @@ function applyCmsCustomGames(customGames) {
             notes: entry.notes || "Thông tin cài đặt sẽ được cập nhật trong hồ sơ patch.",
             downloadUrl: entry.downloadUrl || "",
             imageUrl: entry.imageUrl || "",
+            badge: entry.badge || "",
             tags: Array.isArray(entry.tags) ? entry.tags : []
         });
     });
@@ -770,6 +773,7 @@ function applyCmsGameOverrides(overrides) {
             };
         }
         if (Array.isArray(entry.tags)) game.tags = entry.tags;
+        if (Object.prototype.hasOwnProperty.call(entry, "badge")) game.badge = entry.badge || "";
         if (Object.prototype.hasOwnProperty.call(entry, "downloadUrl")) {
             game.downloadUrl = entry.downloadUrl || "";
         }
@@ -791,6 +795,8 @@ function renderCmsHomeContent() {
     setText(".patch-desk-kicker", site.patchDeskKicker);
     setText("#patch-desk-title", site.patchDeskHeading);
     setText(".patch-desk-header p", site.patchDeskIntro);
+    setText("#catalog-heading", site.catalogHeading);
+    setText("#catalog-intro", site.catalogIntro);
 
     renderWeeklyTrailer();
     renderCmsPosts();
@@ -1517,6 +1523,57 @@ async function unlockFreeGame(game) {
 // DYNAMIC COMPONENT RENDERING
 // ==========================================================================
 
+function getCatalogPageSize() {
+    const configured = Number(cmsState?.site?.catalogPageSize);
+    return [6, 9, 12].includes(configured) ? configured : 9;
+}
+
+function getCatalogBadge(game) {
+    const explicit = String(game?.badge || "").toLocaleLowerCase("en");
+    if (explicit === "new") return { key: "new", label: "Mới" };
+    if (explicit === "hot") return { key: "hot", label: "Nổi bật" };
+    if (game?.id === cmsState?.site?.featuredGameId) return { key: "hot", label: "Nổi bật" };
+    return null;
+}
+
+function renderCatalogPagination(totalItems) {
+    const container = document.getElementById("catalog-pagination");
+    if (!container) return;
+
+    const pageSize = getCatalogPageSize();
+    const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
+    currentCatalogPage = Math.min(Math.max(1, currentCatalogPage), totalPages);
+
+    if (totalPages <= 1) {
+        container.hidden = true;
+        container.innerHTML = "";
+        return;
+    }
+
+    const pages = Array.from({ length: totalPages }, (_, index) => index + 1);
+    container.hidden = false;
+    container.innerHTML = `
+        <div class="catalog-page-status">
+            <span>TRANG</span>
+            <strong>${String(currentCatalogPage).padStart(2, "0")} / ${String(totalPages).padStart(2, "0")}</strong>
+            <small>${totalItems} hồ sơ · ${pageSize} hồ sơ mỗi trang</small>
+        </div>
+        <div class="catalog-page-controls" aria-label="Chuyển trang thư viện">
+            <button type="button" data-catalog-page="${currentCatalogPage - 1}" ${currentCatalogPage === 1 ? "disabled" : ""} aria-label="Trang trước">
+                <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+            </button>
+            ${pages.map(page => `
+                <button type="button" data-catalog-page="${page}" class="${page === currentCatalogPage ? "active" : ""}" aria-label="Trang ${page}" ${page === currentCatalogPage ? 'aria-current="page"' : ""}>
+                    ${String(page).padStart(2, "0")}
+                </button>
+            `).join("")}
+            <button type="button" data-catalog-page="${currentCatalogPage + 1}" ${currentCatalogPage === totalPages ? "disabled" : ""} aria-label="Trang sau">
+                <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+            </button>
+        </div>
+    `;
+}
+
 // Render Game Grid (Main Catalogue)
 function renderGamesGrid() {
     const gridContainer = document.getElementById("games-grid-container");
@@ -1557,6 +1614,7 @@ function renderGamesGrid() {
     gridContainer.innerHTML = "";
 
     if (filteredGames.length === 0) {
+        renderCatalogPagination(0);
         gridContainer.innerHTML = `
             <div class="empty-state-search">
                 <span class="empty-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
@@ -1568,19 +1626,26 @@ function renderGamesGrid() {
         return;
     }
 
-    filteredGames.forEach((game, index) => {
+    const pageSize = getCatalogPageSize();
+    const totalPages = Math.max(1, Math.ceil(filteredGames.length / pageSize));
+    currentCatalogPage = Math.min(Math.max(1, currentCatalogPage), totalPages);
+    const startIndex = (currentCatalogPage - 1) * pageSize;
+    const pageGames = filteredGames.slice(startIndex, startIndex + pageSize);
+
+    pageGames.forEach(game => {
         const isOwned = userState.ownedGames.includes(game.id);
         const coverImage = getGameCoverImage(game);
         const releaseState = getGameReleaseState(game);
+        const badge = getCatalogBadge(game);
         const card = document.createElement("article");
         card.className = `game-card catalog-row state-${releaseState.key}`;
 
         const progress = Math.max(0, Math.min(100, Number(game.progress) || 0));
 
         card.innerHTML = `
-            <span class="catalog-number">${String(index + 1).padStart(2, "0")}</span>
             <button class="card-header-img" type="button" data-game-id="${escapeHtml(game.id)}" aria-label="Xem chi tiết ${escapeHtml(game.title)}">
                 <img src="${escapeHtml(coverImage)}" alt="${escapeHtml(game.title)}" loading="lazy" onerror="this.src='${escapeHtml(getFallbackGameImage(game))}'">
+                ${badge ? `<span class="catalog-badge badge-${badge.key}">${badge.label}</span>` : ""}
             </button>
             <div class="catalog-identity">
                 <h3 class="card-title">${escapeHtml(game.title)}</h3>
@@ -1605,6 +1670,8 @@ function renderGamesGrid() {
         `;
         gridContainer.appendChild(card);
     });
+
+    renderCatalogPagination(filteredGames.length);
 }
 
 // Render Hero Carousel Slider
@@ -1614,7 +1681,8 @@ function renderHeroSlider() {
     if (!sliderContainer || !dotsContainer) return;
 
     const publicGames = getPublicGames();
-    const game = publicGames.find(item => item.id === "wukong") || publicGames[0];
+    const featuredGameId = cmsState?.site?.featuredGameId || "wukong";
+    const game = publicGames.find(item => item.id === featuredGameId) || publicGames[0];
     sliderContainer.innerHTML = "";
     dotsContainer.innerHTML = "";
 
@@ -3174,6 +3242,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const searchInput = document.getElementById("global-search");
     searchInput.addEventListener("input", (e) => {
         searchQuery = e.target.value;
+        currentCatalogPage = 1;
         const heroSearch = document.getElementById("hero-search");
         if (heroSearch && heroSearch.value !== searchQuery) heroSearch.value = searchQuery;
         renderGamesGrid();
@@ -3189,6 +3258,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     heroSearchForm?.addEventListener("submit", (e) => {
         e.preventDefault();
         searchQuery = heroSearchInput?.value || "";
+        currentCatalogPage = 1;
         syncCatalogControls();
         renderGamesGrid();
         revealCatalog();
@@ -3202,6 +3272,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             btn.classList.add("active");
             
             currentFilter = btn.getAttribute("data-filter");
+            currentCatalogPage = 1;
             renderGamesGrid();
         });
     });
@@ -3230,6 +3301,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const availabilitySelect = document.getElementById("availability-filter");
     availabilitySelect?.addEventListener("change", (e) => {
         currentAvailability = e.target.value;
+        currentCatalogPage = 1;
         renderGamesGrid();
     });
 
@@ -3237,10 +3309,21 @@ document.addEventListener("DOMContentLoaded", async () => {
     const sortSelect = document.getElementById("sort-select");
     sortSelect.addEventListener("change", (e) => {
         currentSort = e.target.value;
+        currentCatalogPage = 1;
         renderGamesGrid();
     });
 
     document.getElementById("clear-filters-btn")?.addEventListener("click", resetCatalogFilters);
+
+    document.getElementById("catalog-pagination")?.addEventListener("click", (e) => {
+        const button = e.target.closest("[data-catalog-page]");
+        if (!button || button.disabled) return;
+        const requestedPage = Number(button.dataset.catalogPage);
+        if (!Number.isInteger(requestedPage) || requestedPage < 1) return;
+        currentCatalogPage = requestedPage;
+        renderGamesGrid();
+        document.getElementById("catalog-results")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
 
     // 8. Dynamic delegation for Game Cards (Detail Button)
     document.getElementById("games-grid-container").addEventListener("click", (e) => {

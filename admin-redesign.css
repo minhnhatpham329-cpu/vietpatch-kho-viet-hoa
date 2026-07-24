@@ -429,3 +429,146 @@ textarea:focus-visible {
         grid-template-columns: 1fr;
     }
 }
+
+/* 2026-07 — Direct public-site workflow */
+.studio-main {
+    min-width: 0;
+}
+
+.studio-panel {
+    width: min(1480px, 100%);
+    margin: 0 auto;
+}
+
+.studio-nav {
+    gap: 0.3rem;
+}
+
+.studio-nav-btn {
+    min-height: 48px;
+    padding-inline: 0.85rem;
+}
+
+.studio-nav-btn i {
+    width: 22px;
+    text-align: center;
+}
+
+.dashboard-layout {
+    grid-template-columns: minmax(0, 1.25fr) minmax(310px, 0.75fr);
+}
+
+.quick-actions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.quick-actions button {
+    min-height: 112px;
+}
+
+#panel-homepage .editor-form {
+    max-width: 980px;
+}
+
+#panel-homepage fieldset {
+    padding: 1.25rem;
+    background: rgba(8, 12, 22, 0.4);
+    border: 1px solid rgba(183, 203, 232, 0.13);
+    border-radius: 14px;
+}
+
+#panel-homepage fieldset legend {
+    padding: 0 0.45rem;
+    color: var(--orange);
+    font-size: 0.66rem;
+    font-weight: 800;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+}
+
+.admin-sync-note {
+    margin-top: 1.2rem;
+    padding: 1rem 1.1rem;
+    display: grid;
+    grid-template-columns: 38px minmax(0, 1fr);
+    align-items: start;
+    gap: 0.9rem;
+    color: var(--ink-soft);
+    background: rgba(94, 233, 198, 0.055);
+    border: 1px solid rgba(94, 233, 198, 0.18);
+    border-radius: 13px;
+}
+
+.admin-sync-note > i {
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    color: #07110f;
+    background: var(--orange);
+    border-radius: 10px;
+}
+
+.admin-sync-note strong {
+    display: block;
+    color: var(--ink);
+    font-size: 0.82rem;
+}
+
+.admin-sync-note p {
+    margin: 0.35rem 0 0;
+    color: var(--muted);
+    font-size: 0.69rem;
+    line-height: 1.6;
+}
+
+.manager-layout.patch-manager-layout {
+    grid-template-columns: minmax(300px, 0.72fr) minmax(560px, 1.28fr);
+    align-items: start;
+}
+
+.patch-manager-layout .manager-list {
+    position: sticky;
+    top: 108px;
+    max-height: calc(100vh - 132px);
+    overflow: hidden;
+}
+
+.game-item-list {
+    max-height: calc(100vh - 280px);
+    overflow: auto;
+}
+
+.manager-item-main span {
+    line-height: 1.5;
+}
+
+#panel-posts[hidden] {
+    display: none !important;
+}
+
+@media (max-width: 1080px) {
+    .dashboard-layout,
+    .manager-layout.patch-manager-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .patch-manager-layout .manager-list {
+        position: static;
+        max-height: none;
+    }
+
+    .game-item-list {
+        max-height: 420px;
+    }
+}
+
+@media (max-width: 720px) {
+    .quick-actions {
+        grid-template-columns: 1fr;
+    }
+
+    #panel-homepage fieldset {
+        padding: 1rem;
+    }
+}

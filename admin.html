@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="VietPatch Studio - công cụ quản trị nội dung, trailer, bài viết và link tải patch.">
+    <meta name="description" content="VietPatch Studio - quản lý bố cục trang chủ, thư viện game, trailer, đề xuất và lịch sử xuất bản.">
     <title>VietPatch Studio | Quản trị nội dung</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="admin.css?v=20260626-trailerfix1">
-    <link rel="stylesheet" href="admin-redesign.css?v=20260724-v3">
+    <link rel="stylesheet" href="admin-redesign.css?v=20260724-library1">
 </head>
 <body>
     <div class="studio-shell">
@@ -29,7 +29,10 @@
                     <i class="fa-solid fa-table-columns"></i><span>Tổng quan</span>
                 </button>
                 <button class="studio-nav-btn" type="button" data-panel="homepage">
-                    <i class="fa-solid fa-pen-ruler"></i><span>Trang chủ</span>
+                    <i class="fa-solid fa-pen-ruler"></i><span>Bố cục trang chủ</span>
+                </button>
+                <button class="studio-nav-btn" type="button" data-panel="patches">
+                    <i class="fa-solid fa-box-archive"></i><span>Kho game</span>
                 </button>
                 <button class="studio-nav-btn" type="button" data-panel="trailers">
                     <i class="fa-solid fa-film"></i><span>Trailer tuần</span>
@@ -37,14 +40,8 @@
                 <button class="studio-nav-btn" type="button" data-panel="requests">
                     <i class="fa-solid fa-envelope-open-text"></i><span>Yêu cầu</span>
                 </button>
-                <button class="studio-nav-btn" type="button" data-panel="posts">
-                    <i class="fa-solid fa-newspaper"></i><span>Bài đăng</span>
-                </button>
-                <button class="studio-nav-btn" type="button" data-panel="patches">
-                    <i class="fa-solid fa-box-archive"></i><span>Kho patch</span>
-                </button>
                 <button class="studio-nav-btn" type="button" data-panel="backup">
-                    <i class="fa-solid fa-floppy-disk"></i><span>Sao lưu</span>
+                    <i class="fa-solid fa-clock-rotate-left"></i><span>Lịch sử & sao lưu</span>
                 </button>
             </nav>
 
@@ -92,6 +89,14 @@
                             </div>
                         </div>
                         <div class="quick-actions">
+                            <button type="button" data-open-panel="homepage">
+                                <i class="fa-solid fa-object-group"></i>
+                                <span><strong>Sắp xếp trang chủ</strong><small>Game tiêu điểm và cách chia trang</small></span>
+                            </button>
+                            <button type="button" data-open-panel="patches">
+                                <i class="fa-solid fa-gamepad"></i>
+                                <span><strong>Cập nhật kho game</strong><small>Ảnh, patch, trạng thái và nhãn</small></span>
+                            </button>
                             <button type="button" data-open-panel="trailers">
                                 <i class="fa-solid fa-circle-play"></i>
                                 <span><strong>Đổi trailer tuần</strong><small>Thêm YouTube URL và sắp thứ tự</small></span>
@@ -99,14 +104,6 @@
                             <button type="button" data-open-panel="requests">
                                 <i class="fa-solid fa-square-poll-vertical"></i>
                                 <span><strong>Sửa bảng yêu cầu</strong><small>Logo game, vote, link cửa hàng</small></span>
-                            </button>
-                            <button type="button" data-open-panel="posts">
-                                <i class="fa-solid fa-file-circle-plus"></i>
-                                <span><strong>Đăng bản tin</strong><small>Ảnh bìa, nội dung và liên kết</small></span>
-                            </button>
-                            <button type="button" data-open-panel="patches">
-                                <i class="fa-solid fa-link"></i>
-                                <span><strong>Gắn link tải</strong><small>Chọn game và cập nhật file patch</small></span>
                             </button>
                         </div>
                     </section>
@@ -127,8 +124,9 @@
                 <form class="studio-section editor-form" id="homepage-form">
                     <div class="section-heading">
                         <div>
-                            <span>HOME COPY</span>
-                            <h2>Chữ hiển thị trên trang chủ</h2>
+                            <span>HOME LAYOUT</span>
+                            <h2>Bố cục đang dùng trên website</h2>
+                            <p class="manager-context">Các thay đổi ở đây tác động trực tiếp tới trang chủ và thư viện công khai.</p>
                         </div>
                         <button class="primary-command" type="submit">
                             <i class="fa-solid fa-floppy-disk"></i> Lưu thay đổi
@@ -136,58 +134,39 @@
                     </div>
 
                     <fieldset>
-                        <legend>Khối trailer</legend>
+                        <legend>Nội dung tiêu điểm</legend>
                         <div class="field-grid">
-                            <label class="field">
-                                <span>Nhãn nhỏ</span>
-                                <input name="trailerKicker" maxlength="80" required>
+                            <label class="field field-wide">
+                                <span>Game hiển thị lớn trên trang chủ</span>
+                                <select name="featuredGameId" id="featured-game-select" required></select>
+                                <small>Game này cũng tự nhận nhãn “Nổi bật” trong thư viện nếu chưa chọn nhãn riêng.</small>
                             </label>
                             <label class="field">
-                                <span>Tiêu đề</span>
-                                <input name="trailerHeading" maxlength="90" required>
+                                <span>Tiêu đề thư viện</span>
+                                <input name="catalogHeading" maxlength="90" required>
+                            </label>
+                            <label class="field">
+                                <span>Số game mỗi trang</span>
+                                <select name="catalogPageSize">
+                                    <option value="6">6 game</option>
+                                    <option value="9">9 game</option>
+                                    <option value="12">12 game</option>
+                                </select>
                             </label>
                             <label class="field field-wide">
-                                <span>Đoạn giới thiệu</span>
-                                <textarea name="trailerIntro" rows="3" maxlength="260" required></textarea>
+                                <span>Mô tả ngắn của thư viện</span>
+                                <textarea name="catalogIntro" rows="3" maxlength="260" required></textarea>
                             </label>
                         </div>
                     </fieldset>
 
-                    <fieldset>
-                        <legend>Khu bài đăng</legend>
-                        <div class="field-grid">
-                            <label class="field">
-                                <span>Nhãn nhỏ</span>
-                                <input name="newsroomKicker" maxlength="80" required>
-                            </label>
-                            <label class="field">
-                                <span>Tiêu đề</span>
-                                <input name="newsroomHeading" maxlength="90" required>
-                            </label>
-                            <label class="field field-wide">
-                                <span>Đoạn giới thiệu</span>
-                                <textarea name="newsroomIntro" rows="3" maxlength="260" required></textarea>
-                            </label>
+                    <aside class="admin-sync-note">
+                        <i class="fa-solid fa-link"></i>
+                        <div>
+                            <strong>Đã đồng bộ đúng với web chính</strong>
+                            <p>Các trường của những khu vực cũ không còn hiển thị đã được dọn khỏi trình quản trị. Dữ liệu cũ vẫn được giữ an toàn trong lịch sử.</p>
                         </div>
-                    </fieldset>
-
-                    <fieldset>
-                        <legend>Bàn biên tập</legend>
-                        <div class="field-grid">
-                            <label class="field">
-                                <span>Nhãn nhỏ</span>
-                                <input name="patchDeskKicker" maxlength="80" required>
-                            </label>
-                            <label class="field">
-                                <span>Tiêu đề</span>
-                                <input name="patchDeskHeading" maxlength="90" required>
-                            </label>
-                            <label class="field field-wide">
-                                <span>Đoạn giới thiệu</span>
-                                <textarea name="patchDeskIntro" rows="3" maxlength="260" required></textarea>
-                            </label>
-                        </div>
-                    </fieldset>
+                    </aside>
                 </form>
             </section>
 
@@ -323,7 +302,7 @@
                 </div>
             </section>
 
-            <section class="studio-panel" id="panel-posts">
+            <section class="studio-panel" id="panel-posts" hidden>
                 <div class="manager-layout">
                     <section class="manager-list">
                         <div class="section-heading">
@@ -495,9 +474,13 @@
                                 <input type="date" name="date">
                             </label>
                             <label class="field field-wide">
-                                <span>Mác / tag trên card</span>
-                                <input name="tags" maxlength="120" placeholder="HOT, UE5, Việt hóa 100%, Có link tải">
-                                <small>Ngăn cách bằng dấu phẩy. Tối đa 6 mác.</small>
+                                <span>Nhãn nổi bật trên card</span>
+                                <select name="badge">
+                                    <option value="">Không gắn nhãn</option>
+                                    <option value="new">Mới</option>
+                                    <option value="hot">Nổi bật</option>
+                                </select>
+                                <small>Mỗi game chỉ dùng tối đa một nhãn để thư viện gọn và đáng tin hơn.</small>
                             </label>
                             <label class="field field-wide">
                                 <span>Ảnh cover kho patch</span>
@@ -566,7 +549,7 @@
                     <div class="backup-actions">
                         <button class="backup-action export" id="export-btn" type="button">
                             <i class="fa-solid fa-file-export"></i>
-                            <span><strong>Xuất dữ liệu JSON</strong><small>Tải trailer, yêu cầu, bài đăng và link patch</small></span>
+                            <span><strong>Xuất dữ liệu JSON</strong><small>Sao lưu bố cục, kho game, trailer, đề xuất và link tải</small></span>
                         </button>
                         <label class="backup-action import" for="import-input">
                             <i class="fa-solid fa-file-import"></i>
@@ -603,7 +586,7 @@
     <div class="studio-toast-wrap" id="studio-toast-wrap"></div>
 
     <script src="cms-public-seed.js?v=20260724-secure1"></script>
-    <script src="cms-shared.js?v=20260724-servercms1"></script>
-    <script src="admin.js?v=20260724-servercms1"></script>
+    <script src="cms-shared.js?v=20260724-library1"></script>
+    <script src="admin.js?v=20260724-library1"></script>
 </body>
 </html>

@@ -29,6 +29,10 @@
         version: 1,
         updatedAt: null,
         site: {
+            featuredGameId: "wukong",
+            catalogHeading: "Thư viện bản Việt hóa",
+            catalogIntro: "Tìm đúng game, phiên bản và trạng thái kiểm thử trong một danh mục gọn, có bộ lọc và phân trang rõ ràng.",
+            catalogPageSize: "9",
             trailerKicker: "TRAILER BOARD / GAME HOT GẦN ĐÂY",
             trailerHeading: "Trailer game hot tuần này.",
             trailerIntro: "Theo dõi những game đang được cộng đồng nhắc nhiều để VietPatch ưu tiên khảo sát text, font và khả năng đóng gói patch.",
@@ -241,6 +245,11 @@
             .slice(0, 6);
     }
 
+    function normalizeBadge(value, fallback = "") {
+        const normalized = text(value, fallback).toLocaleLowerCase("en");
+        return ["hot", "new"].includes(normalized) ? normalized : "";
+    }
+
     function normalizeProgress(value, fallback = 100) {
         if (value === "" || value == null) return fallback;
         const number = Number(value);
@@ -311,6 +320,7 @@
             notes: text(source.notes, fallback.notes),
             downloadUrl: safeUrl(source.downloadUrl || fallback.downloadUrl),
             imageUrl: safeAssetUrl(source.imageUrl || source.coverImage || fallback.imageUrl),
+            badge: normalizeBadge(source.badge, fallback.badge),
             tags: normalizeTags(source.tags ?? fallbackTags),
             credits: normalizeCredits(source.credits, fallback.credits, partial),
             screenshots: normalizeScreenshots(source.screenshots, fallback.screenshots)

@@ -286,6 +286,12 @@
     function normalizeGameFields(entry, fallback = {}, partial = false) {
         const source = entry && typeof entry === "object" ? entry : {};
         const fallbackTags = Array.isArray(fallback.tags) ? fallback.tags : [];
+        const type = text(source.type, fallback.type || (partial ? "" : "Free"));
+        const price = type.toLocaleLowerCase("en") === "free"
+            ? 0
+            : (source.price === "" || source.price == null
+                ? (fallback.price === "" || fallback.price == null ? "" : Math.max(0, Number(fallback.price) || 0))
+                : Math.max(0, Number(source.price) || 0));
 
         return {
             title: text(source.title, fallback.title),
@@ -294,10 +300,8 @@
             developer: text(source.developer, fallback.developer || (partial ? "" : "Community Studio")),
             version: text(source.version, fallback.version),
             size: text(source.size, fallback.size),
-            price: source.price === "" || source.price == null
-                ? (fallback.price === "" || fallback.price == null ? "" : Math.max(0, Number(fallback.price) || 0))
-                : Math.max(0, Number(source.price) || 0),
-            type: text(source.type, fallback.type || (partial ? "" : "Free")),
+            price,
+            type,
             progress: source.progress === "" || source.progress == null
                 ? (fallback.progress ?? (partial ? "" : 100))
                 : normalizeProgress(source.progress, fallback.progress ?? 100),

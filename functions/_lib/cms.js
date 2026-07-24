@@ -24,6 +24,10 @@ function plainObject(value) {
     return value && typeof value === "object" && !Array.isArray(value) ? value : {};
 }
 
+function isFreeOffer(value) {
+    return String(value?.type || "").trim().toLocaleLowerCase("en") === "free";
+}
+
 function cleanTree(value, depth = 0) {
     if (depth > 8) return null;
     if (value == null || typeof value === "boolean") return value;
@@ -119,16 +123,20 @@ export async function getCmsDocument(env) {
 export function publicCmsState(input) {
     const state = structuredClone(normalizeCmsState(input));
     state.customGames = state.customGames.map(game => {
-        const price = Math.max(0, Math.round(Number(game.price) || 0));
+        const price = isFreeOffer(game) ? 0 : Math.max(0, Math.round(Number(game.price) || 0));
+        game.price = price;
         if (price > 0 && game.downloadUrl) {
             game.downloadUrl = `/api/vietpatch/download/${encodeURIComponent(game.id)}`;
         }
         return game;
     });
     for (const [gameId, override] of Object.entries(state.gameOverrides)) {
-        const price = override.price === "" || override.price == null
-            ? (BASE_PRICES[gameId] || 0)
-            : Math.max(0, Math.round(Number(override.price) || 0));
+        const price = isFreeOffer(override)
+            ? 0
+            : (override.price === "" || override.price == null
+                ? (BASE_PRICES[gameId] || 0)
+                : Math.max(0, Math.round(Number(override.price) || 0)));
+        override.price = price;
         if (price > 0 && override.downloadUrl) {
             override.downloadUrl = `/api/vietpatch/download/${encodeURIComponent(gameId)}`;
         }

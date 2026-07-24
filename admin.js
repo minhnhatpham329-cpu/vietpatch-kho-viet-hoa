@@ -137,12 +137,22 @@
         `;
     }
 
+    function syncPatchPriceField() {
+        const form = byId("patch-form");
+        const price = form.elements.price;
+        const isFree = form.elements.type.value.toLocaleLowerCase("en") === "free";
+        if (isFree) price.value = "0";
+        price.disabled = isFree;
+        price.title = isFree ? "Patch Free luôn có giá 0đ." : "";
+    }
+
     function getPatchPayload(form, fallback = {}) {
         const rawDownload = form.elements.downloadUrl.value.trim();
         const rawImage = form.elements.imageUrl.value.trim();
         const downloadUrl = CMS.safeUrl(rawDownload);
         const imageUrl = CMS.safeAssetUrl(rawImage);
         const screenshots = parseAssetList(form.elements.screenshots.value);
+        const type = form.elements.type.value;
 
         if (rawDownload && !downloadUrl) {
             return { error: "Link tải phải là địa chỉ HTTP hoặc HTTPS hợp lệ." };
@@ -161,10 +171,10 @@
             developer: form.elements.developer.value.trim(),
             engine: form.elements.engine.value.trim(),
             engineKey: form.elements.engineKey.value,
-            type: form.elements.type.value,
+            type,
             version: form.elements.version.value.trim(),
             size: form.elements.size.value.trim(),
-            price: form.elements.price.value,
+            price: type.toLocaleLowerCase("en") === "free" ? 0 : form.elements.price.value,
             progress: form.elements.progress.value,
             downloads: form.elements.downloads.value.trim(),
             date: form.elements.date.value,
@@ -559,6 +569,7 @@
         form.elements.creditQa.value = entry.credits?.qa || "";
         form.elements.screenshots.value = Array.isArray(entry.screenshots) ? entry.screenshots.join("\n") : "";
         form.elements.notes.value = entry.notes || "";
+        syncPatchPriceField();
 
         byId("patch-image-file").value = "";
         byId("patch-editor-title").textContent = isNew ? "Thêm game mới" : "Chỉnh sửa patch";
@@ -960,7 +971,10 @@
 
         byId("patch-form").addEventListener("input", event => {
             if (["title", "imageUrl"].includes(event.target.name)) updatePatchPreview();
+            if (event.target.name === "type") syncPatchPriceField();
         });
+
+        byId("patch-form").elements.type.addEventListener("change", syncPatchPriceField);
 
         byId("patch-image-file").addEventListener("change", event => {
             const file = event.currentTarget.files?.[0];

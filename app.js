@@ -688,6 +688,10 @@ function applyCmsCustomGames(customGames) {
 
     customGames.forEach(entry => {
         if (!entry?.id || gamesDatabase.some(game => game.id === entry.id)) return;
+        const type = entry.type || "Free";
+        const price = type.toLocaleLowerCase("en") === "free"
+            ? 0
+            : (entry.price === "" || entry.price == null ? 0 : Math.max(0, Number(entry.price) || 0));
 
         gamesDatabase.push({
             id: entry.id,
@@ -695,10 +699,10 @@ function applyCmsCustomGames(customGames) {
             engine: entry.engine || "Unreal Engine 5",
             engineKey: entry.engineKey || "other",
             developer: entry.developer || "Community Studio",
-            price: entry.price === "" || entry.price == null ? 0 : Math.max(0, Number(entry.price) || 0),
+            price,
             size: entry.size || "Đang cập nhật",
             version: entry.version || "v1.0.0",
-            type: entry.type || "Free",
+            type,
             progress: entry.progress === "" || entry.progress == null ? 100 : Math.max(0, Math.min(100, Number(entry.progress) || 0)),
             appid: entry.appid || "",
             downloads: entry.downloads || "0",
@@ -734,8 +738,12 @@ function applyCmsGameOverrides(overrides) {
         if (entry.developer) game.developer = entry.developer;
         if (entry.version) game.version = entry.version;
         if (entry.size) game.size = entry.size;
-        if (entry.price !== "" && entry.price != null) game.price = Math.max(0, Number(entry.price) || 0);
         if (entry.type) game.type = entry.type;
+        if (game.type.toLocaleLowerCase("en") === "free") {
+            game.price = 0;
+        } else if (entry.price !== "" && entry.price != null) {
+            game.price = Math.max(0, Number(entry.price) || 0);
+        }
         if (entry.progress !== "" && entry.progress != null) game.progress = Math.max(0, Math.min(100, Number(entry.progress) || 0));
         if (entry.downloads) game.downloads = entry.downloads;
         if (entry.date) game.date = entry.date;

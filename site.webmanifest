@@ -1,0 +1,31 @@
+{
+  "name": "VietPatch - Kho bản Việt hóa game",
+  "short_name": "VietPatch",
+  "description": "Kho sưu tập bản Việt hóa game với thông tin phiên bản, tiến độ và trạng thái kiểm thử rõ ràng.",
+  "lang": "vi",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f3efe5",
+  "theme_color": "#0d0d0c",
+  "icons": [
+    {
+      "src": "assets/brand/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/brand/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/brand/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

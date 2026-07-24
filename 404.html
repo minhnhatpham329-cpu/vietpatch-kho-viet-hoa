@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="VietPatch - Kho sưu tập bản Việt hóa game với trạng thái kiểm thử, phiên bản tương thích và tiến độ rõ ràng.">
     <meta name="theme-color" content="#f3efe5">
+    <meta name="application-name" content="VietPatch">
+    <meta name="apple-mobile-web-app-title" content="VietPatch">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; form-action 'self'; script-src 'self' https://www.youtube.com; script-src-attr 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' data: https://cdnjs.cloudflare.com https://fonts.gstatic.com; img-src 'self' data: blob: https:; frame-src https://www.youtube.com https://www.youtube-nocookie.com; connect-src 'self'; media-src 'self' blob:; worker-src 'self' blob:; upgrade-insecure-requests">
     <meta property="og:type" content="website">
@@ -19,6 +21,11 @@
     <meta name="twitter:description" content="Khám phá kho sưu tập bản Việt hóa, theo dõi tiến độ và bình chọn dự án cộng đồng.">
     <meta name="twitter:image" content="https://minhnhatpham329-cpu.github.io/vietpatch-kho-viet-hoa/assets/images/og.png">
     <title>VietPatch | Kho bản Việt hóa game đã kiểm thử</title>
+    <link rel="icon" href="favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="48x48" href="assets/brand/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/brand/favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/brand/apple-touch-icon.png">
+    <link rel="manifest" href="site.webmanifest">
     
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -28,7 +35,7 @@
     
     <!-- Custom CSS -->
     <link rel="stylesheet" href="style.css?v=20260626-securepay2">
-    <link rel="stylesheet" href="redesign.css?v=20260724-v6">
+    <link rel="stylesheet" href="redesign.css?v=20260724-v7">
     <link rel="stylesheet" href="collection.css?v=20260724-v2">
 </head>
 <body>
@@ -36,7 +43,7 @@
     <header class="main-header">
         <div class="header-container">
             <button class="logo-area" id="logo-btn" type="button" aria-label="Về Kho game VietPatch">
-                <span class="logo-mark" aria-hidden="true">VP</span>
+                <img class="logo-mark" src="assets/brand/favicon-48x48.png" width="32" height="32" alt="" aria-hidden="true">
                 <span class="logo-copy">
                 <span class="logo-text">Viet<span>Patch</span></span>
                     <small>Hồ sơ bản địa hóa</small>
@@ -660,7 +667,9 @@
         <div class="footer-container">
             <div class="footer-brand">
                 <div class="logo-area">
-                    <div class="logo-icon"><i class="fa-solid fa-gamepad"></i></div>
+                    <div class="logo-icon" aria-hidden="true">
+                        <img src="assets/brand/favicon-48x48.png" width="36" height="36" alt="">
+                    </div>
                     <span class="logo-text">Viet<span>Patch</span></span>
                 </div>
                 <p class="footer-desc">Kho sưu tập patch tiếng Việt có thông tin phiên bản, tiến độ và trạng thái kiểm thử rõ ràng.</p>

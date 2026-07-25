@@ -330,7 +330,27 @@ body.brand-entry-active { overflow: hidden; }
         right: 10px;
         bottom: 10px;
         width: calc(100% - 20px);
+        min-height: 0;
+        grid-template-columns: 1fr;
     }
+    #tab-home .feature-name { padding: 16px 16px 13px; }
+    #tab-home .feature-name > span { margin-bottom: 7px; font-size: 0.57rem; }
+    #tab-home .feature-name h2 { font-size: clamp(1.35rem, 7.6vw, 1.8rem); line-height: 0.98; }
+    #tab-home .feature-name p { margin-top: 7px; white-space: normal; }
+    #tab-home .release-specs {
+        padding: 12px 16px;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+        border-top: 1px solid var(--rule);
+    }
+    #tab-home .release-specs dt { margin-bottom: 5px; font-size: 0.5rem; }
+    #tab-home .release-specs dd { font-size: 0.77rem; }
+    #tab-home .action-zone {
+        padding: 12px 16px 16px;
+        border-top: 1px solid var(--rule);
+        border-left: 0;
+    }
+    #tab-home .feature-action-label { margin-bottom: 8px; }
     #tab-home .weekly-trailer {
         grid-template-columns: 1fr;
         grid-template-rows: 46px 240px auto;

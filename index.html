@@ -47,8 +47,23 @@
     <link rel="stylesheet" href="redesign.css?v=20260724-library1">
     <link rel="stylesheet" href="collection.css?v=20260725-mobile4">
     <link rel="stylesheet" href="motion.css?v=20260724-v1">
+    <link rel="stylesheet" href="home.css?v=20260725-home1">
 </head>
 <body>
+    <div class="brand-entry" id="brand-entry" hidden aria-hidden="true">
+        <div class="brand-entry-grid" aria-hidden="true"></div>
+        <div class="brand-entry-content" role="status" aria-live="polite">
+            <span class="brand-entry-kicker">VIETPATCH / ARCHIVE ONLINE</span>
+            <div class="brand-entry-mark-wrap">
+                <span class="brand-entry-orbit"></span>
+                <img src="assets/brand/icon-192.png" width="96" height="96" alt="">
+            </div>
+            <strong>VIETPATCH</strong>
+            <p>Kho bản Việt hóa được tuyển chọn.</p>
+        </div>
+        <button class="brand-entry-skip" id="brand-entry-skip" type="button">Bỏ qua <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+    </div>
+
     <!-- Global Header -->
     <header class="main-header">
         <div class="header-container">
@@ -165,6 +180,10 @@
 
             <!-- Hero Slider / Carousel -->
             <div class="hero-carousel">
+                <div class="home-hero-signature" aria-label="VietPatch, kho bản Việt hóa game">
+                    <img src="assets/brand/favicon-48x48.png" width="32" height="32" alt="">
+                    <span><strong>VietPatch</strong><small>Archive / Việt hóa game</small></span>
+                </div>
                 <div class="carousel-track" id="hero-slider-container">
                     <!-- Dynamic Hero Banners will be rendered here -->
                 </div>
@@ -1007,5 +1026,6 @@
     <script src="cms-shared.js?v=20260724-trailer1"></script>
     <script src="app.js?v=20260725-mobile1"></script>
     <script src="motion.js?v=20260724-v1"></script>
+    <script src="brand-entry.js?v=20260725-home1"></script>
 </body>
 </html>

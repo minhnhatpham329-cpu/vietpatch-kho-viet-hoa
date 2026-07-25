@@ -129,27 +129,23 @@
     z-index: 6;
 }
 
-/* Desktop feature: a printed release cover, not a full-width game banner. */
+/* Desktop feature: one cinematic scene; the interface stays out of the artwork. */
 @media (min-width: 761px) {
     #tab-home .hero-carousel {
-        min-height: clamp(620px, 71vh, 760px);
+        min-height: clamp(640px, 76vh, 840px);
         overflow: hidden;
-        background:
-            linear-gradient(90deg, rgba(17, 17, 15, 0.045) 1px, transparent 1px) 0 0 / clamp(64px, 5vw, 94px) 100%,
-            linear-gradient(180deg, rgba(17, 17, 15, 0.06) 1px, transparent 1px) 0 0 / 100% 82px,
-            var(--ivory);
-        border-top: 1px solid var(--ink);
-        border-bottom: 1px solid var(--ink);
+        background: #070809;
+        border: 0;
     }
 
     #tab-home .home-hero-signature,
     #tab-home .hero-carousel::after { display: none !important; }
 
     #tab-home .hero-carousel::before {
-        z-index: 1;
+        z-index: 2;
         background:
-            linear-gradient(90deg, var(--ivory) 0%, rgba(243, 239, 229, 0.96) 35%, rgba(243, 239, 229, 0.1) 58%, rgba(243, 239, 229, 0) 100%),
-            linear-gradient(0deg, rgba(17, 17, 15, 0.1) 0%, transparent 28%);
+            linear-gradient(90deg, rgba(6, 7, 8, 0.96) 0%, rgba(6, 7, 8, 0.83) 24%, rgba(6, 7, 8, 0.36) 45%, rgba(6, 7, 8, 0.03) 69%, rgba(6, 7, 8, 0.2) 100%),
+            linear-gradient(0deg, rgba(6, 7, 8, 0.8) 0%, rgba(6, 7, 8, 0) 42%);
     }
 
     #tab-home .hero-slide.active { display: block; }
@@ -157,48 +153,38 @@
     #tab-home .hero-slide-bg {
         position: absolute;
         z-index: 0;
-        top: clamp(42px, 5vw, 72px);
-        right: clamp(44px, 5vw, 94px);
-        left: auto;
-        width: min(61vw, 1030px);
-        height: calc(100% - clamp(78px, 9vw, 132px));
+        inset: 0;
+        width: 100%;
+        height: 100%;
         object-position: center;
-        filter: saturate(0.92) contrast(1.06) brightness(0.9);
-        clip-path: polygon(0 0, 100% 0, 100% 94%, 96% 100%, 0 100%);
-        box-shadow: 0 22px 44px rgba(17, 17, 15, 0.18);
+        filter: saturate(0.92) contrast(1.08) brightness(0.82);
+        clip-path: none;
+        box-shadow: none;
     }
 
-    #tab-home .hero-slide.active::after {
-        content: "";
-        position: absolute;
-        z-index: 1;
-        top: clamp(42px, 5vw, 72px);
-        right: clamp(44px, 5vw, 94px);
-        width: min(61vw, 1030px);
-        height: calc(100% - clamp(78px, 9vw, 132px));
-        pointer-events: none;
-        border: 1px solid rgba(243, 239, 229, 0.38);
-        clip-path: polygon(0 0, 100% 0, 100% 94%, 96% 100%, 0 100%);
-    }
+    #tab-home .hero-slide.active::after { display: none; }
 
     #tab-home .photo-note {
         z-index: 5;
-        top: clamp(58px, 6vw, 92px);
-        right: clamp(66px, 7vw, 126px);
-        color: var(--ink);
-        background: var(--paper-white);
-        border: 1px solid rgba(17, 17, 15, 0.58);
-        box-shadow: 6px 6px 0 var(--vermilion);
+        top: clamp(26px, 3vw, 48px);
+        right: clamp(28px, 4vw, 72px);
+        padding: 0;
+        color: rgba(255, 253, 247, 0.78);
+        background: transparent;
+        border: 0;
+        box-shadow: none;
+        font-size: 0.56rem;
+        letter-spacing: 0.12em;
     }
 
     #tab-home .feature-sheet {
         position: absolute;
         z-index: 4;
-        top: 50%;
+        top: auto;
         right: auto;
-        bottom: auto;
-        left: clamp(38px, 6.2vw, 118px);
-        width: min(470px, 39vw);
+        bottom: clamp(50px, 9vh, 110px);
+        left: clamp(42px, 7.3vw, 142px);
+        width: min(630px, 48vw);
         min-height: 0;
         display: grid;
         grid-template-areas:
@@ -206,83 +192,92 @@
             "specs"
             "action";
         grid-template-columns: 1fr;
-        transform: translateY(-45%);
         color: var(--paper-white);
-        background: #121310;
+        background: transparent;
         border: 0;
-        border-top: 5px solid var(--vermilion);
-        box-shadow: 14px 14px 0 rgba(17, 17, 15, 0.12);
+        box-shadow: none;
         backdrop-filter: none;
     }
 
-    /* Keep the cover composition intact when the shared carousel enters. */
     #tab-home .hero-slide .feature-sheet {
         opacity: 0;
-        transform: translateY(calc(-45% + 22px));
+        transform: translateY(22px);
         animation: none;
     }
 
     #tab-home .hero-slide.active .feature-sheet {
-        animation: home-cover-sheet-enter 620ms 150ms both cubic-bezier(0.22, 0.74, 0.24, 1);
+        animation: home-cinematic-sheet-enter 720ms 180ms both cubic-bezier(0.22, 0.74, 0.24, 1);
     }
 
     #tab-home .feature-name {
         grid-area: name;
         margin: 0;
-        padding: clamp(27px, 3vw, 42px) clamp(24px, 3vw, 40px) 24px;
+        padding: 0 0 25px;
     }
 
     #tab-home .feature-name > span {
-        margin-bottom: 12px;
-        color: #ff776c;
-        font-size: 0.61rem;
-        letter-spacing: 0.14em;
+        margin-bottom: 14px;
+        color: #ff7569;
+        font-size: 0.62rem;
+        font-weight: 700;
+        letter-spacing: 0.16em;
     }
 
     #tab-home .feature-name h2 {
+        overflow: visible;
+        display: block;
+        max-width: 620px;
         color: var(--paper-white);
-        font-size: clamp(2rem, 3.3vw, 4rem);
-        line-height: 0.86;
-        letter-spacing: -0.035em;
-        -webkit-line-clamp: 4;
+        font-family: var(--sans);
+        font-size: clamp(2.4rem, 4vw, 4.7rem);
+        font-weight: 780;
+        line-height: 0.94;
+        letter-spacing: -0.055em;
+        text-align: left;
+        text-transform: none;
+        text-overflow: clip;
+        -webkit-line-clamp: initial;
     }
 
     #tab-home .feature-name p {
-        max-width: 330px;
-        margin-top: 14px;
-        color: #beb9af;
-        font-size: 0.71rem;
+        max-width: 420px;
+        margin-top: 15px;
+        color: rgba(255, 253, 247, 0.68);
+        font-size: 0.76rem;
         line-height: 1.5;
         white-space: normal;
     }
 
     #tab-home .release-specs {
         grid-area: specs;
-        padding: 0 clamp(24px, 3vw, 40px) 22px;
+        max-width: 500px;
+        padding: 18px 0 20px;
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 14px;
+        gap: clamp(14px, 2.2vw, 34px);
         background: transparent;
-        border-top: 1px solid rgba(243, 239, 229, 0.16);
+        border-top: 1px solid rgba(255, 253, 247, 0.22);
     }
 
     #tab-home .release-specs div {
         min-width: 0;
-        padding-top: 15px;
+        padding: 0;
         border: 0;
     }
 
     #tab-home .release-specs dt {
-        margin-bottom: 7px;
-        color: #aaa49a;
-        font-size: 0.5rem;
+        margin-bottom: 6px;
+        color: rgba(255, 253, 247, 0.54);
+        font-size: 0.52rem;
+        font-weight: 600;
         line-height: 1.2;
     }
 
     #tab-home .release-specs dd {
         overflow: hidden;
         color: var(--paper-white);
-        font-size: 0.88rem;
+        font-size: 0.9rem;
+        font-weight: 700;
         text-align: left;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -291,59 +286,71 @@
     #tab-home .action-zone {
         grid-area: action;
         margin: 0;
-        padding: 0 clamp(24px, 3vw, 40px) clamp(26px, 3vw, 38px);
+        padding: 0;
         width: auto;
         background: transparent;
         border: 0;
     }
 
-    #tab-home .primary-action { min-height: 52px; max-width: 196px; }
-
-    #tab-home .hero-carousel .carousel-nav {
-        top: auto;
-        right: clamp(44px, 5vw, 94px);
-        bottom: clamp(26px, 3vw, 46px);
-        left: auto;
-        z-index: 6;
-    }
-
-    #tab-home .hero-carousel .carousel-nav button {
-        background: rgba(243, 239, 229, 0.93);
-        border-color: var(--ink);
+    #tab-home .primary-action {
+        min-height: 48px;
+        max-width: 170px;
+        padding-inline: 18px;
         box-shadow: none;
     }
 
-    #tab-home .hero-carousel .carousel-dots {
-        top: auto;
-        right: clamp(142px, 11vw, 208px);
-        bottom: clamp(39px, 4.2vw, 62px);
+    #tab-home .hero-carousel .carousel-nav {
+        top: 50%;
+        right: clamp(20px, 2.2vw, 42px);
+        bottom: auto;
         left: auto;
-        flex-direction: row;
+        flex-direction: column;
+        gap: 8px;
+        z-index: 6;
+        transform: translateY(-50%);
+    }
+
+    #tab-home .hero-carousel .carousel-nav button {
+        width: 38px;
+        height: 38px;
+        color: rgba(255, 253, 247, 0.86);
+        background: rgba(4, 5, 6, 0.26);
+        border: 1px solid rgba(255, 253, 247, 0.22);
+        box-shadow: none;
+        opacity: 0.72;
+    }
+
+    #tab-home .hero-carousel .carousel-nav button:hover {
+        color: var(--paper-white);
+        background: rgba(4, 5, 6, 0.52);
+        border-color: rgba(255, 253, 247, 0.65);
+        opacity: 1;
+    }
+
+    #tab-home .hero-carousel .carousel-dots {
+        right: auto;
+        bottom: clamp(30px, 4vw, 58px);
+        left: clamp(42px, 7.3vw, 142px);
+        gap: 7px;
         z-index: 6;
     }
 
     #tab-home .hero-carousel .carousel-dot {
         width: 20px;
-        height: 3px;
-        background: rgba(17, 17, 15, 0.28);
+        height: 2px;
+        background: rgba(255, 253, 247, 0.32);
     }
 
     #tab-home .hero-carousel .carousel-dot:hover,
     #tab-home .hero-carousel .carousel-dot.active {
-        width: 34px;
-        height: 3px;
+        width: 30px;
+        height: 2px;
         background: var(--vermilion);
     }
 
-    @keyframes home-cover-sheet-enter {
-        from {
-            opacity: 0;
-            transform: translateY(calc(-45% + 22px));
-        }
-        to {
-            opacity: 1;
-            transform: translateY(-45%);
-        }
+    @keyframes home-cinematic-sheet-enter {
+        from { opacity: 0; transform: translateY(22px); }
+        to { opacity: 1; transform: translateY(0); }
     }
 }
 

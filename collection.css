@@ -3283,7 +3283,15 @@ textarea {
         border-left: 0;
     }
     .catalog-result-summary strong { font-size: 1.85rem; }
-    .catalog-toolbar { min-height: 0; padding: 12px 0 14px; gap: 11px; }
+    .catalog-toolbar {
+        min-height: 0;
+        padding: 12px 0 14px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 11px;
+    }
+    .catalog-search,
+    .catalog-toolbar-main,
+    .clear-filters-btn { grid-column: 1 / -1; }
     .catalog-toolbar-main { gap: 8px; }
     .filter-group { gap: 8px; padding-bottom: 2px; scroll-snap-type: x proximity; }
     .filter-btn { min-height: 40px; padding-inline: 13px; scroll-snap-align: start; }
@@ -3293,8 +3301,14 @@ textarea {
     .clear-filters-btn,
     .catalog-search input,
     .catalog-search button { min-height: 46px; }
-    .catalog-overview > div { min-height: 70px; padding: 10px; gap: 1px 8px; }
-    .catalog-overview strong { font-size: 1.65rem; }
+    .catalog-overview { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .catalog-overview > div {
+        min-height: 72px;
+        padding: 9px 7px;
+        gap: 1px;
+        align-content: center;
+    }
+    .catalog-overview strong { font-size: 1.35rem; }
     .catalog-overview span { font-size: 0.58rem; }
     .catalog-overview small { display: none; }
 

@@ -3302,7 +3302,7 @@ textarea {
     .clear-filters-btn,
     .catalog-search input,
     .catalog-search button { min-height: 46px; }
-    .catalog-overview { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .catalog-overview { display: none; }
     .catalog-overview > div {
         min-height: 72px;
         padding: 9px 7px;

@@ -133,6 +133,8 @@
 @media (min-width: 761px) {
     #tab-home .hero-carousel {
         min-height: clamp(640px, 74vh, 820px);
+        --projection-left: clamp(250px, 20vw, 400px);
+        --projection-right: clamp(220px, 15vw, 320px);
         background: #0d0e0c;
     }
 
@@ -166,9 +168,10 @@
 
     #tab-home .hero-slide-bg {
         position: absolute;
-        inset: 38px clamp(220px, 15vw, 320px) 46px clamp(250px, 20vw, 400px);
-        width: auto;
-        height: auto;
+        top: 38px;
+        left: var(--projection-left);
+        width: calc(100% - var(--projection-left) - var(--projection-right));
+        height: calc(100% - 84px);
         object-position: center;
         filter: saturate(0.9) contrast(1.1) brightness(0.88);
         clip-path: polygon(0 0, 100% 0, 100% 92%, 93% 100%, 0 100%);
@@ -178,7 +181,7 @@
     #tab-home .photo-note {
         z-index: 5;
         top: 58px;
-        right: calc(clamp(220px, 15vw, 320px) + 18px);
+        right: calc(var(--projection-right) + 18px);
         color: var(--paper-white);
         background: rgba(13, 14, 13, 0.68);
         border: 1px solid rgba(243, 239, 229, 0.22);
@@ -210,9 +213,9 @@
 
     #tab-home .feature-name > span { color: #ff776c; }
     #tab-home .feature-name h2 {
-        font-size: clamp(2rem, 2.75vw, 3.25rem);
+        font-size: clamp(1.8rem, 2.55vw, 3rem);
         line-height: 0.89;
-        -webkit-line-clamp: 3;
+        -webkit-line-clamp: 4;
     }
     #tab-home .feature-name p { max-width: 270px; font-size: 0.68rem; line-height: 1.45; white-space: normal; }
 

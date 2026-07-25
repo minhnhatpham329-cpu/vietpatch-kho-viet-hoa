@@ -3286,6 +3286,7 @@ textarea {
     .catalog-toolbar {
         min-height: 0;
         padding: 12px 0 14px;
+        display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 11px;
     }

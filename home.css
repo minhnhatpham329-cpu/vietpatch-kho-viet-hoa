@@ -129,6 +129,119 @@
     z-index: 6;
 }
 
+/* Desktop feature: the image and the release file are one composition, not a card laid over a poster. */
+@media (min-width: 761px) {
+    #tab-home .hero-carousel {
+        min-height: clamp(590px, 70vh, 760px);
+        background: var(--ink);
+    }
+
+    #tab-home .home-hero-signature { display: none; }
+
+    #tab-home .hero-slide.active {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) clamp(360px, 28vw, 480px);
+        grid-template-rows: 1fr;
+    }
+
+    #tab-home .hero-slide-bg {
+        position: relative;
+        grid-column: 1;
+        grid-row: 1;
+        width: 100%;
+        height: 100%;
+        object-position: center;
+        filter: saturate(0.86) contrast(1.08) brightness(0.85);
+    }
+
+    #tab-home .photo-note {
+        z-index: 5;
+        top: 24px;
+        right: calc(clamp(360px, 28vw, 480px) + 24px);
+        color: var(--paper-white);
+        background: rgba(13, 14, 13, 0.68);
+        border: 1px solid rgba(243, 239, 229, 0.22);
+        backdrop-filter: blur(8px);
+    }
+
+    #tab-home .feature-sheet {
+        position: relative;
+        z-index: 4;
+        right: auto;
+        bottom: auto;
+        grid-column: 2;
+        grid-row: 1;
+        width: auto;
+        height: 100%;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        color: var(--paper-white);
+        background: #11120f;
+        border: 0;
+        border-left: 1px solid rgba(243, 239, 229, 0.16);
+        border-top: 0;
+        box-shadow: none;
+        backdrop-filter: none;
+    }
+
+    #tab-home .feature-name {
+        margin-top: auto;
+        padding: 42px 38px 25px;
+    }
+
+    #tab-home .feature-name > span { color: #ff776c; }
+    #tab-home .feature-name h2 {
+        font-size: clamp(2rem, 2.55vw, 3rem);
+        line-height: 0.92;
+        -webkit-line-clamp: 3;
+    }
+    #tab-home .feature-name p { font-size: 0.68rem; }
+
+    #tab-home .release-specs {
+        padding: 0 38px 23px;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0;
+        background: transparent;
+        border-top: 1px solid rgba(243, 239, 229, 0.16);
+    }
+
+    #tab-home .release-specs div {
+        min-height: 42px;
+        padding: 12px 0 9px;
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 14px;
+        border-bottom: 1px solid rgba(243, 239, 229, 0.1);
+    }
+
+    #tab-home .release-specs dt { margin: 0; color: #aaa49a; font-size: 0.56rem; }
+    #tab-home .release-specs dd { color: var(--paper-white); font-size: 0.9rem; text-align: right; }
+
+    #tab-home .action-zone {
+        margin-top: 8px;
+        padding: 20px 38px 38px;
+        background: transparent;
+        border: 0;
+    }
+
+    #tab-home .primary-action { min-height: 50px; }
+
+    #tab-home .hero-carousel .carousel-nav {
+        top: auto;
+        bottom: 28px;
+        left: 28px;
+    }
+
+    #tab-home .hero-carousel .carousel-dots {
+        top: auto;
+        bottom: 47px;
+        left: 132px;
+    }
+}
+
 #tab-home .weekly-trailer {
     order: 2;
     min-height: 0;

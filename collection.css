@@ -2369,6 +2369,410 @@ textarea {
     }
 }
 
+/* Mobile-first collection pass: scan, compare, then decide. */
+@media (max-width: 620px) {
+    .main-header,
+    .header-container,
+    .main-header .logo-area,
+    .mobile-menu-toggle,
+    .library-shortcut,
+    .user-session {
+        min-height: 60px;
+        height: 60px;
+    }
+
+    .header-container {
+        grid-template-columns: minmax(0, 1fr) 46px auto;
+    }
+
+    .main-header .logo-area {
+        padding-inline: 14px;
+    }
+
+    .logo-copy small {
+        display: none;
+    }
+
+    .logo-text {
+        font-size: 1.08rem;
+        letter-spacing: 0.12em;
+    }
+
+    .mobile-menu-toggle,
+    .library-shortcut {
+        width: 46px;
+    }
+
+    .hero-carousel {
+        min-height: 540px;
+    }
+
+    .hero-slide-bg {
+        object-position: 52% 22%;
+    }
+
+    .feature-sheet {
+        width: calc(100% - 16px);
+        right: 8px;
+        bottom: 8px;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .feature-name {
+        padding: 17px 14px 14px;
+    }
+
+    .feature-name h2 {
+        font-size: 1.04rem;
+        line-height: 1.02;
+    }
+
+    .release-specs {
+        padding: 14px;
+        gap: 5px;
+    }
+
+    .action-zone {
+        padding: 12px 14px;
+    }
+
+    .catalog-section {
+        padding: 38px 14px 56px;
+    }
+
+    .catalog-heading {
+        gap: 13px;
+        padding-bottom: 18px;
+    }
+
+    .catalog-heading h2 {
+        font-size: clamp(2.25rem, 12vw, 3.05rem);
+        letter-spacing: -0.06em;
+    }
+
+    .catalog-heading p {
+        margin-top: 10px;
+        font-size: 0.76rem;
+        line-height: 1.55;
+    }
+
+    .catalog-result-summary {
+        width: 100%;
+        min-height: 0;
+        padding: 11px 0 0;
+        display: flex;
+        align-items: baseline;
+        gap: 8px;
+        border-top: 1px solid var(--rule);
+        border-left: 0;
+    }
+
+    .catalog-result-summary strong {
+        font-size: 1.85rem;
+    }
+
+    .catalog-toolbar {
+        min-height: 0;
+        padding: 12px 0 14px;
+        gap: 11px;
+    }
+
+    .catalog-toolbar-main {
+        gap: 8px;
+    }
+
+    .filter-group {
+        gap: 8px;
+        padding-bottom: 2px;
+        scroll-snap-type: x proximity;
+    }
+
+    .filter-btn {
+        min-height: 40px;
+        padding-inline: 13px;
+        scroll-snap-align: start;
+    }
+
+    .toolbar-select span,
+    .toolbar-label {
+        margin-bottom: 6px;
+    }
+
+    .toolbar-select select,
+    .clear-filters-btn,
+    .catalog-search input,
+    .catalog-search button {
+        min-height: 46px;
+    }
+
+    .catalog-overview > div {
+        min-height: 70px;
+        padding: 10px;
+        gap: 1px 8px;
+    }
+
+    .catalog-overview strong {
+        font-size: 1.65rem;
+    }
+
+    .catalog-overview span {
+        font-size: 0.58rem;
+    }
+
+    .catalog-overview small {
+        display: none;
+    }
+
+    .games-grid {
+        margin-top: 18px;
+        gap: 0;
+        border-right: 1px solid var(--rule);
+    }
+
+    .game-card.catalog-row,
+    .game-card.catalog-row:hover,
+    .game-card.catalog-row:focus-within {
+        min-height: 0;
+        padding: 14px 0;
+        display: grid;
+        grid-template-areas:
+            "cover identity"
+            "cover status"
+            "cover specs"
+            "action action";
+        grid-template-columns: 116px minmax(0, 1fr);
+        grid-template-rows: auto auto 1fr auto;
+        column-gap: 0;
+        row-gap: 0;
+    }
+
+    .game-card.catalog-row .card-header-img {
+        grid-area: cover;
+        width: 100%;
+        min-height: 132px;
+        height: 100%;
+        aspect-ratio: auto;
+    }
+
+    .game-card.catalog-row .catalog-number {
+        display: none;
+    }
+
+    .catalog-identity {
+        grid-area: identity;
+        padding: 0 14px;
+    }
+
+    .catalog-identity .card-title {
+        min-height: 0;
+        margin: 0 0 6px;
+        font-size: 1.02rem;
+        line-height: 1.08;
+    }
+
+    .catalog-identity p {
+        font-size: 0.57rem;
+        line-height: 1.35;
+    }
+
+    .catalog-status {
+        grid-area: status;
+        padding: 10px 14px 0;
+    }
+
+    .catalog-status strong {
+        margin-bottom: 3px;
+        font-size: 0.71rem;
+    }
+
+    .catalog-status small {
+        font-size: 0.55rem;
+    }
+
+    .catalog-progress {
+        margin-top: 7px;
+    }
+
+    .catalog-specs {
+        grid-area: specs;
+        padding: 10px 14px 0;
+        gap: 8px;
+    }
+
+    .catalog-specs div {
+        padding-top: 6px;
+    }
+
+    .catalog-specs dt {
+        font-size: 0.5rem;
+    }
+
+    .catalog-specs dd {
+        font-size: 0.64rem;
+    }
+
+    .game-card.catalog-row .card-footer {
+        grid-area: action;
+        margin: 13px 14px 0;
+    }
+
+    .game-card.catalog-row .card-detail-btn {
+        min-height: 44px;
+    }
+
+    .catalog-pagination {
+        margin-top: 24px;
+        padding-top: 16px;
+        gap: 16px;
+    }
+
+    .request-masthead .archive-metrics > div:last-child {
+        grid-column: 1 / -1;
+    }
+
+    .requests-layout {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .request-list-area {
+        order: 1;
+    }
+
+    .request-form-card {
+        position: static;
+        order: 2;
+    }
+
+    .request-list-tools {
+        margin: 15px 0 2px;
+        padding-bottom: 14px;
+        display: grid;
+        gap: 10px;
+        border-bottom: 1px solid var(--rule);
+    }
+
+    .request-search {
+        min-height: 46px;
+        padding: 0 12px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: var(--ivory);
+        border: 1px solid var(--rule);
+    }
+
+    .request-search:focus-within {
+        background: var(--paper-white);
+        border-color: var(--ink);
+    }
+
+    .request-search i {
+        color: var(--muted);
+        font-size: 0.75rem;
+    }
+
+    .request-search input {
+        width: 100%;
+        min-width: 0;
+        color: var(--ink);
+        background: transparent;
+        border: 0;
+        outline: 0;
+        font-size: 0.78rem;
+    }
+
+    .request-list-utility {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+    }
+
+    #request-visible-count {
+        color: var(--muted);
+        font-family: var(--mono);
+        font-size: 0.58rem;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+    }
+
+    .request-jump-form {
+        min-height: 38px;
+        padding: 0 11px;
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        color: var(--paper-white);
+        background: var(--ink);
+        font-size: 0.65rem;
+        font-weight: 800;
+        text-decoration: none;
+    }
+
+    .req-card.bulletin-card {
+        min-height: 0;
+        padding: 18px 0;
+        grid-template-columns: 26px minmax(0, 1fr);
+        gap: 12px;
+    }
+
+    .req-logo {
+        grid-column: 2;
+        width: 100%;
+        aspect-ratio: 16 / 7.5;
+    }
+
+    .req-details,
+    .vote-btn {
+        grid-column: 2;
+    }
+
+    .req-title-row h4 {
+        font-size: 1rem;
+    }
+
+    .req-notes {
+        -webkit-line-clamp: 2;
+        font-size: 0.64rem;
+    }
+
+    .vote-btn {
+        min-height: 44px;
+        flex-direction: row;
+    }
+
+    .request-empty-state {
+        min-height: 132px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: var(--muted);
+        border-bottom: 1px solid var(--rule);
+    }
+
+    .request-empty-state i {
+        color: var(--vermilion);
+        font-size: 1.1rem;
+    }
+
+    .request-empty-state strong,
+    .request-empty-state span {
+        display: block;
+    }
+
+    .request-empty-state strong {
+        color: var(--ink);
+        font-size: 0.82rem;
+    }
+
+    .request-empty-state span {
+        margin-top: 4px;
+        font-size: 0.65rem;
+        line-height: 1.45;
+    }
+}
+
 /* Weekly trailer — cinematic player, sound control and editorial motion */
 .weekly-trailer {
     position: relative;
@@ -2748,4 +3152,241 @@ textarea {
     .hero-carousel .carousel-dot.active {
         width: 30px;
     }
+}
+
+.request-list-tools {
+    margin: 20px 0 8px;
+    padding: 0 0 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    border-bottom: 1px solid var(--rule);
+}
+
+.request-search {
+    min-height: 44px;
+    width: min(390px, 100%);
+    padding: 0 13px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--ivory);
+    border: 1px solid var(--rule);
+}
+
+.request-search:focus-within {
+    background: var(--paper-white);
+    border-color: var(--ink);
+}
+
+.request-search i { color: var(--muted); font-size: 0.75rem; }
+
+.request-search input {
+    width: 100%;
+    min-width: 0;
+    color: var(--ink);
+    background: transparent;
+    border: 0;
+    outline: 0;
+    font-size: 0.74rem;
+}
+
+.request-list-utility {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+#request-visible-count {
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 0.58rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.request-jump-form {
+    min-height: 40px;
+    padding: 0 13px;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: var(--paper-white);
+    background: var(--ink);
+    font-size: 0.65rem;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+.request-jump-form:hover { background: var(--vermilion); }
+
+.request-empty-state {
+    min-height: 150px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: var(--muted);
+    border-bottom: 1px solid var(--rule);
+}
+
+.request-empty-state i { color: var(--vermilion); font-size: 1.15rem; }
+.request-empty-state strong,
+.request-empty-state span { display: block; }
+.request-empty-state strong { color: var(--ink); font-size: 0.88rem; }
+.request-empty-state span { margin-top: 4px; font-size: 0.68rem; }
+
+/* Final mobile overrides: placed after the editorial motion layer. */
+@media (max-width: 620px) {
+    .main-header,
+    .header-container,
+    .main-header .logo-area,
+    .mobile-menu-toggle,
+    .library-shortcut,
+    .user-session {
+        min-height: 60px;
+        height: 60px;
+    }
+
+    .header-container { grid-template-columns: minmax(0, 1fr) 46px auto; }
+    .main-header .logo-area { padding-inline: 14px; }
+    .logo-copy small { display: none; }
+    .logo-text { font-size: 1.08rem; letter-spacing: 0.12em; }
+    .mobile-menu-toggle,
+    .library-shortcut { width: 46px; }
+
+    .hero-carousel { min-height: 540px; }
+    .hero-slide-bg { object-position: 52% 22%; }
+    .feature-sheet {
+        width: calc(100% - 16px);
+        right: 8px;
+        bottom: 8px;
+        grid-template-columns: 1fr 1fr;
+    }
+    .feature-name { padding: 17px 14px 14px; }
+    .feature-name h2 { font-size: 1.04rem; line-height: 1.02; }
+    .release-specs { padding: 14px; gap: 5px; }
+    .action-zone { padding: 12px 14px; }
+
+    .catalog-section { padding: 38px 14px 56px; }
+    .catalog-heading { gap: 13px; padding-bottom: 18px; }
+    .catalog-heading h2 { font-size: clamp(2.25rem, 12vw, 3.05rem); letter-spacing: -0.06em; }
+    .catalog-heading p { margin-top: 10px; font-size: 0.76rem; line-height: 1.55; }
+    .catalog-result-summary {
+        width: 100%;
+        min-height: 0;
+        padding: 11px 0 0;
+        display: flex;
+        align-items: baseline;
+        gap: 8px;
+        border-top: 1px solid var(--rule);
+        border-left: 0;
+    }
+    .catalog-result-summary strong { font-size: 1.85rem; }
+    .catalog-toolbar { min-height: 0; padding: 12px 0 14px; gap: 11px; }
+    .catalog-toolbar-main { gap: 8px; }
+    .filter-group { gap: 8px; padding-bottom: 2px; scroll-snap-type: x proximity; }
+    .filter-btn { min-height: 40px; padding-inline: 13px; scroll-snap-align: start; }
+    .toolbar-select span,
+    .toolbar-label { margin-bottom: 6px; }
+    .toolbar-select select,
+    .clear-filters-btn,
+    .catalog-search input,
+    .catalog-search button { min-height: 46px; }
+    .catalog-overview > div { min-height: 70px; padding: 10px; gap: 1px 8px; }
+    .catalog-overview strong { font-size: 1.65rem; }
+    .catalog-overview span { font-size: 0.58rem; }
+    .catalog-overview small { display: none; }
+
+    .games-grid { margin-top: 18px; gap: 0; border-right: 1px solid var(--rule); }
+    .game-card.catalog-row,
+    .game-card.catalog-row:hover,
+    .game-card.catalog-row:focus-within {
+        min-height: 0;
+        padding: 14px 0;
+        display: grid;
+        grid-template-areas:
+            "cover identity"
+            "cover status"
+            "cover specs"
+            "action action";
+        grid-template-columns: 116px minmax(0, 1fr);
+        grid-template-rows: auto auto 1fr auto;
+        row-gap: 0;
+    }
+    .game-card.catalog-row .card-header-img {
+        grid-area: cover;
+        width: 100%;
+        min-height: 132px;
+        height: 100%;
+        aspect-ratio: auto;
+    }
+    .game-card.catalog-row .catalog-number { display: none; }
+    .catalog-identity { grid-area: identity; padding: 0 14px; }
+    .catalog-identity .card-title { min-height: 0; margin: 0 0 6px; font-size: 1.02rem; line-height: 1.08; }
+    .catalog-identity p { font-size: 0.57rem; line-height: 1.35; }
+    .catalog-status { grid-area: status; padding: 10px 14px 0; }
+    .catalog-status strong { margin-bottom: 3px; font-size: 0.71rem; }
+    .catalog-status small { font-size: 0.55rem; }
+    .catalog-progress { margin-top: 7px; }
+    .catalog-specs { grid-area: specs; padding: 10px 14px 0; gap: 8px; }
+    .catalog-specs div { padding-top: 6px; }
+    .catalog-specs dt { font-size: 0.5rem; }
+    .catalog-specs dd { font-size: 0.64rem; }
+    .game-card.catalog-row .card-footer { grid-area: action; margin: 13px 14px 0; }
+    .game-card.catalog-row .card-detail-btn { min-height: 44px; }
+    .catalog-pagination { margin-top: 24px; padding-top: 16px; gap: 16px; }
+
+    .request-masthead .archive-metrics > div:last-child { grid-column: 1 / -1; }
+    .requests-layout { display: flex; flex-direction: column; }
+    .request-list-area { order: 1; }
+    .request-form-card { position: static; order: 2; }
+    .request-list-tools {
+        margin: 15px 0 2px;
+        padding-bottom: 14px;
+        display: grid;
+        gap: 10px;
+        border-bottom: 1px solid var(--rule);
+    }
+    .request-search {
+        min-height: 46px;
+        padding: 0 12px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: var(--ivory);
+        border: 1px solid var(--rule);
+    }
+    .request-search:focus-within { background: var(--paper-white); border-color: var(--ink); }
+    .request-search i { color: var(--muted); font-size: 0.75rem; }
+    .request-search input {
+        width: 100%; min-width: 0; color: var(--ink); background: transparent;
+        border: 0; outline: 0; font-size: 0.78rem;
+    }
+    .request-list-utility { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    #request-visible-count {
+        color: var(--muted); font-family: var(--mono); font-size: 0.58rem;
+        letter-spacing: 0.04em; text-transform: uppercase;
+    }
+    .request-jump-form {
+        min-height: 38px; padding: 0 11px; display: inline-flex; align-items: center; gap: 7px;
+        color: var(--paper-white); background: var(--ink); font-size: 0.65rem; font-weight: 800;
+        text-decoration: none;
+    }
+    .req-card.bulletin-card { min-height: 0; padding: 18px 0; grid-template-columns: 26px minmax(0, 1fr); gap: 12px; }
+    .req-logo { grid-column: 2; width: 100%; aspect-ratio: 16 / 7.5; }
+    .req-details,
+    .vote-btn { grid-column: 2; }
+    .req-title-row h4 { font-size: 1rem; }
+    .req-notes { -webkit-line-clamp: 2; font-size: 0.64rem; }
+    .vote-btn { min-height: 44px; flex-direction: row; }
+    .request-empty-state {
+        min-height: 132px; display: flex; align-items: center; gap: 12px;
+        color: var(--muted); border-bottom: 1px solid var(--rule);
+    }
+    .request-empty-state i { color: var(--vermilion); font-size: 1.1rem; }
+    .request-empty-state strong,
+    .request-empty-state span { display: block; }
+    .request-empty-state strong { color: var(--ink); font-size: 0.82rem; }
+    .request-empty-state span { margin-top: 4px; font-size: 0.65rem; line-height: 1.45; }
 }

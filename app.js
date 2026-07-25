@@ -536,6 +536,7 @@ let userState = {
 };
 
 let requestsList = [...initialRequests];
+let requestQuery = "";
 let cmsState = null;
 let hiddenGameIds = new Set();
 
@@ -1949,9 +1950,13 @@ function getRequestInitials(title) {
 function renderRequestsList() {
     const container = document.getElementById("requests-list-container");
     if (!container) return;
-    
-    // Sort by votes descending
-    requestsList.sort((a, b) => b.votes - a.votes);
+
+    const rankedRequests = [...requestsList].sort((a, b) => (Number(b.votes) || 0) - (Number(a.votes) || 0));
+    const normalizedQuery = normalizeSearchText(requestQuery);
+    const visibleRequests = rankedRequests.filter(req => {
+        if (!normalizedQuery) return true;
+        return normalizeSearchText([req.title, req.engine, req.platform, req.notes].join(" ")).includes(normalizedQuery);
+    });
 
     const openCount = document.getElementById("request-open-count");
     const voteTotal = document.getElementById("request-vote-total");
@@ -1959,17 +1964,35 @@ function renderRequestsList() {
     const totalVotes = requestsList.reduce((total, request) => total + (Number(request.votes) || 0), 0);
     if (openCount) openCount.textContent = String(requestsList.length).padStart(2, "0");
     if (voteTotal) voteTotal.textContent = new Intl.NumberFormat("vi-VN").format(totalVotes);
-    if (topName) topName.textContent = requestsList[0]?.title || "—";
-    
+    if (topName) topName.textContent = rankedRequests[0]?.title || "—";
+
+    const visibleCount = document.getElementById("request-visible-count");
+    if (visibleCount) {
+        visibleCount.textContent = normalizedQuery
+            ? `${visibleRequests.length} / ${requestsList.length} đề xuất`
+            : `${requestsList.length} đề xuất`;
+    }
+
     container.innerHTML = "";
-    
-    requestsList.forEach((req, index) => {
+
+    if (!visibleRequests.length) {
+        container.innerHTML = `
+            <div class="request-empty-state">
+                <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                <div><strong>Chưa có đề xuất phù hợp</strong><span>Thử tìm theo tên game, engine hoặc nền tảng.</span></div>
+            </div>
+        `;
+        return;
+    }
+
+    visibleRequests.forEach((req, index) => {
+        const rank = rankedRequests.findIndex(item => String(item.id) === String(req.id)) + 1;
         const logoUrl = window.VietPatchCMS?.safeAssetUrl(req.logoUrl) || "";
         const link = window.VietPatchCMS?.safeUrl(req.link) || "";
         const card = document.createElement("article");
         card.className = "req-card bulletin-card glass";
         card.innerHTML = `
-            <span class="request-rank">${String(index + 1).padStart(2, "0")}</span>
+            <span class="request-rank">${String(rank).padStart(2, "0")}</span>
             <div class="req-logo ${logoUrl ? "has-logo" : ""}">
                 ${logoUrl
                     ? `<img src="${escapeHtml(logoUrl)}" alt="${escapeHtml(req.title)} logo" loading="lazy">`
@@ -3712,12 +3735,22 @@ document.addEventListener("DOMContentLoaded", async () => {
             
             requestsList.unshift(newRequest);
             saveCommunityRequests();
+
+            requestQuery = "";
+            const requestSearch = document.getElementById("request-search");
+            if (requestSearch) requestSearch.value = "";
             
             showToast(`Đã gửi yêu cầu dịch game ${title} thành công!`, "success");
             reqForm.reset();
             renderRequestsList();
         });
     }
+
+    const requestSearch = document.getElementById("request-search");
+    requestSearch?.addEventListener("input", event => {
+        requestQuery = event.target.value || "";
+        renderRequestsList();
+    });
     
     // 15. Empty Library action button
     document.getElementById("library-go-home").addEventListener("click", () => {

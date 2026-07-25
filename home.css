@@ -584,37 +584,156 @@ body.brand-entry-active { overflow: hidden; }
 @keyframes brand-entry-leave { to { opacity: 0; transform: scale(1.025); } }
 
 @media (max-width: 760px) {
-    #tab-home .hero-carousel { min-height: 540px; }
-    .home-hero-signature { top: 16px; left: 16px; }
+    #tab-home .hero-carousel {
+        min-height: clamp(590px, 88svh, 700px);
+        overflow: hidden;
+        background: #070809;
+    }
+
+    #tab-home .hero-carousel::before {
+        z-index: 2;
+        background:
+            linear-gradient(180deg, rgba(5, 6, 7, 0.55) 0%, rgba(5, 6, 7, 0.03) 29%, rgba(5, 6, 7, 0.16) 44%, rgba(5, 6, 7, 0.94) 79%, #070809 100%);
+    }
+
+    #tab-home .home-hero-signature { display: none; }
+
+    #tab-home .hero-slide-bg {
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-position: center;
+        filter: saturate(0.92) contrast(1.06) brightness(0.84);
+        clip-path: none;
+        box-shadow: none;
+    }
+
+    #tab-home .photo-note { display: none; }
+
     #tab-home .feature-sheet {
-        right: 10px;
-        bottom: 10px;
-        width: calc(100% - 20px);
+        z-index: 4;
+        right: 18px;
+        bottom: 42px;
+        left: 18px;
+        width: auto;
         min-height: 0;
+        display: grid;
         grid-template-areas:
             "name"
             "specs"
             "action";
         grid-template-columns: 1fr;
+        color: var(--paper-white);
+        background: transparent;
+        border: 0;
+        box-shadow: none;
+        backdrop-filter: none;
     }
-    #tab-home .feature-name { padding: 16px 16px 13px; }
-    #tab-home .feature-name > span { margin-bottom: 7px; font-size: 0.57rem; }
-    #tab-home .feature-name h2 { font-size: clamp(1.35rem, 7.6vw, 1.8rem); line-height: 0.98; }
-    #tab-home .feature-name p { margin-top: 7px; white-space: normal; }
+
+    #tab-home .hero-slide .feature-sheet {
+        opacity: 0;
+        transform: translateY(18px);
+        animation: none;
+    }
+
+    #tab-home .hero-slide.active .feature-sheet {
+        animation: home-mobile-sheet-enter 620ms 120ms both cubic-bezier(0.22, 0.74, 0.24, 1);
+    }
+
+    #tab-home .feature-name { padding: 0 0 16px; }
+    #tab-home .feature-name > span {
+        margin-bottom: 10px;
+        color: #ff7569;
+        font-size: 0.56rem;
+        letter-spacing: 0.14em;
+    }
+    #tab-home .feature-name h2 {
+        overflow: visible;
+        display: block;
+        color: var(--paper-white);
+        font-family: var(--sans);
+        font-size: clamp(2rem, 9vw, 2.65rem);
+        font-weight: 780;
+        line-height: 0.95;
+        letter-spacing: -0.045em;
+        text-transform: none;
+        text-overflow: clip;
+        -webkit-line-clamp: initial;
+    }
+    #tab-home .feature-name p {
+        margin-top: 10px;
+        color: rgba(255, 253, 247, 0.67);
+        font-size: 0.68rem;
+        line-height: 1.45;
+        white-space: normal;
+    }
+
     #tab-home .release-specs {
-        padding: 12px 16px;
+        padding: 14px 0 16px;
         grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 8px;
-        border-top: 1px solid rgba(243, 239, 229, 0.18);
+        gap: 10px;
+        background: transparent;
+        border-top: 1px solid rgba(255, 253, 247, 0.22);
     }
-    #tab-home .release-specs dt { margin-bottom: 5px; font-size: 0.5rem; }
-    #tab-home .release-specs dd { font-size: 0.77rem; }
+    #tab-home .release-specs div { padding: 0; border: 0; }
+    #tab-home .release-specs dt {
+        margin-bottom: 5px;
+        color: rgba(255, 253, 247, 0.55);
+        font-size: 0.46rem;
+    }
+    #tab-home .release-specs dd {
+        overflow: hidden;
+        color: var(--paper-white);
+        font-size: 0.75rem;
+        text-align: left;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
     #tab-home .action-zone {
-        padding: 12px 16px 16px;
-        border-top: 1px solid rgba(243, 239, 229, 0.18);
+        padding: 0;
         border-left: 0;
     }
-    #tab-home .feature-action-label { margin-bottom: 8px; }
+    #tab-home .feature-action-label { display: none; }
+    #tab-home .primary-action { min-height: 46px; max-width: 162px; }
+
+    #tab-home .hero-carousel .carousel-nav {
+        top: 18px;
+        right: 14px;
+        bottom: auto;
+        left: auto;
+        gap: 6px;
+        z-index: 6;
+    }
+
+    #tab-home .hero-carousel .carousel-nav button {
+        width: 36px;
+        height: 36px;
+        color: rgba(255, 253, 247, 0.9);
+        background: rgba(4, 5, 6, 0.28);
+        border: 1px solid rgba(255, 253, 247, 0.28);
+        box-shadow: none;
+    }
+
+    #tab-home .hero-carousel .carousel-dots {
+        top: 29px;
+        right: auto;
+        bottom: auto;
+        left: 18px;
+        gap: 6px;
+        z-index: 6;
+    }
+
+    #tab-home .hero-carousel .carousel-dot {
+        width: 16px;
+        height: 2px;
+        background: rgba(255, 253, 247, 0.38);
+    }
+
+    #tab-home .hero-carousel .carousel-dot.active {
+        width: 24px;
+        background: var(--vermilion);
+    }
+
     #tab-home .weekly-trailer {
         grid-template-columns: 1fr;
         grid-template-rows: 46px 240px auto;
@@ -637,6 +756,11 @@ body.brand-entry-active { overflow: hidden; }
     #tab-home .weekly-trailer-caption p { font-size: 0.74rem; line-height: 1.62; }
     .brand-entry-content strong { letter-spacing: 0.14em; }
     .brand-entry-kicker { font-size: 0.5rem; }
+
+    @keyframes home-mobile-sheet-enter {
+        from { opacity: 0; transform: translateY(18px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {

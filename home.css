@@ -650,14 +650,16 @@ body.brand-entry-active { overflow: hidden; }
     #tab-home .feature-name h2 {
         overflow: visible;
         display: block;
+        max-width: 100%;
         color: var(--paper-white);
         font-family: var(--sans);
-        font-size: clamp(2rem, 9vw, 2.65rem);
+        font-size: clamp(1.95rem, 8.3vw, 2.4rem);
         font-weight: 780;
-        line-height: 0.95;
+        line-height: 0.98;
         letter-spacing: -0.045em;
         text-transform: none;
         text-overflow: clip;
+        overflow-wrap: anywhere;
         -webkit-line-clamp: initial;
     }
     #tab-home .feature-name p {

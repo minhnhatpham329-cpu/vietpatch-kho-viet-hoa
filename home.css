@@ -215,6 +215,17 @@
         backdrop-filter: none;
     }
 
+    /* Keep the cover composition intact when the shared carousel enters. */
+    #tab-home .hero-slide .feature-sheet {
+        opacity: 0;
+        transform: translateY(calc(-45% + 22px));
+        animation: none;
+    }
+
+    #tab-home .hero-slide.active .feature-sheet {
+        animation: home-cover-sheet-enter 620ms 150ms both cubic-bezier(0.22, 0.74, 0.24, 1);
+    }
+
     #tab-home .feature-name {
         grid-area: name;
         margin: 0;
@@ -322,6 +333,17 @@
         width: 34px;
         height: 3px;
         background: var(--vermilion);
+    }
+
+    @keyframes home-cover-sheet-enter {
+        from {
+            opacity: 0;
+            transform: translateY(calc(-45% + 22px));
+        }
+        to {
+            opacity: 1;
+            transform: translateY(-45%);
+        }
     }
 }
 

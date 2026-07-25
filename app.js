@@ -1797,7 +1797,7 @@ function renderHeroSlider() {
             <span class="photo-note">CẬP NHẬT · ${escapeHtml(formatGameDate(game.date))}</span>
             <article class="feature-sheet">
                 <div class="feature-name">
-                    <span>Hồ sơ tuyển chọn</span>
+                    <span>Cập nhật mới</span>
                     <h2>${escapeHtml(game.title)}</h2>
                     <p>${escapeHtml(game.developer)} · ${escapeHtml(game.engine)}</p>
                 </div>

@@ -69,25 +69,60 @@
 #tab-home .feature-sheet {
     right: clamp(20px, 4vw, 62px);
     bottom: clamp(20px, 4vw, 44px);
-    width: min(1120px, calc(100% - clamp(40px, 8vw, 124px)));
-    min-height: 138px;
+    width: min(850px, calc(100% - clamp(40px, 8vw, 124px)));
+    min-height: 0;
+    grid-template-areas:
+        "name action"
+        "specs action";
+    grid-template-columns: minmax(0, 1fr) 154px;
+    color: var(--paper-white);
+    background: rgba(13, 14, 13, 0.88);
+    border: 1px solid rgba(243, 239, 229, 0.28);
+    border-top: 3px solid var(--vermilion);
+    box-shadow: 0 18px 42px rgba(0, 0, 0, 0.34);
+    backdrop-filter: blur(13px);
 }
 
 #tab-home .feature-name {
-    padding: 23px 26px 20px;
+    grid-area: name;
+    padding: 19px 22px 13px;
 }
+
+#tab-home .feature-name > span { margin-bottom: 7px; color: #ff776c; }
 
 #tab-home .feature-name h2 {
-    font-size: clamp(1.5rem, 2.2vw, 2.25rem);
+    overflow: hidden;
+    display: -webkit-box;
+    color: var(--paper-white);
+    font-size: clamp(1.35rem, 2vw, 2rem);
+    line-height: 0.96;
+    text-overflow: clip;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
 }
+
+#tab-home .feature-name p { margin-top: 7px; color: #bbb4aa; }
 
 #tab-home .release-specs {
-    padding-inline: 26px;
+    grid-area: specs;
+    padding: 11px 22px 15px;
+    gap: 14px;
+    background: transparent;
+    border-top: 1px solid rgba(243, 239, 229, 0.18);
 }
 
+#tab-home .release-specs dt { margin-bottom: 5px; color: #aaa49a; font-size: 0.53rem; }
+#tab-home .release-specs dd { color: var(--paper-white); font-size: 0.9rem; }
+
 #tab-home .action-zone {
-    padding-inline: 22px;
+    grid-area: action;
+    padding: 18px;
+    background: rgba(255, 255, 255, 0.045);
+    border-left: 1px solid rgba(243, 239, 229, 0.18);
 }
+
+#tab-home .feature-action-label { display: none; }
+#tab-home .primary-action { min-height: 44px; }
 
 #tab-home .hero-carousel .carousel-nav,
 #tab-home .hero-carousel .carousel-dots {
@@ -331,6 +366,10 @@ body.brand-entry-active { overflow: hidden; }
         bottom: 10px;
         width: calc(100% - 20px);
         min-height: 0;
+        grid-template-areas:
+            "name"
+            "specs"
+            "action";
         grid-template-columns: 1fr;
     }
     #tab-home .feature-name { padding: 16px 16px 13px; }
@@ -341,13 +380,13 @@ body.brand-entry-active { overflow: hidden; }
         padding: 12px 16px;
         grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 8px;
-        border-top: 1px solid var(--rule);
+        border-top: 1px solid rgba(243, 239, 229, 0.18);
     }
     #tab-home .release-specs dt { margin-bottom: 5px; font-size: 0.5rem; }
     #tab-home .release-specs dd { font-size: 0.77rem; }
     #tab-home .action-zone {
         padding: 12px 16px 16px;
-        border-top: 1px solid var(--rule);
+        border-top: 1px solid rgba(243, 239, 229, 0.18);
         border-left: 0;
     }
     #tab-home .feature-action-label { margin-bottom: 8px; }

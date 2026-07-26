@@ -1,0 +1,991 @@
+/* ==========================================================================
+   VietPatch – refine.css
+   Lớp tinh chỉnh cuối cùng (nạp sau home.css). Mục tiêu:
+   1) Nâng độ dễ đọc: sàn cỡ chữ cho nhãn mono, tăng tương phản chữ phụ.
+   2) Sửa các chi tiết lệch: watermark trailer, specs hero mobile, giá trong modal.
+   3) Vi tinh chỉnh card thư viện, dải thống kê, modal thanh toán.
+   Không đổi cấu trúc HTML ngoài phần đã ghi chú trong index.html/app.js.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   0. Font & token nhỏ
+   - Dùng Be Vietnam Pro (đã được tải trong <head> nhưng trước đây không dùng)
+     để dấu tiếng Việt hiển thị đồng nhất trên mọi hệ điều hành.
+   -------------------------------------------------------------------------- */
+:root {
+    --sans: "Be Vietnam Pro", "Segoe UI Variable", "Segoe UI", Arial, sans-serif;
+    --font-primary: var(--sans);
+    --label-min: 0.62rem;   /* sàn cỡ chữ cho nhãn mono viết hoa */
+    --body-min: 0.78rem;    /* sàn cỡ chữ cho chữ phụ */
+}
+
+/* --------------------------------------------------------------------------
+   1. Sàn dễ đọc – các nhãn mono đang ở 0.46–0.58rem (7–9px)
+   -------------------------------------------------------------------------- */
+#tab-home .release-specs dt,
+.catalog-specs dt,
+.catalog-status small,
+.catalog-identity p,
+#tab-home .feature-name > span,
+.home-hero-signature small,
+.brand-entry-kicker {
+    font-size: var(--label-min);
+}
+
+#tab-home .feature-name p {
+    color: rgba(255, 253, 247, 0.76);
+    font-size: var(--body-min);
+}
+
+#tab-home .release-specs dt { color: rgba(255, 253, 247, 0.62); }
+
+/* --------------------------------------------------------------------------
+   2. Hero – desktop
+   -------------------------------------------------------------------------- */
+#tab-home .feature-name h2 {
+    text-shadow: 0 2px 24px rgba(0, 0, 0, 0.45);
+}
+
+#tab-home .feature-name > span {
+    letter-spacing: 0.18em;
+}
+
+#tab-home .primary-action {
+    max-width: 200px;
+    font-size: 0.74rem;
+    letter-spacing: 0.06em;
+}
+
+/* --------------------------------------------------------------------------
+   3. Trailer tuần
+   - Watermark "WEEKLY / SCREENING": trước đây đè lên tiêu đề và bị cắt.
+     Chuyển thành chữ viền mảnh nằm dưới đáy phải, không va chạm nội dung.
+   -------------------------------------------------------------------------- */
+.weekly-trailer-caption::before {
+    top: auto;
+    right: 30px;
+    bottom: 22px;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(17, 17, 15, 0.14);
+    font-size: clamp(1.8rem, 3vw, 3.6rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+}
+
+#tab-home .weekly-trailer-caption p {
+    font-size: 0.88rem;
+    color: #44413a;
+}
+
+.weekly-trailer-meta {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.weekly-trailer-meta a {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 5px 10px;
+    border: 1px solid var(--rule);
+    color: var(--ink);
+    font-family: var(--mono);
+    font-size: var(--label-min);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+}
+
+.weekly-trailer-meta a:hover {
+    color: var(--paper-white);
+    background: var(--ink);
+    border-color: var(--ink);
+}
+
+/* --------------------------------------------------------------------------
+   4. Dải thống kê thư viện (catalog-overview)
+   -------------------------------------------------------------------------- */
+.catalog-overview {
+    border-bottom-width: 3px;
+}
+
+.catalog-overview > div {
+    padding: 18px 22px 15px;
+    border-left: 1px solid rgba(243, 239, 229, 0.14);
+}
+
+.catalog-overview > div:first-child {
+    border-left: 0;
+}
+
+.catalog-overview span {
+    font-size: var(--label-min);
+    letter-spacing: 0.1em;
+}
+
+.catalog-overview small {
+    color: #9a948a;
+    font-size: 0.6rem;
+}
+
+/* --------------------------------------------------------------------------
+   5. Card thư viện
+   -------------------------------------------------------------------------- */
+.games-grid .game-card.catalog-row {
+    transition: transform 200ms ease, box-shadow 200ms ease;
+}
+
+.games-grid .game-card.catalog-row:hover,
+.games-grid .game-card.catalog-row:focus-within {
+    transform: translateY(-4px);
+    box-shadow: 0 22px 44px rgba(17, 17, 15, 0.16);
+}
+
+.catalog-specs {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.catalog-specs dd {
+    font-size: 0.72rem;
+}
+
+.catalog-specs dd.spec-price {
+    color: var(--vermilion);
+    font-weight: 800;
+}
+
+.catalog-specs dd.spec-price.is-free {
+    color: var(--tested);
+}
+
+.catalog-status strong {
+    font-size: 0.76rem;
+}
+
+/* --------------------------------------------------------------------------
+   6. Modal chi tiết game
+   -------------------------------------------------------------------------- */
+.detail-header-banner {
+    min-height: clamp(190px, 28vh, 260px);
+}
+
+.price-section .price-val {
+    font-family: var(--condensed);
+    font-size: 1.6rem;
+    font-weight: 800;
+    letter-spacing: 0.01em;
+}
+
+.price-val .text-success {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    color: var(--tested);
+    border: 1.5px solid var(--tested);
+    font-family: var(--condensed);
+    font-size: 1.05rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.detail-state-note {
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.04em;
+}
+
+.progress-details-bar {
+    position: relative;
+    overflow: hidden;
+    height: 24px;
+    background: #e6dfd2;
+    border: 1px solid var(--rule);
+}
+
+.progress-details-bar .progress-fill {
+    background: var(--vermilion);
+}
+
+.progress-details-bar .progress-num {
+    position: absolute;
+    top: 50%;
+    left: auto;
+    right: 8px;
+    transform: translateY(-50%);
+    padding: 2px 8px;
+    color: var(--ink);
+    background: var(--paper-white);
+    border: 1px solid var(--rule);
+    font-family: var(--mono);
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+/* --------------------------------------------------------------------------
+   7. Modal thanh toán / nạp tiền / tài khoản
+   -------------------------------------------------------------------------- */
+.checkout-details .detail-row > span:first-child {
+    font-size: var(--label-min);
+}
+
+.checkout-details .code {
+    font-family: var(--mono);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+}
+
+.qr-box {
+    border: 1px solid var(--ink);
+    border-radius: 0;
+    box-shadow: 8px 8px 0 rgba(17, 17, 15, 0.16);
+}
+
+.qr-box canvas,
+.qr-code-svg-mock {
+    border-radius: 0;
+}
+
+/* Nút "Kiểm tra thanh toán": gom icon + chữ vào giữa thay vì dàn hai mép
+   (collection.css dùng selector ID nên phải lặp lại đúng selector đó) */
+.payment-action-row .action-btn-main,
+.transaction-card #btn-verify-payment {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.payment-safety-note {
+    font-size: 0.7rem;
+}
+
+.auth-tip {
+    font-size: 0.68rem;
+}
+
+/* --------------------------------------------------------------------------
+   8. Mobile
+   -------------------------------------------------------------------------- */
+@media (max-width: 760px) {
+    /* Hero gọn hơn để lộ mép khu trailer, tăng tín hiệu cuộn trang */
+    #tab-home .hero-carousel {
+        min-height: clamp(520px, 78svh, 640px);
+    }
+
+    /* Sửa hàng specs vỡ bố cục: nhãn/giá trị xếp dọc, không cắt chữ */
+    #tab-home .release-specs {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        gap: 12px 26px;
+    }
+
+    #tab-home .release-specs div {
+        display: grid;
+        gap: 4px;
+    }
+
+    #tab-home .release-specs dt {
+        margin: 0;
+        font-size: 0.54rem;
+        white-space: nowrap;
+    }
+
+    #tab-home .release-specs dd {
+        overflow: visible;
+        font-size: 0.8rem;
+        white-space: nowrap;
+    }
+
+    #tab-home .feature-name p { font-size: 0.74rem; }
+
+    .catalog-specs {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    .catalog-specs dt { font-size: 0.56rem; }
+    .catalog-specs dd { font-size: 0.68rem; }
+
+    .catalog-overview > div {
+        padding: 13px 16px 11px;
+    }
+
+    .detail-header-banner {
+        min-height: clamp(150px, 24vh, 210px);
+    }
+}
+
+/* ==========================================================================
+   BOLD PASS – các điểm nhấn "hồ sơ lưu trữ / bản in" tạo cá tính riêng
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   B1. Vân giấy toàn trang (grain tĩnh, rất nhẹ – chất bản in)
+   -------------------------------------------------------------------------- */
+html::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 11990;
+    pointer-events: none;
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+::selection {
+    color: #fffdf7;
+    background: var(--vermilion);
+}
+
+/* --------------------------------------------------------------------------
+   B2. Thanh tiến trình đọc trang (đỏ, mảnh, trên cùng)
+   -------------------------------------------------------------------------- */
+.vp-scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 12010;
+    width: 0%;
+    height: 3px;
+    background: var(--vermilion);
+    box-shadow: 0 0 8px rgba(223, 63, 47, 0.5);
+}
+
+/* --------------------------------------------------------------------------
+   B3. Hero: số thứ tự slide khổ lớn kiểu chữ viền + kicker dạng tem đỏ
+   -------------------------------------------------------------------------- */
+.hero-slide-index {
+    position: absolute;
+    z-index: 3;
+    right: clamp(70px, 6.5vw, 120px);
+    bottom: clamp(26px, 5vh, 58px);
+    color: transparent;
+    -webkit-text-stroke: 1.5px rgba(255, 253, 247, 0.24);
+    font-family: var(--condensed);
+    font-size: clamp(7rem, 15vw, 15rem);
+    font-weight: 900;
+    line-height: 0.8;
+    letter-spacing: -0.04em;
+    pointer-events: none;
+    user-select: none;
+}
+
+#tab-home .feature-name > span {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    width: fit-content;
+    padding: 5px 12px;
+    color: #fffdf7;
+    background: var(--vermilion);
+    letter-spacing: 0.18em;
+}
+
+#tab-home .feature-name > span::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #fffdf7;
+    animation: vp-live-dot 1.6s ease-in-out infinite;
+}
+
+@keyframes vp-live-dot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.35; transform: scale(0.72); }
+}
+
+/* Dấu định vị bản in (crop marks) quanh khối thông tin hero */
+#tab-home .hero-carousel .feature-sheet {
+    position: absolute;
+}
+
+#tab-home .feature-sheet::before,
+#tab-home .feature-sheet::after {
+    content: "" !important;
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    display: block !important;
+    pointer-events: none;
+    opacity: 0.85;
+}
+
+#tab-home .feature-sheet::before {
+    top: -16px;
+    left: -20px;
+    border-top: 2px solid var(--vermilion);
+    border-left: 2px solid var(--vermilion);
+    background: none;
+}
+
+#tab-home .feature-sheet::after {
+    right: -20px;
+    bottom: -14px;
+    border-right: 2px solid var(--vermilion);
+    border-bottom: 2px solid var(--vermilion);
+    background: none;
+}
+
+/* --------------------------------------------------------------------------
+   B4. ARCHIVE WIRE – dải tin chạy ngang (tạm dừng khi rê chuột)
+   -------------------------------------------------------------------------- */
+.vp-ticker {
+    order: 1;
+    display: flex;
+    align-items: stretch;
+    min-height: 46px;
+    overflow: hidden;
+    color: var(--ivory);
+    background: var(--ink);
+    border-top: 1px solid #2e2d28;
+    border-bottom: 3px solid var(--vermilion);
+}
+
+.vp-ticker-label {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 0 18px;
+    color: #fffdf7;
+    background: var(--vermilion);
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    font-weight: 800;
+    letter-spacing: 0.15em;
+    white-space: nowrap;
+}
+
+.vp-ticker-viewport {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+
+.vp-ticker-track {
+    display: flex;
+    flex: none;
+    animation: vp-ticker-scroll var(--vp-ticker-duration, 38s) linear infinite;
+}
+
+.vp-ticker:hover .vp-ticker-track {
+    animation-play-state: paused;
+}
+
+.vp-ticker-group {
+    flex: none;
+    display: flex;
+    align-items: center;
+}
+
+.vp-ticker-item {
+    padding: 0 22px;
+    color: #d8d2c6;
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+}
+
+.vp-ticker-sep {
+    color: var(--vermilion);
+    font-size: 0.55rem;
+}
+
+@keyframes vp-ticker-scroll {
+    to { transform: translateX(-50%); }
+}
+
+/* --------------------------------------------------------------------------
+   B5. Trailer tuần: viền phim đục lỗ hai mép khung video
+   -------------------------------------------------------------------------- */
+#tab-home .weekly-trailer-media {
+    position: relative;
+}
+
+#tab-home .weekly-trailer-media::before,
+#tab-home .weekly-trailer-media::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 3;
+    width: 15px;
+    pointer-events: none;
+    background:
+        repeating-linear-gradient(180deg, transparent 0 9px, rgba(243, 239, 229, 0.85) 9px 17px) 50% 0 / 7px 100% no-repeat,
+        #0b0c0b;
+}
+
+#tab-home .weekly-trailer-media::before { left: 0; }
+#tab-home .weekly-trailer-media::after { right: 0; }
+
+/* --------------------------------------------------------------------------
+   B6. Tiêu đề thư viện: vạch gạch chéo đỏ kiểu biên tập
+   -------------------------------------------------------------------------- */
+#catalog-heading::before {
+    content: "";
+    display: inline-block;
+    width: 46px;
+    height: 10px;
+    margin-right: 18px;
+    vertical-align: 0.08em;
+    background: repeating-linear-gradient(-45deg, var(--vermilion) 0 3px, transparent 3px 7px);
+}
+
+/* --------------------------------------------------------------------------
+   B7. Card thư viện: duotone → màu khi hover, lưới halftone,
+       góc gấp đỏ, tem "ĐÃ KIỂM THỬ", mã vạch trên nút
+   -------------------------------------------------------------------------- */
+.games-grid .game-card.catalog-row {
+    position: relative;
+}
+
+.games-grid .game-card.catalog-row::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 5;
+    border-style: solid;
+    border-width: 0 26px 26px 0;
+    border-color: transparent var(--vermilion) transparent transparent;
+}
+
+.games-grid .card-header-img {
+    position: relative;
+    overflow: hidden;
+}
+
+.games-grid .card-header-img img {
+    filter: grayscale(0.3) sepia(0.08) contrast(1.04);
+    transform: scale(1.001);
+    transition: filter 350ms ease, transform 450ms ease;
+}
+
+.games-grid .game-card:hover .card-header-img img,
+.games-grid .game-card:focus-within .card-header-img img {
+    filter: none;
+    transform: scale(1.045);
+}
+
+.games-grid .card-header-img::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    opacity: 0.2;
+    background-image: radial-gradient(rgba(17, 17, 15, 0.5) 1px, transparent 1.4px);
+    background-size: 5px 5px;
+    mix-blend-mode: multiply;
+    transition: opacity 350ms ease;
+}
+
+.games-grid .game-card:hover .card-header-img::before,
+.games-grid .game-card:focus-within .card-header-img::before {
+    opacity: 0;
+}
+
+.games-grid .card-detail-btn span::after {
+    content: "";
+    display: inline-block;
+    width: 34px;
+    height: 11px;
+    margin-left: 12px;
+    vertical-align: -1px;
+    opacity: 0.5;
+    background: repeating-linear-gradient(90deg, currentColor 0 1px, transparent 1px 3px, currentColor 3px 5px, transparent 5px 6px);
+}
+
+/* --------------------------------------------------------------------------
+   B8. Nút bấm "bản in": đổ bóng khối, nhấc lên khi hover, dập xuống khi bấm
+   -------------------------------------------------------------------------- */
+#tab-home .primary-action,
+.games-grid .card-detail-btn,
+.detail-panel .action-btn-main,
+.modal-card .action-btn-main {
+    transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease, color 160ms ease;
+}
+
+#tab-home .primary-action {
+    box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.4);
+}
+
+#tab-home .primary-action:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 7px 7px 0 rgba(0, 0, 0, 0.45);
+}
+
+#tab-home .primary-action:active {
+    transform: translate(1px, 1px);
+    box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.4);
+}
+
+.games-grid .card-detail-btn:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0 rgba(17, 17, 15, 0.28);
+}
+
+.games-grid .card-detail-btn:active {
+    transform: translate(1px, 1px);
+    box-shadow: none;
+}
+
+.detail-panel .action-btn-main:not(:disabled):hover,
+.modal-card .action-btn-main:not(:disabled):hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0 rgba(17, 17, 15, 0.3);
+}
+
+.detail-panel .action-btn-main:not(:disabled):active,
+.modal-card .action-btn-main:not(:disabled):active {
+    transform: translate(1px, 1px);
+    box-shadow: none;
+}
+
+/* --------------------------------------------------------------------------
+   B9. Modal chi tiết: tem lưu trữ trên banner
+   -------------------------------------------------------------------------- */
+.detail-header-banner {
+    position: relative;
+}
+
+.detail-header-banner::before {
+    content: "VIETPATCH ★ HỒ SƠ LƯU TRỮ";
+    position: absolute;
+    right: 26px;
+    bottom: 24px;
+    z-index: 2;
+    padding: 7px 12px;
+    transform: rotate(-5deg);
+    color: #f3efe5;
+    background: rgba(17, 17, 15, 0.3);
+    border: 2px solid rgba(243, 239, 229, 0.85);
+    outline: 1px solid rgba(243, 239, 229, 0.4);
+    outline-offset: 3px;
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+}
+
+/* --------------------------------------------------------------------------
+   B10. Mobile cho bold pass
+   -------------------------------------------------------------------------- */
+@media (max-width: 760px) {
+    .hero-slide-index {
+        top: 66px;
+        right: 16px;
+        bottom: auto;
+        -webkit-text-stroke-width: 1px;
+        font-size: 5.4rem;
+    }
+
+    #tab-home .feature-sheet::before,
+    #tab-home .feature-sheet::after {
+        display: none !important;
+    }
+
+    .vp-ticker { min-height: 40px; }
+    .vp-ticker-label { padding: 0 12px; font-size: 0.54rem; }
+    .vp-ticker-item { padding: 0 16px; font-size: 0.6rem; }
+
+    #catalog-heading::before {
+        width: 30px;
+        height: 8px;
+        margin-right: 12px;
+    }
+
+    #tab-home .weekly-trailer-media::before,
+    #tab-home .weekly-trailer-media::after { width: 11px; }
+
+    .detail-header-banner::before {
+        right: 16px;
+        bottom: 14px;
+        font-size: 0.5rem;
+    }
+}
+
+/* --------------------------------------------------------------------------
+   B11. Tôn trọng prefers-reduced-motion
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+    .vp-ticker-track,
+    #tab-home .feature-name > span::before {
+        animation: none !important;
+    }
+
+    .games-grid .card-header-img img,
+    .games-grid .game-card.catalog-row,
+    #tab-home .primary-action,
+    .games-grid .card-detail-btn {
+        transition: none !important;
+    }
+
+    .games-grid .game-card:hover .card-header-img img {
+        transform: none;
+    }
+}
+
+/* ==========================================================================
+   V3 HOME – Hero "phòng triển lãm sáng" + ARCHIVE WIRE nổi bắc cầu
+   (phương án được chọn: V1 + ticker nổi của V2)
+   ========================================================================== */
+
+/* ---- Desktop ---- */
+@media (min-width: 761px) {
+    #tab-home .hero-carousel {
+        min-height: clamp(600px, 74vh, 800px);
+        background: var(--ivory);
+        border-bottom: 1px solid var(--ink);
+    }
+
+    #tab-home .hero-carousel::before { display: none !important; }
+
+    #tab-home .hero-slide-bg {
+        position: absolute;
+        inset: auto;
+        top: 50%;
+        right: clamp(40px, 5.5vw, 110px);
+        width: min(47vw, 710px);
+        height: auto;
+        aspect-ratio: 16 / 10;
+        transform: translateY(-50%);
+        object-fit: cover;
+        border: 3px solid var(--ink);
+        box-shadow: 22px 22px 0 rgba(17, 17, 15, 0.16);
+        filter: none;
+    }
+
+    #tab-home .feature-sheet { color: var(--ink); }
+
+    #tab-home .feature-name h2 {
+        color: var(--ink);
+        font-family: var(--condensed);
+        font-size: clamp(2.6rem, 4.6vw, 4.9rem);
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        line-height: 0.92;
+        text-transform: uppercase;
+        text-shadow: none;
+    }
+
+    #tab-home .feature-name p { color: #5a564d; }
+    #tab-home .release-specs { border-top: 1px solid var(--ink); }
+    #tab-home .release-specs dt { color: #8a8478; }
+    #tab-home .release-specs dd { color: var(--ink); }
+    #tab-home .photo-note { color: #8a8478; }
+
+    .hero-slide-index {
+        right: auto;
+        left: clamp(28px, 3.6vw, 72px);
+        bottom: 18px;
+        -webkit-text-stroke-color: rgba(17, 17, 15, 0.13);
+    }
+
+    #tab-home .primary-action { box-shadow: 5px 5px 0 var(--ink); }
+    #tab-home .primary-action:hover { box-shadow: 7px 7px 0 var(--ink); }
+    #tab-home .primary-action:active { box-shadow: 2px 2px 0 var(--ink); }
+
+    #tab-home .hero-carousel .carousel-nav button {
+        color: var(--ink);
+        background: var(--paper-white);
+        border: 1px solid var(--ink);
+        opacity: 1;
+    }
+
+    #tab-home .hero-carousel .carousel-nav button:hover {
+        color: var(--paper-white);
+        background: var(--ink);
+        border-color: var(--ink);
+    }
+
+    #tab-home .hero-carousel .carousel-dot { background: rgba(17, 17, 15, 0.25); }
+    #tab-home .hero-carousel .carousel-dot:hover,
+    #tab-home .hero-carousel .carousel-dot.active { background: var(--vermilion); }
+
+    /* Ticker thu thành thanh nổi bắc cầu giữa hero và khu trailer */
+    .vp-ticker {
+        position: relative;
+        z-index: 6;
+        width: min(1240px, calc(100% - 56px));
+        margin: -23px auto 0;
+        border: 1px solid #33322c;
+        border-bottom: 3px solid var(--vermilion);
+        box-shadow: 0 16px 34px rgba(17, 17, 15, 0.28);
+    }
+}
+
+/* ---- Mobile: cùng ngôn ngữ "triển lãm sáng" ---- */
+@media (max-width: 760px) {
+    #tab-home .hero-carousel {
+        min-height: clamp(540px, 78svh, 640px);
+        background: var(--ivory);
+        border-bottom: 1px solid var(--ink);
+    }
+
+    #tab-home .hero-carousel::before { display: none !important; }
+
+    #tab-home .hero-slide-bg {
+        position: absolute;
+        inset: auto 16px auto 16px;
+        top: 18px;
+        width: calc(100% - 32px);
+        height: min(52vw, 240px);
+        object-fit: cover;
+        border: 3px solid var(--ink);
+        box-shadow: 10px 10px 0 rgba(17, 17, 15, 0.16);
+        filter: none;
+    }
+
+    #tab-home .feature-sheet { color: var(--ink); }
+
+    #tab-home .feature-name h2 {
+        color: var(--ink);
+        font-family: var(--condensed);
+        font-weight: 900;
+        letter-spacing: -0.01em;
+        text-transform: uppercase;
+        text-shadow: none;
+    }
+
+    #tab-home .feature-name p { color: #5a564d; }
+    #tab-home .release-specs { border-top: 1px solid rgba(17, 17, 15, 0.35); }
+    #tab-home .release-specs dt { color: #8a8478; }
+    #tab-home .release-specs dd { color: var(--ink); }
+
+    .hero-slide-index { display: none; }
+
+    #tab-home .primary-action { box-shadow: 4px 4px 0 var(--ink); }
+
+    #tab-home .hero-carousel .carousel-nav button {
+        color: var(--ink);
+        background: var(--paper-white);
+        border: 1px solid var(--ink);
+    }
+
+    #tab-home .hero-carousel .carousel-dots { top: auto; bottom: 14px; left: 18px; }
+    #tab-home .hero-carousel .carousel-dot { background: rgba(17, 17, 15, 0.25); }
+    #tab-home .hero-carousel .carousel-dot.active { background: var(--vermilion); }
+
+    .vp-ticker {
+        position: relative;
+        z-index: 6;
+        width: calc(100% - 28px);
+        margin: -18px auto 0;
+        border: 1px solid #33322c;
+        border-bottom: 3px solid var(--vermilion);
+        box-shadow: 0 12px 24px rgba(17, 17, 15, 0.26);
+    }
+}
+
+/* ---- Dải đầu khu trailer chuyển sáng (mọi kích thước màn hình) ---- */
+#tab-home .weekly-trailer { border-top: 0; }
+
+#tab-home .weekly-trailer-head {
+    color: var(--ink);
+    background: var(--ivory);
+    border-bottom: 1px solid var(--ink);
+}
+
+#tab-home .weekly-trailer-head span,
+#tab-home .weekly-trailer-head small,
+#tab-home .weekly-trailer-head time { color: var(--ink); }
+
+
+
+/* ==========================================================================
+   V5 MASTHEADS – Tiến độ / Đề xuất / Bộ sưu tập đồng bộ ngôn ngữ sáng
+   (trước đây là các khối đen lớn, lệch với hero "triển lãm sáng" mới)
+   ========================================================================== */
+.archive-masthead {
+    min-height: 0;
+    align-items: center;
+    color: var(--ink);
+    background: var(--ivory);
+    border-bottom: 3px solid var(--ink);
+}
+
+.archive-masthead.request-masthead,
+.archive-masthead.library-masthead {
+    border-bottom: 3px solid var(--ink);
+}
+
+/* Vòng tròn trang trí chuyển thành nét chìm trên nền giấy */
+.archive-masthead::after {
+    border-color: rgba(17, 17, 15, 0.12);
+    box-shadow:
+        0 0 0 46px transparent,
+        0 0 0 47px rgba(17, 17, 15, 0.07),
+        0 0 0 96px transparent,
+        0 0 0 97px rgba(17, 17, 15, 0.05);
+}
+
+/* Chỉ mục mục lục thành tem đỏ có chấm nhịp — giống kicker của hero */
+.archive-section-index {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    width: fit-content;
+    padding: 5px 12px;
+    color: #fffdf7;
+    background: var(--vermilion);
+    font-size: var(--label-min);
+    letter-spacing: 0.18em;
+}
+
+.archive-section-index::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #fffdf7;
+    animation: vp-live-dot 1.6s ease-in-out infinite;
+}
+
+.archive-masthead h1 {
+    color: var(--ink);
+    font-family: var(--condensed);
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+}
+
+.archive-masthead-copy p { color: #5a564d; }
+
+/* Bảng chỉ số thành khối đóng khung như bản in trưng bày */
+.archive-metrics {
+    background: var(--paper-white);
+    border: 1px solid var(--ink);
+    box-shadow: 12px 12px 0 rgba(17, 17, 15, 0.12);
+}
+
+.archive-metrics > div {
+    border-right-color: var(--rule);
+    border-bottom-color: var(--rule);
+}
+
+.archive-metrics dt { color: #8a8478; }
+.archive-metrics dd { color: var(--ink); }
+.archive-metrics dd small { color: #8a8478; }
+
+/* Thẻ mời đăng nhập ở tab Hồ sơ: đóng khung cùng ngôn ngữ */
+.profile-guest-card {
+    background: var(--paper-white);
+    border: 1px solid var(--ink);
+    border-left: 4px solid var(--vermilion);
+    box-shadow: 10px 10px 0 rgba(17, 17, 15, 0.1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .archive-section-index::before { animation: none !important; }
+}

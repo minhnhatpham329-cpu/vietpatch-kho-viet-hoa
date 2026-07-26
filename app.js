@@ -807,6 +807,37 @@ function renderCmsHomeContent() {
     renderCmsPosts();
 }
 
+// "Archive wire": dải tin chạy ngang giữa hero và khu trailer.
+function renderArchiveTicker() {
+    const track = document.getElementById("vp-ticker-track");
+    if (!track) return;
+
+    const allGames = getPublicGames();
+    if (!allGames.length) {
+        track.innerHTML = "";
+        return;
+    }
+
+    const latest = allGames
+        .slice()
+        .sort((a, b) => (new Date(b.date).getTime() || 0) - (new Date(a.date).getTime() || 0))
+        .slice(0, 8);
+    const readyCount = allGames.filter(game => Number(game.progress) >= 100).length;
+
+    const items = [
+        `KHO LƯU TRỮ VIETPATCH · ${allGames.length} HỒ SƠ · ${readyCount} ĐÃ KIỂM THỬ`,
+        ...latest.map(game => `${String(game.title).toUpperCase()} — PATCH ${game.version} · ${formatGameDate(game.date)}`),
+        "GỬI ĐỀ XUẤT GAME BẠN MUỐN VIỆT HÓA TẠI MỤC ĐỀ XUẤT"
+    ];
+
+    const sequence = items
+        .map(text => `<span class="vp-ticker-item">${escapeHtml(text)}</span>`)
+        .join('<span class="vp-ticker-sep" aria-hidden="true">◆</span>');
+    const group = `${sequence}<span class="vp-ticker-sep" aria-hidden="true">◆</span>`;
+    track.innerHTML = `<div class="vp-ticker-group">${group}</div><div class="vp-ticker-group" aria-hidden="true">${group}</div>`;
+    track.style.setProperty("--vp-ticker-duration", `${Math.max(30, Math.round(items.join(" ").length / 3.4))}s`);
+}
+
 function getCurrentIsoWeek(date = new Date()) {
     const utcDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
     const day = utcDate.getUTCDay() || 7;
@@ -1764,6 +1795,7 @@ function renderGamesGrid() {
             <dl class="catalog-specs">
                 <div><dt>Patch</dt><dd>${escapeHtml(game.version)}</dd></div>
                 <div><dt>Dung lượng</dt><dd>${escapeHtml(game.size)}</dd></div>
+                <div><dt>Giá</dt><dd class="spec-price${Number(game.price) > 0 ? "" : " is-free"}">${Number(game.price) > 0 ? escapeHtml(formatCurrency(game.price)) : "Miễn phí"}</dd></div>
             </dl>
             <div class="card-footer">
                 <button class="card-detail-btn" type="button" data-game-id="${escapeHtml(game.id)}">
@@ -1804,6 +1836,7 @@ function renderHeroSlider() {
         slide.className = `hero-slide ${index === 0 ? "active" : ""}`;
         slide.innerHTML = `
             <img class="hero-slide-bg" src="${escapeHtml(heroImage)}" alt="Ảnh bìa ${escapeHtml(game.title)}" onerror="this.src='${escapeHtml(getGameCoverImage(game))}'">
+            <span class="hero-slide-index" aria-hidden="true">${String(index + 1).padStart(2, "0")}</span>
             <span class="photo-note">CẬP NHẬT · ${escapeHtml(formatGameDate(game.date))}</span>
             <article class="feature-sheet">
                 <div class="feature-name">
@@ -3348,12 +3381,33 @@ document.addEventListener("DOMContentLoaded", async () => {
     // 2. Render Initial views
     renderGamesGrid();
     renderHeroSlider();
+    renderArchiveTicker();
     initWeeklyTrailerPlayer();
+
+    // Thanh tiến trình đọc trang (chỉ hiển thị, không ảnh hưởng bố cục)
+    const scrollProgress = document.getElementById("vp-scroll-progress");
+    if (scrollProgress) {
+        let scrollTicking = false;
+        const paintScrollProgress = () => {
+            scrollTicking = false;
+            const max = document.documentElement.scrollHeight - window.innerHeight;
+            scrollProgress.style.width = max > 0 ? `${Math.min(100, (window.scrollY / max) * 100)}%` : "0%";
+        };
+        window.addEventListener("scroll", () => {
+            if (!scrollTicking) {
+                scrollTicking = true;
+                requestAnimationFrame(paintScrollProgress);
+            }
+        }, { passive: true });
+        window.addEventListener("resize", paintScrollProgress);
+        paintScrollProgress();
+    }
 
     cmsReady
         .then(() => {
             renderGamesGrid();
             renderHeroSlider();
+            renderArchiveTicker();
         })
         .catch(() => {
             showToast("Đang dùng dữ liệu lưu sẵn vì chưa kết nối được máy chủ nội dung.", "info");

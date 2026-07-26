@@ -48,8 +48,10 @@
     <link rel="stylesheet" href="collection.css?v=20260725-mobile4">
     <link rel="stylesheet" href="motion.css?v=20260724-v1">
     <link rel="stylesheet" href="home.css?v=20260725-home11">
+    <link rel="stylesheet" href="refine.css?v=20260726-tabs1">
 </head>
 <body>
+    <div class="vp-scroll-progress" id="vp-scroll-progress" aria-hidden="true"></div>
     <div class="brand-entry" id="brand-entry" hidden aria-hidden="true">
         <div class="brand-entry-grid" aria-hidden="true"></div>
         <div class="brand-entry-content" role="status" aria-live="polite">
@@ -192,6 +194,14 @@
                     <button class="nav-btn next"><i class="fa-solid fa-chevron-right"></i></button>
                 </div>
                 <div class="carousel-dots" id="carousel-dots-container"></div>
+            </div>
+
+            <!-- Archive wire: dải tin chạy giữa hero và trailer -->
+            <div class="vp-ticker" id="vp-ticker">
+                <span class="vp-ticker-label" aria-hidden="true"><i class="fa-solid fa-bolt"></i> ARCHIVE WIRE</span>
+                <div class="vp-ticker-viewport" aria-hidden="true">
+                    <div class="vp-ticker-track" id="vp-ticker-track"></div>
+                </div>
             </div>
 
             <!-- Live catalogue summary -->
@@ -1031,7 +1041,7 @@
     <!-- Custom App Script -->
     <script src="cms-public-seed.js?v=20260724-secure1"></script>
     <script src="cms-shared.js?v=20260726-requests1"></script>
-    <script src="app.js?v=20260726-requests1"></script>
+    <script src="app.js?v=20260726-home3"></script>
     <script src="motion.js?v=20260724-v1"></script>
     <script src="brand-entry.js?v=20260725-home1"></script>
 </body>

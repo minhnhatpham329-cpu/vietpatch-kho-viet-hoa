@@ -1572,9 +1572,18 @@ function updateUIForUserSession() {
     const ddUsername = document.getElementById("dd-username");
     const ddEmail = document.getElementById("dd-email");
     
+    const librarySize = userState.ownedGames.length;
     const libraryCountBadges = document.querySelectorAll(".library-count");
     libraryCountBadges.forEach(b => {
-        b.textContent = userState.ownedGames.length;
+        b.textContent = librarySize;
+    });
+
+    document.querySelectorAll(".library-index-count").forEach(label => {
+        label.textContent = `${String(librarySize).padStart(2, "0")} HỒ SƠ`;
+    });
+
+    document.querySelectorAll(".library-access-status").forEach(label => {
+        label.textContent = userState.loggedIn ? "Theo tài khoản" : "Khách";
     });
     
     if (userState.loggedIn) {

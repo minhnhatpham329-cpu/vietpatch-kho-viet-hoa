@@ -521,8 +521,8 @@ let authSecurityConfig = {
     turnstile: { enabled: false, siteKey: "" }
 };
 let turnstileScriptPromise = null;
-const turnstileWidgets = { login: null, register: null };
-const turnstileTokens = { login: "", register: "" };
+const turnstileWidgets = { login: null, register: null, proposal: null };
+const turnstileTokens = { login: "", register: "", proposal: "" };
 
 // User Profile System (server-backed, sensitive state stays in memory only)
 let userState = {
@@ -549,6 +549,8 @@ async function initializeCmsContent() {
     applyCmsCustomGames(cmsState.customGames);
     applyCmsGameOverrides(cmsState.gameOverrides);
     renderCmsHomeContent();
+    loadCommunityRequests();
+    renderRequestsList();
 }
 
 function getPublicGames() {
@@ -1215,40 +1217,44 @@ function normalizePublicRequest(item, fallback = {}) {
         notes: String(item?.notes || fallback.notes || "").trim(),
         votes: Math.max(0, Math.round(Number(item?.votes ?? fallback.votes) || 0)),
         voted: Boolean(item?.voted ?? fallback.voted),
-        published: item?.published !== false,
-        userCreated: Boolean(item?.userCreated || fallback.userCreated)
+        published: item?.published !== false
     };
 }
 
 function loadCommunityRequests() {
-    const cmsRequests = Array.isArray(cmsState?.requests) && cmsState.requests.length
+    // Mảng rỗng là trạng thái hợp lệ: Admin có thể xóa toàn bộ đề xuất.
+    const cmsRequests = Array.isArray(cmsState?.requests)
         ? cmsState.requests
         : initialRequests;
-    let savedRequests = [];
+    let voteState = {};
 
     try {
-        savedRequests = JSON.parse(localStorage.getItem("vietpatch_requests") || "[]");
-    } catch (error) {
-        console.error("Failed to parse requests, loading CMS defaults.", error);
+        const stored = JSON.parse(localStorage.getItem("vietpatch_request_votes") || "{}");
+        voteState = stored && typeof stored === "object" && !Array.isArray(stored) ? stored : {};
+    } catch {
+        voteState = {};
     }
 
-    const savedById = new Map(savedRequests.map(item => [String(item.id), item]));
-    const cmsIds = new Set(cmsRequests.map(item => String(item.id)));
-    const merged = cmsRequests
-        .map(item => normalizePublicRequest(item, savedById.get(String(item.id))))
+    // Trước đây đề xuất do khách gửi chỉ nằm trong localStorage nên Admin xóa xong vẫn quay lại.
+    // Dữ liệu công khai giờ chỉ lấy từ CMS đã xuất bản; localStorage chỉ giữ dấu đã vote của thiết bị.
+    localStorage.removeItem("vietpatch_requests");
+    requestsList = cmsRequests
+        .map(item => {
+            const request = normalizePublicRequest(item);
+            request.voted = Boolean(voteState[request.id]);
+            if (request.voted) request.votes += 1;
+            return request;
+        })
         .filter(item => item.published);
-
-    savedRequests
-        .filter(item => item.userCreated && !cmsIds.has(String(item.id)))
-        .map(item => normalizePublicRequest(item))
-        .forEach(item => merged.push(item));
-
-    requestsList = merged;
-    localStorage.setItem("vietpatch_requests", JSON.stringify(requestsList));
 }
 
 function saveCommunityRequests() {
-    localStorage.setItem("vietpatch_requests", JSON.stringify(requestsList));
+    const voteState = Object.fromEntries(
+        requestsList
+            .filter(item => item.voted)
+            .map(item => [String(item.id), true])
+    );
+    localStorage.setItem("vietpatch_request_votes", JSON.stringify(voteState));
 }
 
 // ==========================================================================
@@ -1379,6 +1385,10 @@ async function apiRequest(path, options = {}) {
             HUMAN_VERIFICATION_FAILED: "Xác minh chống bot không hợp lệ. Vui lòng thử lại.",
             HUMAN_VERIFICATION_REQUIRED: "Vui lòng hoàn tất bước xác minh chống bot.",
             HUMAN_VERIFICATION_UNAVAILABLE: "Dịch vụ xác minh đang tạm gián đoạn. Vui lòng thử lại.",
+            INVALID_REQUEST_TITLE: "Hãy nhập tên game cần đề xuất.",
+            INVALID_REQUEST_IMAGE: "Ảnh game chưa hợp lệ hoặc quá nặng.",
+            INVALID_REQUEST_LINK: "Link cửa hàng chính thức chưa hợp lệ.",
+            REQUEST_QUEUE_FULL: "Hàng chờ đề xuất đang đầy. Vui lòng thử lại sau.",
             TOO_MANY_REQUESTS: "Thiết bị này gửi quá nhiều yêu cầu. Vui lòng thử lại sau.",
             TOO_MANY_LOGIN_ATTEMPTS: "Bạn đã thử đăng nhập quá nhiều lần. Hãy chờ 15 phút.",
             USE_FREE_UNLOCK: "Bản Việt hóa này đang miễn phí, hãy thêm thẳng vào thư viện."
@@ -2871,6 +2881,7 @@ async function initializeAuthSecurity() {
             if (document.getElementById("auth-modal")?.classList.contains("active")) {
                 await ensureTurnstileWidget(activeAuthMode());
             }
+            await ensureTurnstileWidget("proposal");
         } catch {
             showToast("Không tải được lớp xác minh chống bot. Vui lòng tải lại trang.", "error");
         }
@@ -3697,17 +3708,48 @@ document.addEventListener("DOMContentLoaded", async () => {
     // 14. Translation Request Submission
     const reqForm = document.getElementById("req-form");
     if (reqForm) {
-        reqForm.addEventListener("submit", (e) => {
+        const reqImageInput = document.getElementById("req-image-file");
+        const reqImageStatus = document.getElementById("req-image-status");
+        const reqSubmit = reqForm.querySelector('button[type="submit"]');
+
+        reqImageInput?.addEventListener("change", async event => {
+            const file = event.currentTarget.files?.[0];
+            if (!file) return;
+            const logoField = document.getElementById("req-logo");
+            if (!logoField || !window.VietPatchCMS?.prepareImageUpload) return;
+
+            try {
+                if (reqImageStatus) reqImageStatus.textContent = "Đang nén ảnh để đồng bộ...";
+                const prepared = await window.VietPatchCMS.prepareImageUpload(file);
+                logoField.value = prepared.dataUrl;
+                if (reqImageStatus) {
+                    reqImageStatus.textContent = `Ảnh đã sẵn sàng (${Math.max(1, Math.round(prepared.bytes / 1024))} KB).`;
+                }
+                showToast("Đã gắn ảnh game vào đề xuất.", "success");
+            } catch (error) {
+                if (reqImageStatus) reqImageStatus.textContent = "Chưa thể dùng ảnh này.";
+                showToast(error.message || "Không thể chuẩn bị ảnh để tải lên.", "error");
+            } finally {
+                event.currentTarget.value = "";
+            }
+        });
+
+        reqForm.addEventListener("submit", async (e) => {
             e.preventDefault();
             
-            const title = document.getElementById("req-title").value;
+            const title = document.getElementById("req-title").value.trim();
             const engine = document.getElementById("req-engine").value;
             const platform = document.getElementById("req-platform").value;
-            const link = document.getElementById("req-link").value;
+            const link = document.getElementById("req-link").value.trim();
             const logo = document.getElementById("req-logo").value;
-            const notes = document.getElementById("req-notes").value;
+            const notes = document.getElementById("req-notes").value.trim();
             const safeLogo = window.VietPatchCMS?.safeAssetUrl(logo) || "";
             const safeLink = window.VietPatchCMS?.safeUrl(link) || "";
+
+            if (!title) {
+                showToast("Hãy nhập tên game cần đề xuất.", "error");
+                return;
+            }
 
             if (logo.trim() && !safeLogo) {
                 showToast("Link logo/ảnh game chưa hợp lệ.", "error");
@@ -3718,31 +3760,47 @@ document.addEventListener("DOMContentLoaded", async () => {
                 showToast("Đường dẫn cửa hàng chưa hợp lệ.", "error");
                 return;
             }
-            
-            const newRequest = {
-                id: window.VietPatchCMS?.createId("request") || `request-${Date.now()}`,
-                title: title,
-                logoUrl: safeLogo,
-                engine: engine,
-                platform: platform,
-                link: safeLink,
-                notes: notes,
-                votes: 1,
-                voted: true,
-                published: true,
-                userCreated: true
-            };
-            
-            requestsList.unshift(newRequest);
-            saveCommunityRequests();
 
-            requestQuery = "";
-            const requestSearch = document.getElementById("request-search");
-            if (requestSearch) requestSearch.value = "";
-            
-            showToast(`Đã gửi yêu cầu dịch game ${title} thành công!`, "success");
-            reqForm.reset();
-            renderRequestsList();
+            try {
+                await authSecurityReady;
+                await ensureTurnstileWidget("proposal");
+                const turnstileToken = currentTurnstileToken("proposal");
+                if (authSecurityConfig.turnstile.enabled && !turnstileToken) {
+                    showToast("Hãy hoàn tất bước xác minh chống bot trước khi gửi.", "error");
+                    return;
+                }
+
+                if (reqSubmit) {
+                    reqSubmit.disabled = true;
+                    reqSubmit.innerHTML = `Đang gửi <i class="fa-solid fa-spinner fa-spin"></i>`;
+                }
+                await apiRequest("/api/vietpatch/requests", {
+                    method: "POST",
+                    body: {
+                        title,
+                        engine,
+                        platform,
+                        link: safeLink,
+                        logoUrl: safeLogo,
+                        notes,
+                        turnstileToken
+                    }
+                });
+
+                reqForm.reset();
+                document.getElementById("req-logo").value = "";
+                if (reqImageStatus) reqImageStatus.textContent = "Chưa chọn ảnh game.";
+                resetTurnstile("proposal");
+                showToast(`Đã gửi “${title}” vào hàng chờ duyệt của VietPatch.`, "success");
+            } catch (error) {
+                showToast(error.message || "Chưa gửi được đề xuất. Vui lòng thử lại.", "error");
+                resetTurnstile("proposal");
+            } finally {
+                if (reqSubmit) {
+                    reqSubmit.disabled = false;
+                    reqSubmit.innerHTML = `Gửi đề xuất <i class="fa-solid fa-arrow-right"></i>`;
+                }
+            }
         });
     }
 

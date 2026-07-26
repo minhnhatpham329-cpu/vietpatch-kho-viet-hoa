@@ -573,6 +573,12 @@
                                 <input type="url" id="req-link" placeholder="https://store.steampowered.com/app/...">
                             </div>
 
+                            <div class="form-group">
+                                <label for="req-image-file">Ảnh game <small>(không bắt buộc)</small></label>
+                                <input type="file" id="req-image-file" accept="image/png,image/jpeg,image/webp,image/gif">
+                                <small id="req-image-status">Chưa chọn ảnh game. Ảnh sẽ tự nén trước khi đồng bộ.</small>
+                            </div>
+
                             <input type="hidden" id="req-logo" value="">
 
                             <div class="form-group">
@@ -580,6 +586,7 @@
                                 <textarea id="req-notes" rows="4" placeholder="Điểm nào khiến bản Việt hóa thật sự hữu ích?"></textarea>
                             </div>
 
+                            <div class="turnstile-slot" id="proposal-turnstile" hidden aria-label="Xác minh người gửi đề xuất"></div>
                             <button type="submit" class="submit-btn">Gửi đề xuất <i class="fa-solid fa-arrow-right"></i></button>
                         </form>
                     </div>
@@ -1023,8 +1030,8 @@
 
     <!-- Custom App Script -->
     <script src="cms-public-seed.js?v=20260724-secure1"></script>
-    <script src="cms-shared.js?v=20260724-trailer1"></script>
-    <script src="app.js?v=20260725-home2"></script>
+    <script src="cms-shared.js?v=20260726-requests1"></script>
+    <script src="app.js?v=20260726-requests1"></script>
     <script src="motion.js?v=20260724-v1"></script>
     <script src="brand-entry.js?v=20260725-home1"></script>
 </body>

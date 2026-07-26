@@ -247,6 +247,80 @@
         return safeUrl(candidate);
     }
 
+    function readAsDataUrl(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.addEventListener("load", () => resolve(String(reader.result || "")), { once: true });
+            reader.addEventListener("error", () => reject(new Error("Không đọc được ảnh đã chọn.")), { once: true });
+            reader.readAsDataURL(file);
+        });
+    }
+
+    function canvasToBlob(canvas, type, quality) {
+        return new Promise((resolve, reject) => {
+            canvas.toBlob(blob => {
+                if (blob) resolve(blob);
+                else reject(new Error("Trình duyệt không thể nén ảnh này."));
+            }, type, quality);
+        });
+    }
+
+    async function prepareImageUpload(file, options = {}) {
+        const maxInputBytes = Math.max(256 * 1024, Number(options.maxInputBytes) || 8 * 1024 * 1024);
+        const targetBytes = Math.max(120 * 1024, Number(options.targetBytes) || 650 * 1024);
+        const maxDimension = Math.max(480, Number(options.maxDimension) || 1600);
+        const type = String(file?.type || "").toLowerCase();
+
+        if (!file || !/^image\/(png|jpe?g|webp|gif)$/i.test(type)) {
+            throw new Error("Chỉ hỗ trợ ảnh PNG, JPG, WebP hoặc GIF.");
+        }
+        if (file.size > maxInputBytes) {
+            throw new Error("Ảnh gốc quá lớn. Hãy chọn ảnh dưới 8MB.");
+        }
+
+        // GIF cần giữ nguyên animation, nên chỉ nhận file nhỏ thay vì ép qua canvas.
+        if (type === "image/gif") {
+            if (file.size > targetBytes) {
+                throw new Error("GIF cần dưới 650KB để đồng bộ ổn định. Hãy dùng JPG hoặc WebP nếu ảnh lớn hơn.");
+            }
+            return { dataUrl: await readAsDataUrl(file), bytes: file.size, compressed: false };
+        }
+
+        const objectUrl = URL.createObjectURL(file);
+        try {
+            const image = await new Promise((resolve, reject) => {
+                const element = new Image();
+                element.onload = () => resolve(element);
+                element.onerror = () => reject(new Error("Không thể đọc nội dung ảnh này."));
+                element.src = objectUrl;
+            });
+            const longestEdge = Math.max(image.naturalWidth || image.width, image.naturalHeight || image.height, 1);
+            const scale = Math.min(1, maxDimension / longestEdge);
+            const width = Math.max(1, Math.round((image.naturalWidth || image.width) * scale));
+            const height = Math.max(1, Math.round((image.naturalHeight || image.height) * scale));
+            const canvas = document.createElement("canvas");
+            canvas.width = width;
+            canvas.height = height;
+            const context = canvas.getContext("2d", { alpha: false });
+            if (!context) throw new Error("Không thể chuẩn bị ảnh để tải lên.");
+            context.fillStyle = "#121212";
+            context.fillRect(0, 0, width, height);
+            context.drawImage(image, 0, 0, width, height);
+
+            let blob = null;
+            for (const quality of [0.88, 0.78, 0.68, 0.58, 0.5]) {
+                blob = await canvasToBlob(canvas, "image/webp", quality);
+                if (blob.size <= targetBytes) break;
+            }
+            if (!blob || blob.size > targetBytes) {
+                throw new Error("Ảnh vẫn quá nặng sau khi nén. Hãy chọn ảnh đơn giản hoặc có kích thước nhỏ hơn.");
+            }
+            return { dataUrl: await readAsDataUrl(blob), bytes: blob.size, compressed: true };
+        } finally {
+            URL.revokeObjectURL(objectUrl);
+        }
+    }
+
     function normalizeTags(value) {
         const source = Array.isArray(value)
             ? value
@@ -575,6 +649,7 @@
         normalize,
         safeUrl,
         safeAssetUrl,
+        prepareImageUpload,
         normalizeTags,
         normalizeScreenshots,
         normalizeCredits,

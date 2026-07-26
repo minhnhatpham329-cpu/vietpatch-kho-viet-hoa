@@ -418,7 +418,7 @@
                 <div class="manager-item ${item.id === selectedRequestId ? "active" : ""}">
                     <button class="manager-item-main" type="button" data-edit-request="${escapeHtml(item.id)}">
                         <strong>${escapeHtml(item.title)}</strong>
-                        <span><i class="status-dot ${item.published ? "" : "off"}"></i> ${escapeHtml(item.engine)} / ${escapeHtml(item.platform)} / ${Number(item.votes) || 0} vote</span>
+                        <span><i class="status-dot ${item.published ? "" : "off"}"></i> ${item.published ? "CÔNG KHAI" : "CHỜ DUYỆT"} · ${escapeHtml(item.engine)} / ${escapeHtml(item.platform)} / ${Number(item.votes) || 0} vote</span>
                     </button>
                     <div class="manager-item-actions">
                         <button type="button" data-move-request="-1" data-id="${escapeHtml(item.id)}" title="Đưa lên" ${index === 0 ? "disabled" : ""}><i class="fa-solid fa-arrow-up"></i></button>
@@ -430,6 +430,30 @@
             : `<p>Chưa có yêu cầu. Nhấn dấu + để thêm game vào bảng bình chọn.</p>`;
 
         fillRequestForm(state.requests.find(item => item.id === selectedRequestId));
+    }
+
+    async function refreshRequestsFromServer() {
+        await saveQueue;
+        const button = byId("refresh-request-btn");
+        const previousSelection = selectedRequestId;
+        if (button) button.disabled = true;
+        setSaveState("Đang tải đề xuất mới", true);
+        try {
+            state = await CMS.loadRemote({ scope: "draft", strict: true });
+            selectedRequestId = state.requests.some(item => item.id === previousSelection)
+                ? previousSelection
+                : (state.requests[0]?.id || "");
+            renderRequestManager();
+            renderDashboard();
+            renderBackupReport();
+            setSaveState("Bản nháp đã đồng bộ", false);
+            showToast("Đã tải danh sách đề xuất mới từ máy chủ.");
+        } catch (error) {
+            setSaveState("Không tải được đề xuất", false, true);
+            showToast(`Không tải được đề xuất: ${error.message}`, "error");
+        } finally {
+            if (button) button.disabled = false;
+        }
     }
 
     function fillRequestForm(item) {
@@ -444,6 +468,12 @@
         form.elements.link.value = item?.link || "";
         form.elements.notes.value = item?.notes || "";
         form.elements.published.checked = item ? item.published : true;
+        const imageInput = byId("request-image-file");
+        const imageStatus = byId("request-image-status");
+        if (imageInput) imageInput.value = "";
+        if (imageStatus) imageStatus.textContent = item?.logoUrl
+            ? "Đã có ảnh. Chọn ảnh mới nếu muốn thay thế."
+            : "Ảnh sẽ tự nén trước khi lưu để đồng bộ ổn định.";
         byId("request-editor-title").textContent = item ? "Chỉnh sửa yêu cầu" : "Thêm yêu cầu";
         updateRequestPreview();
     }
@@ -870,7 +900,27 @@
             renderRequestManager();
         });
 
+        byId("refresh-request-btn").addEventListener("click", refreshRequestsFromServer);
+
         byId("request-form").addEventListener("input", updateRequestPreview);
+        byId("request-image-file").addEventListener("change", async event => {
+            const file = event.currentTarget.files?.[0];
+            if (!file) return;
+            const status = byId("request-image-status");
+            try {
+                if (status) status.textContent = "Đang nén ảnh để lưu...";
+                const prepared = await CMS.prepareImageUpload(file);
+                byId("request-form").elements.logoUrl.value = prepared.dataUrl;
+                updateRequestPreview();
+                if (status) status.textContent = `Đã gắn ảnh (${Math.max(1, Math.round(prepared.bytes / 1024))} KB).`;
+                showToast("Ảnh game đã sẵn sàng để lưu.");
+            } catch (error) {
+                if (status) status.textContent = "Chưa thể dùng ảnh này.";
+                showToast(error.message || "Không thể chuẩn bị ảnh để tải lên.", "error");
+            } finally {
+                event.currentTarget.value = "";
+            }
+        });
         byId("request-form").addEventListener("submit", event => {
             event.preventDefault();
             const form = event.currentTarget;
@@ -1018,26 +1068,16 @@
             const file = event.currentTarget.files?.[0];
             if (!file) return;
 
-            if (!file.type.startsWith("image/")) {
-                showToast("Tệp upload phải là ảnh.", "error");
-                event.currentTarget.value = "";
-                return;
-            }
-
-            if (file.size > 2 * 1024 * 1024) {
-                showToast("Ảnh hơi nặng. Hãy dùng ảnh dưới 2MB để lưu ổn định hơn.", "error");
-                event.currentTarget.value = "";
-                return;
-            }
-
-            const reader = new FileReader();
-            reader.addEventListener("load", () => {
-                byId("patch-form").elements.imageUrl.value = reader.result;
+            CMS.prepareImageUpload(file)
+                .then(prepared => {
+                byId("patch-form").elements.imageUrl.value = prepared.dataUrl;
                 updatePatchPreview();
-                showToast("Đã gắn ảnh vào patch editor.");
-            });
-            reader.addEventListener("error", () => showToast("Không đọc được ảnh này.", "error"));
-            reader.readAsDataURL(file);
+                showToast(`Đã gắn ảnh đã nén (${Math.max(1, Math.round(prepared.bytes / 1024))} KB) vào patch editor.`);
+                })
+                .catch(error => showToast(error.message || "Không đọc được ảnh này.", "error"))
+                .finally(() => {
+                    event.currentTarget.value = "";
+                });
         });
 
         byId("patch-form").addEventListener("submit", event => {

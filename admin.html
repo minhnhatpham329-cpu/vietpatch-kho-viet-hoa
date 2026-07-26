@@ -239,6 +239,9 @@
                                 <span>COMMUNITY BOARD</span>
                                 <h2>Danh sách yêu cầu</h2>
                             </div>
+                            <button class="icon-command" id="refresh-request-btn" type="button" title="Tải đề xuất mới từ máy chủ">
+                                <i class="fa-solid fa-rotate"></i>
+                            </button>
                             <button class="icon-command" id="new-request-btn" type="button" title="Thêm yêu cầu">
                                 <i class="fa-solid fa-plus"></i>
                             </button>
@@ -271,7 +274,12 @@
                             <label class="field field-wide">
                                 <span>Logo / ảnh game</span>
                                 <input name="logoUrl" placeholder="https://.../header.jpg">
-                                <small>Dán link ảnh trực tiếp. Nếu để trống, web sẽ tự hiện chữ viết tắt.</small>
+                                <small>Dán link ảnh trực tiếp hoặc upload ảnh bên dưới. Nếu để trống, web sẽ tự hiện chữ viết tắt.</small>
+                            </label>
+                            <label class="field field-wide">
+                                <span>Upload ảnh từ máy</span>
+                                <input type="file" id="request-image-file" accept="image/png,image/jpeg,image/webp,image/gif">
+                                <small id="request-image-status">Ảnh sẽ tự nén trước khi lưu để đồng bộ ổn định.</small>
                             </label>
                             <label class="field">
                                 <span>Game engine</span>
@@ -587,7 +595,7 @@
     <div class="studio-toast-wrap" id="studio-toast-wrap"></div>
 
     <script src="cms-public-seed.js?v=20260724-secure1"></script>
-    <script src="cms-shared.js?v=20260724-trailer1"></script>
-    <script src="admin.js?v=20260724-trailer1"></script>
+    <script src="cms-shared.js?v=20260726-requests1"></script>
+    <script src="admin.js?v=20260726-requests1"></script>
 </body>
 </html>

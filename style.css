@@ -882,6 +882,22 @@ img {
     font-weight: 800;
 }
 
+.form-group small,
+.turnstile-slot {
+    color: var(--text-secondary);
+    font-size: 0.82rem;
+    line-height: 1.45;
+}
+
+.turnstile-slot {
+    min-height: 0;
+    margin: 0.15rem 0 0.8rem;
+}
+
+.turnstile-slot[hidden] {
+    display: none;
+}
+
 .form-row {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));

@@ -1841,6 +1841,12 @@ function renderHeroSlider() {
     featuredGames.forEach((game, index) => {
         const heroImage = getGameHeroImage(game);
         const releaseState = getGameReleaseState(game);
+        const titleLength = Array.from(String(game.title || "")).length;
+        const titleSizeClass = titleLength >= 34
+            ? "is-long"
+            : titleLength >= 23
+                ? "is-medium"
+                : "is-short";
         const slide = document.createElement("div");
         slide.className = `hero-slide ${index === 0 ? "active" : ""}`;
         slide.innerHTML = `
@@ -1850,7 +1856,7 @@ function renderHeroSlider() {
             <article class="feature-sheet">
                 <div class="feature-name">
                     <span>Cập nhật mới</span>
-                    <h2>${escapeHtml(game.title)}</h2>
+                    <h2 class="${titleSizeClass}">${escapeHtml(game.title)}</h2>
                     <p>${escapeHtml(game.developer)} · ${escapeHtml(game.engine)}</p>
                 </div>
                 <dl class="release-specs">

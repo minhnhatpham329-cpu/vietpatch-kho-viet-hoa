@@ -978,6 +978,111 @@ html::after {
 .archive-metrics dd { color: var(--ink); }
 .archive-metrics dd small { color: #8a8478; }
 
+/* ==========================================================================
+   V6 TYPOGRAPHY – cân tiêu đề theo độ dài, tránh dòng mồ côi
+   ========================================================================== */
+#tab-home .feature-name h2,
+.archive-masthead h1,
+.catalog-heading h2,
+.weekly-trailer-caption h1 {
+    hyphens: none;
+    overflow-wrap: normal;
+    word-break: normal;
+    text-wrap: balance;
+}
+
+.archive-masthead-copy {
+    min-width: 0;
+}
+
+.archive-masthead h1 {
+    max-width: 100%;
+    font-size: clamp(2.7rem, 3.9vw, 4.3rem);
+    letter-spacing: -0.035em;
+    line-height: 0.98;
+}
+
+.archive-metrics dd small {
+    display: inline-block;
+    margin-left: 0.55em;
+    line-height: 1.2;
+    vertical-align: 0.12em;
+}
+
+.archive-metrics dd > small:only-child {
+    margin-left: 0;
+}
+
+.archive-metrics .metric-wide dd {
+    overflow: visible;
+    font-size: clamp(1.35rem, 2.2vw, 2.35rem);
+    line-height: 1.04;
+    text-overflow: clip;
+    white-space: normal;
+    text-wrap: balance;
+}
+
+.catalog-heading h2 {
+    max-width: 18ch;
+    font-size: clamp(2.2rem, 3.8vw, 4rem);
+    letter-spacing: -0.045em;
+    line-height: 1;
+}
+
+.weekly-trailer-caption h1 {
+    max-width: 24ch;
+    font-size: clamp(2rem, 2.7vw, 3.15rem);
+    line-height: 1.02;
+}
+
+@media (min-width: 761px) {
+    #tab-home .feature-name h2 {
+        max-width: 14ch;
+        font-size: clamp(2.35rem, 3.8vw, 4.2rem);
+        letter-spacing: -0.025em;
+        line-height: 0.94;
+    }
+
+    #tab-home .feature-name h2.is-medium {
+        max-width: 16ch;
+        font-size: clamp(2.15rem, 3.25vw, 3.65rem);
+    }
+
+    #tab-home .feature-name h2.is-long {
+        max-width: 18ch;
+        font-size: clamp(1.9rem, 2.75vw, 3.1rem);
+        line-height: 0.98;
+    }
+}
+
+@media (max-width: 760px) {
+    #tab-home .feature-name h2,
+    #tab-home .feature-name h2.is-medium,
+    #tab-home .feature-name h2.is-long {
+        max-width: 100%;
+        font-size: clamp(1.65rem, 7.4vw, 2.2rem);
+        letter-spacing: -0.02em;
+        line-height: 1;
+    }
+
+    .archive-masthead h1 {
+        max-width: 100%;
+        font-size: clamp(2.05rem, 8.8vw, 2.75rem);
+        line-height: 0.98;
+    }
+
+    .catalog-heading h2 {
+        max-width: 100%;
+        font-size: clamp(2rem, 9.2vw, 2.65rem);
+        letter-spacing: -0.035em;
+    }
+
+    .weekly-trailer-caption h1 {
+        max-width: 100%;
+        font-size: clamp(1.85rem, 8.2vw, 2.5rem);
+    }
+}
+
 /* Thẻ mời đăng nhập ở tab Hồ sơ: đóng khung cùng ngôn ngữ */
 .profile-guest-card {
     background: var(--paper-white);

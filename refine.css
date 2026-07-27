@@ -997,20 +997,28 @@ html::after {
 
 .archive-masthead h1 {
     max-width: 100%;
-    font-size: clamp(2.7rem, 3.9vw, 4.3rem);
-    letter-spacing: -0.035em;
-    line-height: 0.98;
+    font-family: var(--sans);
+    font-size: clamp(2.35rem, 3.2vw, 3.55rem);
+    font-weight: 800;
+    letter-spacing: -0.045em;
+    line-height: 1.08;
+    text-transform: none;
+}
+
+.archive-metrics dd {
+    display: flex;
+    align-items: baseline;
+    gap: 0.3em;
 }
 
 .archive-metrics dd small {
     display: inline-block;
-    margin-left: 0.55em;
-    line-height: 1.2;
-    vertical-align: 0.12em;
-}
-
-.archive-metrics dd > small:only-child {
     margin-left: 0;
+    font-family: var(--sans);
+    font-size: 0.72rem;
+    font-weight: 600;
+    line-height: 1.2;
+    vertical-align: baseline;
 }
 
 .archive-metrics .metric-wide dd {
@@ -1024,34 +1032,44 @@ html::after {
 
 .catalog-heading h2 {
     max-width: 18ch;
-    font-size: clamp(2.2rem, 3.8vw, 4rem);
-    letter-spacing: -0.045em;
-    line-height: 1;
+    font-family: var(--sans);
+    font-size: clamp(2.15rem, 3.2vw, 3.45rem);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1.08;
+    text-transform: none;
 }
 
 .weekly-trailer-caption h1 {
     max-width: 24ch;
-    font-size: clamp(2rem, 2.7vw, 3.15rem);
-    line-height: 1.02;
+    font-family: var(--sans);
+    font-size: clamp(1.9rem, 2.5vw, 2.8rem);
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    line-height: 1.08;
+    text-transform: none;
 }
 
 @media (min-width: 761px) {
     #tab-home .feature-name h2 {
-        max-width: 14ch;
-        font-size: clamp(2.35rem, 3.8vw, 4.2rem);
-        letter-spacing: -0.025em;
-        line-height: 0.94;
+        max-width: 16ch;
+        font-family: var(--sans);
+        font-size: clamp(2.2rem, 3.2vw, 3.45rem);
+        font-weight: 800;
+        letter-spacing: -0.045em;
+        line-height: 1.05;
+        text-transform: none;
     }
 
     #tab-home .feature-name h2.is-medium {
-        max-width: 16ch;
-        font-size: clamp(2.15rem, 3.25vw, 3.65rem);
+        max-width: 18ch;
+        font-size: clamp(2rem, 2.85vw, 3.05rem);
     }
 
     #tab-home .feature-name h2.is-long {
-        max-width: 18ch;
-        font-size: clamp(1.9rem, 2.75vw, 3.1rem);
-        line-height: 0.98;
+        max-width: 20ch;
+        font-size: clamp(1.75rem, 2.45vw, 2.65rem);
+        line-height: 1.08;
     }
 }
 
@@ -1060,26 +1078,29 @@ html::after {
     #tab-home .feature-name h2.is-medium,
     #tab-home .feature-name h2.is-long {
         max-width: 100%;
-        font-size: clamp(1.65rem, 7.4vw, 2.2rem);
-        letter-spacing: -0.02em;
-        line-height: 1;
+        font-family: var(--sans);
+        font-size: clamp(1.55rem, 6.8vw, 2rem);
+        font-weight: 800;
+        letter-spacing: -0.035em;
+        line-height: 1.08;
+        text-transform: none;
     }
 
     .archive-masthead h1 {
         max-width: 100%;
-        font-size: clamp(2.05rem, 8.8vw, 2.75rem);
-        line-height: 0.98;
+        font-size: clamp(1.9rem, 8vw, 2.45rem);
+        line-height: 1.08;
     }
 
     .catalog-heading h2 {
         max-width: 100%;
-        font-size: clamp(2rem, 9.2vw, 2.65rem);
-        letter-spacing: -0.035em;
+        font-size: clamp(1.9rem, 8.5vw, 2.45rem);
+        letter-spacing: -0.04em;
     }
 
     .weekly-trailer-caption h1 {
         max-width: 100%;
-        font-size: clamp(1.85rem, 8.2vw, 2.5rem);
+        font-size: clamp(1.75rem, 7.6vw, 2.2rem);
     }
 }
 

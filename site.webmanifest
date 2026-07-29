@@ -1,7 +1,7 @@
 {
   "name": "VietPatch - Kho bản Việt hóa game",
   "short_name": "VietPatch",
-  "description": "Kho sưu tập bản Việt hóa game với thông tin phiên bản, tiến độ và trạng thái kiểm thử rõ ràng.",
+  "description": "Thư viện Việt hóa game PC có thông tin phiên bản, dung lượng, engine, tiến độ và trạng thái kiểm thử.",
   "lang": "vi",
   "start_url": "/",
   "scope": "/",

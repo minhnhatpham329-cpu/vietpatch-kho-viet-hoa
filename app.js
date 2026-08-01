@@ -1673,13 +1673,41 @@ function getCatalogPageSize() {
 
 function getCatalogBadge(game) {
     const explicit = String(game?.badge || "").toLocaleLowerCase("en");
-    if (explicit === "new") {
-        return {
+    const explicitBadges = {
+        new: {
             key: "new",
             label: "Cập nhật mới",
-            icon: "fa-sparkles",
+            icon: "fa-plus",
             ariaLabel: "Bản cập nhật mới"
-        };
+        },
+        verified: {
+            key: "verified",
+            label: "Đã kiểm thử",
+            icon: "fa-circle-check",
+            ariaLabel: "Bản đã kiểm thử"
+        },
+        progress: {
+            key: "progress",
+            label: "Đang hoàn thiện",
+            icon: "fa-wrench",
+            ariaLabel: "Bản đang hoàn thiện"
+        },
+        community: {
+            key: "community",
+            label: "Cộng đồng chọn",
+            icon: "fa-users",
+            ariaLabel: "Bản được cộng đồng chọn"
+        },
+        free: {
+            key: "free",
+            label: "Miễn phí",
+            icon: "fa-gift",
+            ariaLabel: "Bản miễn phí"
+        }
+    };
+
+    if (explicitBadges[explicit]) {
+        return explicitBadges[explicit];
     }
 
     const featuredIds = Array.isArray(cmsState?.site?.featuredGameIds)
@@ -1690,7 +1718,7 @@ function getCatalogBadge(game) {
         return {
             key: "hot",
             label: "Nổi bật",
-            icon: "fa-fire-flame-curved",
+            icon: "fa-star",
             ariaLabel: "Bản nổi bật"
         };
     }

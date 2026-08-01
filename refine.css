@@ -720,10 +720,7 @@ html::after {
    -------------------------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
     .vp-ticker-track,
-    #tab-home .feature-name > span::before,
-    .games-grid .catalog-badge.badge-new > i,
-    .games-grid .catalog-badge.badge-hot::before,
-    .games-grid .catalog-badge.badge-hot > i {
+    #tab-home .feature-name > span::before {
         animation: none !important;
     }
 
@@ -740,113 +737,96 @@ html::after {
 }
 
 /* --------------------------------------------------------------------------
-   B11.1 Nhãn card: cập nhật mới / nổi bật
-   Tem được lấy từ Content Studio; game đang đặt trên hero cũng tự nhận “Nổi bật”.
+   B11.1 Nhãn card: tem biên tập tối giản
+   Một nhãn mỗi card, không dùng hiệu ứng chuyển động để không cạnh tranh với ảnh game.
    -------------------------------------------------------------------------- */
 .games-grid .catalog-badge {
-    top: 13px;
-    left: 13px;
-    min-height: 32px;
-    gap: 7px;
-    padding: 0 12px 0 10px;
-    border: 1px solid rgba(17, 17, 15, 0.84);
-    border-radius: 2px 15px 15px 2px;
-    box-shadow: 3px 3px 0 rgba(17, 17, 15, 0.84);
+    top: 12px;
+    left: 12px;
+    min-height: 26px;
+    gap: 5px;
+    padding: 0 9px;
+    border: 1px solid #161613;
+    border-radius: 0;
+    box-shadow: none;
+    color: #fdf9ef;
+    background: #161613;
     font-family: var(--mono);
-    font-size: 0.58rem;
+    font-size: 0.51rem;
     font-weight: 800;
-    letter-spacing: 0.075em;
+    letter-spacing: 0.07em;
     line-height: 1;
-    isolation: isolate;
-    transition: transform 180ms ease, box-shadow 180ms ease;
+    white-space: nowrap;
 }
 
 .games-grid .catalog-badge > i {
     display: grid;
-    width: 15px;
-    height: 15px;
+    width: 12px;
+    height: 12px;
     place-items: center;
-    flex: 0 0 15px;
-    font-size: 0.75rem;
-}
-
-.games-grid .catalog-badge > span {
-    position: relative;
-    z-index: 1;
-}
-
-.games-grid .game-card:hover .catalog-badge,
-.games-grid .game-card:focus-within .catalog-badge {
-    transform: translate(-1px, -1px);
-    box-shadow: 5px 5px 0 rgba(17, 17, 15, 0.84);
+    flex: 0 0 12px;
+    font-size: 0.58rem;
 }
 
 .games-grid .catalog-badge.badge-new {
-    color: var(--ink);
-    background: #fbf7e9;
-    border-color: var(--ink);
-}
-
-.games-grid .catalog-badge.badge-new::before {
-    position: absolute;
-    inset: 0 auto 0 0;
-    width: 5px;
-    content: "";
+    color: #fffaf1;
     background: var(--vermilion);
-}
-
-.games-grid .catalog-badge.badge-new > i {
-    position: relative;
-    z-index: 1;
-    color: var(--vermilion);
-    animation: vp-card-new-spark 2.8s ease-in-out infinite;
+    border-color: var(--vermilion);
 }
 
 .games-grid .catalog-badge.badge-hot {
-    color: #fffaf1;
-    background: linear-gradient(105deg, #1d1714 0 32%, #d83729 62%, #f05a3f 100%);
-    border-color: #170f0d;
-    overflow: visible;
-}
-
-.games-grid .catalog-badge.badge-hot::before {
-    position: absolute;
-    top: 4px;
-    right: 6px;
-    width: 29px;
-    height: 20px;
-    content: "";
-    opacity: 0.78;
-    background: radial-gradient(circle at 28% 85%, rgba(255, 198, 73, 0.85) 0 2px, transparent 2.8px),
-        radial-gradient(circle at 58% 28%, rgba(255, 237, 180, 0.8) 0 1.4px, transparent 2.2px),
-        radial-gradient(circle at 85% 72%, rgba(255, 209, 99, 0.72) 0 1.4px, transparent 2.2px);
-    pointer-events: none;
-    animation: vp-card-hot-embers 1.9s ease-in-out infinite;
+    border-left: 4px solid var(--vermilion);
 }
 
 .games-grid .catalog-badge.badge-hot > i {
-    position: relative;
-    z-index: 1;
-    color: #ffd36e;
-    filter: drop-shadow(0 0 4px rgba(255, 120, 38, 0.9));
-    transform-origin: 50% 90%;
-    animation: vp-card-hot-flame 1.35s ease-in-out infinite alternate;
+    color: var(--vermilion);
 }
 
-@keyframes vp-card-new-spark {
-    0%, 78%, 100% { transform: scale(1) rotate(0deg); }
-    84% { transform: scale(1.2) rotate(-8deg); }
-    92% { transform: scale(0.92) rotate(8deg); }
+.games-grid .catalog-badge.badge-verified {
+    color: #143527;
+    background: #d9ecdf;
+    border-color: #143527;
 }
 
-@keyframes vp-card-hot-flame {
-    0% { transform: translateY(1px) rotate(-4deg) scale(0.94, 1.05); }
-    100% { transform: translateY(-1px) rotate(5deg) scale(1.08, 0.94); }
+.games-grid .catalog-badge.badge-verified > i {
+    color: #197245;
 }
 
-@keyframes vp-card-hot-embers {
-    0%, 100% { transform: translate(0, 1px); opacity: 0.48; }
-    52% { transform: translate(2px, -2px); opacity: 1; }
+.games-grid .catalog-badge.badge-progress {
+    color: #2b210b;
+    background: #edc653;
+    border-color: #2b210b;
+}
+
+.games-grid .catalog-badge.badge-community {
+    color: #f7f7f1;
+    background: #304a77;
+    border-color: #182945;
+}
+
+.games-grid .catalog-badge.badge-free {
+    color: #edf9f1;
+    background: #1d6549;
+    border-color: #123e2c;
+}
+
+@media (max-width: 620px) {
+    .games-grid .catalog-badge {
+        top: 9px;
+        left: 9px;
+        min-height: 24px;
+        gap: 4px;
+        padding: 0 8px;
+        font-size: 0.46rem;
+        letter-spacing: 0.055em;
+    }
+
+    .games-grid .catalog-badge > i {
+        width: 11px;
+        height: 11px;
+        flex-basis: 11px;
+        font-size: 0.52rem;
+    }
 }
 
 /* ==========================================================================

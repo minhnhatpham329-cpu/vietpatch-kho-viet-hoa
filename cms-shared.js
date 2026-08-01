@@ -334,7 +334,9 @@
 
     function normalizeBadge(value, fallback = "") {
         const normalized = text(value, fallback).toLocaleLowerCase("en");
-        return ["hot", "new"].includes(normalized) ? normalized : "";
+        return ["hot", "new", "verified", "progress", "community", "free"].includes(normalized)
+            ? normalized
+            : "";
     }
 
     function normalizeProgress(value, fallback = 100) {

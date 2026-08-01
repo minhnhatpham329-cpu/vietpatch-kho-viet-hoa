@@ -19,6 +19,15 @@
     let selectedRequestId = state.requests[0]?.id || "";
     let selectedPostId = state.posts[0]?.id || "";
     const NEW_GAME_ID = "__new_game__";
+    const CARD_BADGE_LABELS = Object.freeze({
+        new: "Cập nhật mới",
+        hot: "Nổi bật",
+        verified: "Đã kiểm thử",
+        progress: "Đang hoàn thiện",
+        community: "Cộng đồng chọn",
+        free: "Miễn phí"
+    });
+    const CARD_BADGE_VALUES = Object.keys(CARD_BADGE_LABELS);
     let selectedGameId = CMS.catalog[0]?.id || "";
     let saveQueue = Promise.resolve();
     let revisionsLoaded = false;
@@ -177,7 +186,7 @@
             progress: form.elements.progress.value,
             downloads: form.elements.downloads.value.trim(),
             date: form.elements.date.value,
-            badge: ["new", "hot"].includes(form.elements.badge.value) ? form.elements.badge.value : "",
+            badge: CARD_BADGE_VALUES.includes(form.elements.badge.value) ? form.elements.badge.value : "",
             tags: Array.isArray(fallback.tags) ? fallback.tags : [],
             imageUrl,
             downloadUrl,
@@ -569,9 +578,7 @@
                 : state.gameOverrides[game.id];
             const hasLink = Boolean(entry?.downloadUrl);
             const hasImage = Boolean(entry?.imageUrl);
-            const badge = entry?.badge === "new"
-                ? "Mới"
-                : (entry?.badge === "hot" ? "Nổi bật" : "");
+            const badge = CARD_BADGE_LABELS[entry?.badge] || "";
             const hasGallery = Array.isArray(entry?.screenshots) && entry.screenshots.length > 0;
             const hasCredits = entry?.credits && Object.values(entry.credits).some(Boolean);
             const hasOverride = Boolean(entry);
@@ -615,7 +622,7 @@
         form.elements.progress.value = entry.progress === "" || entry.progress == null ? "" : entry.progress;
         form.elements.downloads.value = entry.downloads || "";
         form.elements.date.value = entry.date || "";
-        form.elements.badge.value = ["new", "hot"].includes(entry.badge) ? entry.badge : "";
+        form.elements.badge.value = CARD_BADGE_VALUES.includes(entry.badge) ? entry.badge : "";
         form.elements.imageUrl.value = entry.imageUrl || "";
         form.elements.downloadUrl.value = entry.downloadUrl || "";
         form.elements.description.value = entry.description || "";

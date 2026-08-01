@@ -720,7 +720,9 @@ html::after {
    -------------------------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
     .vp-ticker-track,
-    #tab-home .feature-name > span::before {
+    #tab-home .feature-name > span::before,
+    .games-grid .catalog-badge.badge-hot::after,
+    .games-grid .catalog-badge.badge-hot > i {
         animation: none !important;
     }
 
@@ -738,7 +740,7 @@ html::after {
 
 /* --------------------------------------------------------------------------
    B11.1 Nhãn card: tem biên tập tối giản
-   Một nhãn mỗi card, không dùng hiệu ứng chuyển động để không cạnh tranh với ảnh game.
+   Nhãn thường đứng yên; chỉ tem “Nổi bật” có một nhịp ánh sáng nhẹ.
    -------------------------------------------------------------------------- */
 .games-grid .catalog-badge {
     top: 12px;
@@ -775,11 +777,34 @@ html::after {
 }
 
 .games-grid .catalog-badge.badge-hot {
+    position: absolute;
+    overflow: hidden;
     border-left: 4px solid var(--vermilion);
+}
+
+.games-grid .catalog-badge.badge-hot::after {
+    position: absolute;
+    top: -10px;
+    bottom: -10px;
+    left: -38%;
+    width: 25%;
+    content: "";
+    background: linear-gradient(90deg, transparent, rgba(255, 249, 222, 0.48), transparent);
+    pointer-events: none;
+    transform: skewX(-18deg);
+    animation: vp-card-special-sheen 4.8s cubic-bezier(0.22, 0.61, 0.36, 1) infinite;
+}
+
+.games-grid .catalog-badge.badge-hot > i,
+.games-grid .catalog-badge.badge-hot > span {
+    position: relative;
+    z-index: 1;
 }
 
 .games-grid .catalog-badge.badge-hot > i {
     color: var(--vermilion);
+    transform-origin: 50% 50%;
+    animation: vp-card-special-star 3.2s ease-in-out infinite;
 }
 
 .games-grid .catalog-badge.badge-verified {
@@ -808,6 +833,18 @@ html::after {
     color: #edf9f1;
     background: #1d6549;
     border-color: #123e2c;
+}
+
+@keyframes vp-card-special-sheen {
+    0%, 58% { opacity: 0; transform: translateX(-130%) skewX(-18deg); }
+    66% { opacity: 0.9; }
+    78%, 100% { opacity: 0; transform: translateX(620%) skewX(-18deg); }
+}
+
+@keyframes vp-card-special-star {
+    0%, 100% { opacity: 0.76; transform: scale(1) rotate(0deg); }
+    42% { opacity: 1; transform: scale(1.08) rotate(-8deg); }
+    56% { opacity: 0.88; transform: scale(1) rotate(4deg); }
 }
 
 @media (max-width: 620px) {

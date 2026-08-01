@@ -1153,6 +1153,254 @@ html::after {
     }
 }
 
+/* --------------------------------------------------------------------------
+   B11.2 Metadata biên tập: nhãn hòa vào phần nội dung, không tạo thêm dải UI.
+   Chuyển động chỉ chạy khi người dùng tương tác với card.
+   -------------------------------------------------------------------------- */
+.games-grid .catalog-identity > .catalog-badge {
+    --badge-accent: #d23b30;
+    position: relative;
+    top: auto;
+    left: auto;
+    z-index: 1;
+    width: max-content;
+    min-height: 0;
+    max-width: 100%;
+    margin: 0 0 10px;
+    padding: 0 0 7px;
+    gap: 7px;
+    overflow: visible;
+    border: 0;
+    border-radius: 0;
+    clip-path: none;
+    filter: none;
+    color: #5f5b53;
+    background: transparent;
+    font-size: 0.54rem;
+    font-weight: 900;
+    letter-spacing: 0.085em;
+    line-height: 1.15;
+    isolation: auto;
+    animation: vp-inline-label-in 420ms ease-out both;
+}
+
+.games-grid .catalog-identity > .catalog-badge::before {
+    position: absolute;
+    inset: auto 0 0 25px;
+    width: auto;
+    height: 1px;
+    content: "";
+    background: color-mix(in srgb, var(--badge-accent) 25%, transparent);
+    box-shadow: none;
+    transform: scaleX(0.25);
+    transform-origin: left center;
+    transition: transform 320ms ease, background-color 320ms ease;
+    animation: none;
+}
+
+.games-grid .catalog-identity > .catalog-badge::after {
+    position: absolute;
+    inset: auto auto -1px 25px;
+    width: 18px;
+    height: 2px;
+    content: "";
+    opacity: 1;
+    background: var(--badge-accent);
+    transform: none;
+    transition: width 320ms cubic-bezier(0.2, 0.75, 0.25, 1);
+    animation: none;
+}
+
+.games-grid .catalog-identity > .catalog-badge > i {
+    width: 18px;
+    height: 18px;
+    flex: 0 0 18px;
+    border: 1px solid color-mix(in srgb, var(--badge-accent) 62%, #625e56 38%);
+    border-radius: 0;
+    color: var(--badge-accent);
+    background: transparent;
+    font-size: 0.58rem;
+    transition: color 200ms ease, background-color 200ms ease, transform 200ms ease;
+    animation: none !important;
+}
+
+.games-grid .catalog-identity > .catalog-badge > span {
+    color: inherit;
+}
+
+.games-grid .catalog-identity > .catalog-badge.badge-new {
+    --badge-accent: #df3f32;
+    color: #6c332d;
+    background: transparent;
+    border: 0;
+}
+
+.games-grid .catalog-identity > .catalog-badge.badge-hot {
+    --badge-accent: #b66b19;
+    color: #69471f;
+    background: transparent;
+    border: 0;
+}
+
+.games-grid .catalog-identity > .catalog-badge.badge-verified {
+    --badge-accent: #26764d;
+    color: #315e47;
+    background: transparent;
+    border: 0;
+}
+
+.games-grid .catalog-identity > .catalog-badge.badge-progress {
+    --badge-accent: #9a711d;
+    color: #655424;
+    background: transparent;
+    border: 0;
+}
+
+.games-grid .catalog-identity > .catalog-badge.badge-community {
+    --badge-accent: #356896;
+    color: #3a5974;
+    background: transparent;
+    border: 0;
+}
+
+.games-grid .catalog-identity > .catalog-badge.badge-free {
+    --badge-accent: #247a58;
+    color: #315f4e;
+    background: transparent;
+    border: 0;
+}
+
+.games-grid .game-card:hover .catalog-identity > .catalog-badge::before,
+.games-grid .game-card:focus-within .catalog-identity > .catalog-badge::before {
+    background: color-mix(in srgb, var(--badge-accent) 55%, transparent);
+    transform: scaleX(1);
+}
+
+.games-grid .game-card:hover .catalog-identity > .catalog-badge::after,
+.games-grid .game-card:focus-within .catalog-identity > .catalog-badge::after {
+    width: calc(100% - 25px);
+}
+
+.games-grid .game-card:hover .catalog-identity > .catalog-badge > i,
+.games-grid .game-card:focus-within .catalog-identity > .catalog-badge > i {
+    color: #fffdf6;
+    background: var(--badge-accent);
+}
+
+.games-grid .game-card:hover .catalog-identity > .badge-new > i,
+.games-grid .game-card:focus-within .catalog-identity > .badge-new > i {
+    animation: vp-inline-bolt 620ms ease-out both !important;
+}
+
+.games-grid .game-card:hover .catalog-identity > .badge-hot > i,
+.games-grid .game-card:focus-within .catalog-identity > .badge-hot > i {
+    animation: vp-inline-crown 760ms ease-out both !important;
+}
+
+.games-grid .game-card:hover .catalog-identity > .badge-verified > i,
+.games-grid .game-card:focus-within .catalog-identity > .badge-verified > i {
+    animation: vp-inline-stamp 600ms ease-out both !important;
+}
+
+.games-grid .game-card:hover .catalog-identity > .badge-progress > i,
+.games-grid .game-card:focus-within .catalog-identity > .badge-progress > i {
+    animation: vp-inline-progress 720ms ease-in-out both !important;
+}
+
+.games-grid .game-card:hover .catalog-identity > .badge-community > i,
+.games-grid .game-card:focus-within .catalog-identity > .badge-community > i {
+    animation: vp-inline-community 720ms ease-out both !important;
+}
+
+.games-grid .game-card:hover .catalog-identity > .badge-free > i,
+.games-grid .game-card:focus-within .catalog-identity > .badge-free > i {
+    animation: vp-inline-gift 720ms ease-out both !important;
+}
+
+@keyframes vp-inline-label-in {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes vp-inline-bolt {
+    0% { transform: scale(1) rotate(0deg); }
+    42% { transform: scale(1.22) rotate(-12deg); }
+    72% { transform: scale(0.94) rotate(6deg); }
+    100% { transform: scale(1) rotate(0deg); }
+}
+
+@keyframes vp-inline-crown {
+    0% { transform: translateY(0) rotate(0deg); }
+    48% { transform: translateY(-3px) rotate(-7deg); }
+    72% { transform: translateY(-1px) rotate(5deg); }
+    100% { transform: translateY(0) rotate(0deg); }
+}
+
+@keyframes vp-inline-stamp {
+    0% { transform: scale(1.18); opacity: 0.4; }
+    58% { transform: scale(0.88); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes vp-inline-progress {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(180deg); }
+}
+
+@keyframes vp-inline-community {
+    0%, 100% { transform: scaleX(1); }
+    48% { transform: scaleX(1.22) translateY(-1px); }
+}
+
+@keyframes vp-inline-gift {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    42% { transform: translateY(-3px) rotate(-6deg); }
+    68% { transform: translateY(0) rotate(5deg); }
+}
+
+@media (max-width: 620px) {
+    .games-grid .game-card.catalog-row,
+    .games-grid .game-card.catalog-row:hover,
+    .games-grid .game-card.catalog-row:focus-within {
+        grid-template-areas:
+            "cover identity"
+            "cover status"
+            "cover specs"
+            "action action";
+        grid-template-rows: auto auto 1fr auto;
+    }
+
+    .games-grid .catalog-identity > .catalog-badge {
+        margin-bottom: 7px;
+        padding-bottom: 5px;
+        gap: 5px;
+        font-size: 0.47rem;
+        letter-spacing: 0.055em;
+    }
+
+    .games-grid .catalog-identity > .catalog-badge > i {
+        width: 16px;
+        height: 16px;
+        flex-basis: 16px;
+        font-size: 0.5rem;
+    }
+
+    .games-grid .catalog-identity > .catalog-badge::before,
+    .games-grid .catalog-identity > .catalog-badge::after {
+        left: 21px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .games-grid .catalog-identity > .catalog-badge,
+    .games-grid .catalog-identity > .catalog-badge::before,
+    .games-grid .catalog-identity > .catalog-badge::after,
+    .games-grid .catalog-identity > .catalog-badge > i {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
 /* ==========================================================================
    V3 HOME – Hero "phòng triển lãm sáng" + ARCHIVE WIRE nổi bắc cầu
    (phương án được chọn: V1 + ticker nổi của V2)

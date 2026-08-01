@@ -724,7 +724,9 @@ html::after {
     .games-grid .catalog-badge,
     .games-grid .catalog-badge::before,
     .games-grid .catalog-badge::after,
-    .games-grid .catalog-badge > i {
+    .games-grid .catalog-badge > i,
+    .games-grid .catalog-signal-track::after,
+    .games-grid .catalog-signal-track > i {
         animation: none !important;
     }
 
@@ -742,26 +744,100 @@ html::after {
 
 /* --------------------------------------------------------------------------
    B11.1 Nhãn card: hệ tem tín hiệu VietPatch
-   Cắt góc như thẻ kho lưu trữ; mỗi trạng thái có một nhịp chuyển động riêng.
+   Nhãn nằm trong một đường tín hiệu riêng dưới cover nên không che ảnh game.
    -------------------------------------------------------------------------- */
+.games-grid .catalog-signal-row {
+    --signal-accent: #706d65;
+    --signal-speed: 3.8s;
+    min-height: 38px;
+    padding: 4px 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    overflow: hidden;
+    color: #fdf9ef;
+    background: #151513;
+    border-top: 3px solid var(--signal-accent);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.games-grid .catalog-signal-row.signal-new { --signal-accent: #ef4937; --signal-speed: 2.4s; }
+.games-grid .catalog-signal-row.signal-hot { --signal-accent: #ffc657; --signal-speed: 2.9s; }
+.games-grid .catalog-signal-row.signal-verified { --signal-accent: #5cb77d; --signal-speed: 4.1s; }
+.games-grid .catalog-signal-row.signal-progress { --signal-accent: #e4ad32; --signal-speed: 1.8s; }
+.games-grid .catalog-signal-row.signal-community { --signal-accent: #78b9f2; --signal-speed: 3.2s; }
+.games-grid .catalog-signal-row.signal-free { --signal-accent: #65c89a; --signal-speed: 3.6s; }
+
+.games-grid .catalog-signal-code {
+    flex: 0 0 auto;
+    color: #aaa69e;
+    font-family: var(--mono);
+    font-size: 0.5rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+}
+
+.games-grid .catalog-signal-track {
+    position: relative;
+    min-width: 28px;
+    height: 12px;
+    flex: 1 1 auto;
+    overflow: hidden;
+}
+
+.games-grid .catalog-signal-track::before {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    left: 0;
+    height: 1px;
+    content: "";
+    background: repeating-linear-gradient(90deg, color-mix(in srgb, var(--signal-accent) 76%, transparent) 0 7px, transparent 7px 12px);
+}
+
+.games-grid .catalog-signal-track::after {
+    position: absolute;
+    top: 3px;
+    left: 0;
+    width: 6px;
+    height: 6px;
+    content: "";
+    border: 1px solid #151513;
+    border-radius: 50%;
+    background: var(--signal-accent);
+    box-shadow: 0 0 9px color-mix(in srgb, var(--signal-accent) 82%, transparent);
+    animation: vp-signal-run var(--signal-speed) cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+.games-grid .catalog-signal-track > i {
+    position: absolute;
+    top: 3px;
+    right: 0;
+    width: 6px;
+    height: 6px;
+    border: 1px solid var(--signal-accent);
+    border-radius: 50%;
+    animation: vp-signal-receiver var(--signal-speed) ease-in-out infinite;
+}
+
 .games-grid .catalog-badge {
     --badge-a: #171714;
     --badge-b: #302f29;
     --badge-accent: #f04a3a;
     --badge-ink: #fffaf0;
-    position: absolute;
-    top: 12px;
-    left: 12px;
-    z-index: 4;
-    min-height: 31px;
-    max-width: calc(100% - 24px);
+    position: relative;
+    top: auto;
+    left: auto;
+    z-index: 1;
+    min-height: 27px;
+    max-width: 72%;
     gap: 7px;
     padding: 0 16px 0 9px;
     overflow: hidden;
     border: 1px solid color-mix(in srgb, var(--badge-accent) 72%, #111 28%);
     border-radius: 2px;
     clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 50%, calc(100% - 8px) 100%, 0 100%);
-    filter: drop-shadow(0 4px 3px rgba(0, 0, 0, 0.34));
+    filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.32));
     color: var(--badge-ink);
     background: linear-gradient(112deg, var(--badge-a) 0 58%, var(--badge-b) 100%);
     font-family: var(--mono);
@@ -818,7 +894,7 @@ html::after {
 
 .games-grid .game-card:hover .catalog-badge,
 .games-grid .game-card:focus-within .catalog-badge {
-    filter: drop-shadow(0 6px 5px rgba(0, 0, 0, 0.42));
+    filter: drop-shadow(0 3px 3px rgba(0, 0, 0, 0.4));
 }
 
 /* Cập nhật mới: tín hiệu điện quét nhanh qua nhãn. */
@@ -1018,24 +1094,62 @@ html::after {
     84% { transform: translateY(0) rotate(5deg); }
 }
 
+@keyframes vp-signal-run {
+    0% { left: 0; opacity: 0; transform: scale(0.65); }
+    12% { opacity: 1; }
+    78% { opacity: 1; }
+    92%, 100% { left: calc(100% - 6px); opacity: 0; transform: scale(1.18); }
+}
+
+@keyframes vp-signal-receiver {
+    0%, 72%, 100% { opacity: 0.34; transform: scale(0.75); }
+    84% { opacity: 1; transform: scale(1.35); box-shadow: 0 0 8px var(--signal-accent); }
+}
+
 @media (max-width: 620px) {
+    .games-grid .game-card.catalog-row,
+    .games-grid .game-card.catalog-row:hover,
+    .games-grid .game-card.catalog-row:focus-within {
+        grid-template-areas:
+            "cover signal"
+            "cover identity"
+            "cover status"
+            "cover specs"
+            "action action";
+        grid-template-rows: auto auto auto 1fr auto;
+    }
+
+    .games-grid .catalog-signal-row {
+        grid-area: signal;
+        min-height: 31px;
+        padding: 3px 12px;
+        gap: 8px;
+        border-top-width: 2px;
+    }
+
     .games-grid .catalog-badge {
-        top: 8px;
-        left: 8px;
-        min-height: 27px;
-        max-width: calc(100% - 16px);
+        min-height: 23px;
+        max-width: calc(100% - 26px);
         gap: 5px;
-        padding: 0 13px 0 7px;
+        padding: 0 12px 0 7px;
         clip-path: polygon(0 0, calc(100% - 7px) 0, 100% 50%, calc(100% - 7px) 100%, 0 100%);
         font-size: 0.46rem;
         letter-spacing: 0.055em;
     }
 
     .games-grid .catalog-badge > i {
-        width: 14px;
-        height: 14px;
-        flex-basis: 14px;
-        font-size: 0.5rem;
+        width: 13px;
+        height: 13px;
+        flex-basis: 13px;
+        font-size: 0.47rem;
+    }
+
+    .games-grid .catalog-signal-track {
+        min-width: 18px;
+    }
+
+    .games-grid .catalog-signal-code {
+        font-size: 0.44rem;
     }
 }
 

@@ -1835,13 +1835,16 @@ function renderGamesGrid() {
         card.innerHTML = `
             <button class="card-header-img" type="button" data-game-id="${escapeHtml(game.id)}" aria-label="Xem chi tiết ${escapeHtml(game.title)}">
                 <img src="${escapeHtml(coverImage)}" alt="${escapeHtml(game.title)}" loading="lazy" onerror="this.src='${escapeHtml(getFallbackGameImage(game))}'">
+            </button>
+            <div class="catalog-signal-row signal-${badge ? badge.key : "idle"}">
                 ${badge ? `
                     <span class="catalog-badge badge-${badge.key}" role="status" aria-label="${escapeHtml(badge.ariaLabel)}">
                         <i class="fa-solid ${badge.icon}" aria-hidden="true"></i>
                         <span>${escapeHtml(badge.label)}</span>
                     </span>
-                ` : ""}
-            </button>
+                ` : `<span class="catalog-signal-code">VP / ARCHIVE</span>`}
+                <span class="catalog-signal-track" aria-hidden="true"><i></i></span>
+            </div>
             <div class="catalog-identity">
                 <h3 class="card-title">${escapeHtml(game.title)}</h3>
                 <p>${escapeHtml(game.developer)} · ${escapeHtml(game.engine)}</p>

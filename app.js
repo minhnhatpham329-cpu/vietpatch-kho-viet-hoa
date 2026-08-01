@@ -1673,9 +1673,28 @@ function getCatalogPageSize() {
 
 function getCatalogBadge(game) {
     const explicit = String(game?.badge || "").toLocaleLowerCase("en");
-    if (explicit === "new") return { key: "new", label: "Mới" };
-    if (explicit === "hot") return { key: "hot", label: "Nổi bật" };
-    if (game?.id === cmsState?.site?.featuredGameId) return { key: "hot", label: "Nổi bật" };
+    if (explicit === "new") {
+        return {
+            key: "new",
+            label: "Cập nhật mới",
+            icon: "fa-sparkles",
+            ariaLabel: "Bản cập nhật mới"
+        };
+    }
+
+    const featuredIds = Array.isArray(cmsState?.site?.featuredGameIds)
+        ? cmsState.site.featuredGameIds
+        : [cmsState?.site?.featuredGameId].filter(Boolean);
+
+    if (explicit === "hot" || featuredIds.includes(game?.id)) {
+        return {
+            key: "hot",
+            label: "Nổi bật",
+            icon: "fa-fire-flame-curved",
+            ariaLabel: "Bản nổi bật"
+        };
+    }
+
     return null;
 }
 
@@ -1788,7 +1807,12 @@ function renderGamesGrid() {
         card.innerHTML = `
             <button class="card-header-img" type="button" data-game-id="${escapeHtml(game.id)}" aria-label="Xem chi tiết ${escapeHtml(game.title)}">
                 <img src="${escapeHtml(coverImage)}" alt="${escapeHtml(game.title)}" loading="lazy" onerror="this.src='${escapeHtml(getFallbackGameImage(game))}'">
-                ${badge ? `<span class="catalog-badge badge-${badge.key}">${badge.label}</span>` : ""}
+                ${badge ? `
+                    <span class="catalog-badge badge-${badge.key}" role="status" aria-label="${escapeHtml(badge.ariaLabel)}">
+                        <i class="fa-solid ${badge.icon}" aria-hidden="true"></i>
+                        <span>${escapeHtml(badge.label)}</span>
+                    </span>
+                ` : ""}
             </button>
             <div class="catalog-identity">
                 <h3 class="card-title">${escapeHtml(game.title)}</h3>

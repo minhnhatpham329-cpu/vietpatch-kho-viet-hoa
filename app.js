@@ -1677,7 +1677,7 @@ function getCatalogBadge(game) {
         new: {
             key: "new",
             label: "Cập nhật mới",
-            icon: "fa-plus",
+            icon: "fa-bolt",
             ariaLabel: "Bản cập nhật mới"
         },
         verified: {
@@ -1689,13 +1689,13 @@ function getCatalogBadge(game) {
         progress: {
             key: "progress",
             label: "Đang hoàn thiện",
-            icon: "fa-wrench",
+            icon: "fa-arrows-rotate",
             ariaLabel: "Bản đang hoàn thiện"
         },
         community: {
             key: "community",
             label: "Cộng đồng chọn",
-            icon: "fa-users",
+            icon: "fa-people-group",
             ariaLabel: "Bản được cộng đồng chọn"
         },
         free: {
@@ -1718,7 +1718,7 @@ function getCatalogBadge(game) {
         return {
             key: "hot",
             label: "Nổi bật",
-            icon: "fa-star",
+            icon: "fa-crown",
             ariaLabel: "Bản nổi bật"
         };
     }

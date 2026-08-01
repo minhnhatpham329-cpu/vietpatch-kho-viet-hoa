@@ -721,8 +721,10 @@ html::after {
 @media (prefers-reduced-motion: reduce) {
     .vp-ticker-track,
     #tab-home .feature-name > span::before,
-    .games-grid .catalog-badge.badge-hot::after,
-    .games-grid .catalog-badge.badge-hot > i {
+    .games-grid .catalog-badge,
+    .games-grid .catalog-badge::before,
+    .games-grid .catalog-badge::after,
+    .games-grid .catalog-badge > i {
         animation: none !important;
     }
 
@@ -739,130 +741,301 @@ html::after {
 }
 
 /* --------------------------------------------------------------------------
-   B11.1 Nhãn card: tem biên tập tối giản
-   Nhãn thường đứng yên; chỉ tem “Nổi bật” có một nhịp ánh sáng nhẹ.
+   B11.1 Nhãn card: hệ tem tín hiệu VietPatch
+   Cắt góc như thẻ kho lưu trữ; mỗi trạng thái có một nhịp chuyển động riêng.
    -------------------------------------------------------------------------- */
 .games-grid .catalog-badge {
+    --badge-a: #171714;
+    --badge-b: #302f29;
+    --badge-accent: #f04a3a;
+    --badge-ink: #fffaf0;
+    position: absolute;
     top: 12px;
     left: 12px;
-    min-height: 26px;
-    gap: 5px;
-    padding: 0 9px;
-    border: 1px solid #161613;
-    border-radius: 0;
-    box-shadow: none;
-    color: #fdf9ef;
-    background: #161613;
+    z-index: 4;
+    min-height: 31px;
+    max-width: calc(100% - 24px);
+    gap: 7px;
+    padding: 0 16px 0 9px;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--badge-accent) 72%, #111 28%);
+    border-radius: 2px;
+    clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 50%, calc(100% - 8px) 100%, 0 100%);
+    filter: drop-shadow(0 4px 3px rgba(0, 0, 0, 0.34));
+    color: var(--badge-ink);
+    background: linear-gradient(112deg, var(--badge-a) 0 58%, var(--badge-b) 100%);
     font-family: var(--mono);
-    font-size: 0.51rem;
-    font-weight: 800;
-    letter-spacing: 0.07em;
+    font-size: 0.54rem;
+    font-weight: 900;
+    letter-spacing: 0.085em;
     line-height: 1;
     white-space: nowrap;
+    isolation: isolate;
+    transform-origin: left center;
+    animation: vp-badge-arrive 560ms cubic-bezier(0.18, 0.82, 0.2, 1.12) both;
 }
 
-.games-grid .catalog-badge > i {
-    display: grid;
-    width: 12px;
-    height: 12px;
-    place-items: center;
-    flex: 0 0 12px;
-    font-size: 0.58rem;
-}
-
-.games-grid .catalog-badge.badge-new {
-    color: #fffaf1;
-    background: var(--vermilion);
-    border-color: var(--vermilion);
-}
-
-.games-grid .catalog-badge.badge-hot {
+.games-grid .catalog-badge::before {
     position: absolute;
-    overflow: hidden;
-    border-left: 4px solid var(--vermilion);
-}
-
-.games-grid .catalog-badge.badge-hot::after {
-    position: absolute;
-    top: -10px;
-    bottom: -10px;
-    left: -38%;
-    width: 25%;
+    inset: 4px auto 4px 3px;
+    z-index: 0;
+    width: 3px;
     content: "";
-    background: linear-gradient(90deg, transparent, rgba(255, 249, 222, 0.48), transparent);
-    pointer-events: none;
-    transform: skewX(-18deg);
-    animation: vp-card-special-sheen 4.8s cubic-bezier(0.22, 0.61, 0.36, 1) infinite;
+    background: var(--badge-accent);
+    box-shadow: 0 0 9px color-mix(in srgb, var(--badge-accent) 75%, transparent);
 }
 
-.games-grid .catalog-badge.badge-hot > i,
-.games-grid .catalog-badge.badge-hot > span {
+.games-grid .catalog-badge::after {
+    position: absolute;
+    z-index: 0;
+    content: "";
+    pointer-events: none;
+}
+
+.games-grid .catalog-badge > i,
+.games-grid .catalog-badge > span {
     position: relative;
     z-index: 1;
 }
 
-.games-grid .catalog-badge.badge-hot > i {
-    color: var(--vermilion);
-    transform-origin: 50% 50%;
-    animation: vp-card-special-star 3.2s ease-in-out infinite;
+.games-grid .catalog-badge > i {
+    display: grid;
+    width: 17px;
+    height: 17px;
+    place-items: center;
+    flex: 0 0 17px;
+    border: 1px solid currentColor;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    font-size: 0.62rem;
 }
 
+.games-grid .catalog-badge > span {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.games-grid .game-card:hover .catalog-badge,
+.games-grid .game-card:focus-within .catalog-badge {
+    filter: drop-shadow(0 6px 5px rgba(0, 0, 0, 0.42));
+}
+
+/* Cập nhật mới: tín hiệu điện quét nhanh qua nhãn. */
+.games-grid .catalog-badge.badge-new {
+    --badge-a: #ef4937;
+    --badge-b: #9f2027;
+    --badge-accent: #ffd29a;
+    --badge-ink: #fffdf7;
+}
+
+.games-grid .catalog-badge.badge-new::after {
+    inset: -20% auto -20% -34%;
+    width: 24%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.68), transparent);
+    transform: skewX(-18deg);
+    animation: vp-badge-wipe 3.6s ease-in-out infinite;
+}
+
+.games-grid .catalog-badge.badge-new > i {
+    animation: vp-badge-bolt 2.4s ease-in-out infinite;
+}
+
+/* Nổi bật: ánh kim dịch chuyển và vương miện nổi lên. */
+.games-grid .catalog-badge.badge-hot {
+    --badge-a: #15130f;
+    --badge-b: #7c321f;
+    --badge-accent: #ffc657;
+    --badge-ink: #fff8e7;
+    background-size: 180% 100%;
+    animation: vp-badge-arrive 560ms cubic-bezier(0.18, 0.82, 0.2, 1.12) both,
+        vp-badge-hot-flow 5.4s ease-in-out infinite;
+}
+
+.games-grid .catalog-badge.badge-hot::after {
+    inset: -20% auto -20% -36%;
+    width: 30%;
+    background: linear-gradient(90deg, transparent, rgba(255, 216, 126, 0.78), transparent);
+    transform: skewX(-18deg);
+    animation: vp-badge-wipe 3.1s ease-in-out infinite;
+}
+
+.games-grid .catalog-badge.badge-hot > i {
+    color: #ffe18f;
+    animation: vp-badge-crown 2.7s ease-in-out infinite;
+}
+
+/* Đã kiểm thử: dấu kiểm đóng xuống như con dấu QA. */
 .games-grid .catalog-badge.badge-verified {
-    color: #143527;
-    background: #d9ecdf;
-    border-color: #143527;
+    --badge-a: #e3f3e8;
+    --badge-b: #9bcbaa;
+    --badge-accent: #167345;
+    --badge-ink: #123824;
+}
+
+.games-grid .catalog-badge.badge-verified::after {
+    top: 50%;
+    left: 6px;
+    width: 24px;
+    height: 24px;
+    border: 1px solid rgba(22, 115, 69, 0.5);
+    border-radius: 50%;
+    animation: vp-badge-verified-ring 3.8s ease-out infinite;
 }
 
 .games-grid .catalog-badge.badge-verified > i {
-    color: #197245;
+    color: #167345;
+    animation: vp-badge-stamp 3.8s ease-in-out infinite;
 }
 
+/* Đang hoàn thiện: sọc tiến độ liên tục chạy về phía trước. */
 .games-grid .catalog-badge.badge-progress {
-    color: #2b210b;
-    background: #edc653;
-    border-color: #2b210b;
+    --badge-a: #e2aa2d;
+    --badge-b: #f3d16f;
+    --badge-accent: #4a3411;
+    --badge-ink: #2a1e0b;
+    background: repeating-linear-gradient(135deg, #e4ad32 0 10px, #f0ca62 10px 20px);
+    background-size: 30px 30px;
+    animation: vp-badge-arrive 560ms cubic-bezier(0.18, 0.82, 0.2, 1.12) both,
+        vp-badge-progress-lines 2.2s linear infinite;
 }
 
+.games-grid .catalog-badge.badge-progress > i {
+    animation: vp-badge-progress-icon 2.2s linear infinite;
+}
+
+/* Cộng đồng chọn: cụm tín hiệu chấm lan sang phải. */
 .games-grid .catalog-badge.badge-community {
-    color: #f7f7f1;
-    background: #304a77;
-    border-color: #182945;
+    --badge-a: #233b67;
+    --badge-b: #426ba5;
+    --badge-accent: #9ed7ff;
+    --badge-ink: #f7fbff;
 }
 
+.games-grid .catalog-badge.badge-community::after {
+    top: 6px;
+    right: 10px;
+    width: 34px;
+    height: 18px;
+    opacity: 0.5;
+    background: radial-gradient(circle at 15% 50%, #c6eaff 0 2px, transparent 2.8px),
+        radial-gradient(circle at 50% 50%, #c6eaff 0 2px, transparent 2.8px),
+        radial-gradient(circle at 85% 50%, #c6eaff 0 2px, transparent 2.8px);
+    animation: vp-badge-community-signal 2.8s ease-in-out infinite;
+}
+
+.games-grid .catalog-badge.badge-community > i {
+    animation: vp-badge-community-icon 2.8s ease-in-out infinite;
+}
+
+/* Miễn phí: dải ngọc lục bảo và hộp quà bật nhẹ. */
 .games-grid .catalog-badge.badge-free {
-    color: #edf9f1;
-    background: #1d6549;
-    border-color: #123e2c;
+    --badge-a: #15563d;
+    --badge-b: #2d8a67;
+    --badge-accent: #b9f0d7;
+    --badge-ink: #effff6;
 }
 
-@keyframes vp-card-special-sheen {
-    0%, 58% { opacity: 0; transform: translateX(-130%) skewX(-18deg); }
-    66% { opacity: 0.9; }
-    78%, 100% { opacity: 0; transform: translateX(620%) skewX(-18deg); }
+.games-grid .catalog-badge.badge-free::after {
+    inset: 0 auto 0 -28%;
+    width: 18%;
+    background: linear-gradient(90deg, transparent, rgba(211, 255, 235, 0.74), transparent);
+    transform: skewX(-16deg);
+    animation: vp-badge-gift-ribbon 4.6s ease-in-out infinite;
 }
 
-@keyframes vp-card-special-star {
-    0%, 100% { opacity: 0.76; transform: scale(1) rotate(0deg); }
-    42% { opacity: 1; transform: scale(1.08) rotate(-8deg); }
-    56% { opacity: 0.88; transform: scale(1) rotate(4deg); }
+.games-grid .catalog-badge.badge-free > i {
+    animation: vp-badge-gift-hop 3.2s ease-in-out infinite;
+}
+
+@keyframes vp-badge-arrive {
+    0% { opacity: 0; transform: translateX(-14px) scaleX(0.9); }
+    72% { opacity: 1; transform: translateX(2px) scaleX(1.02); }
+    100% { opacity: 1; transform: translateX(0) scaleX(1); }
+}
+
+@keyframes vp-badge-wipe {
+    0%, 52% { opacity: 0; transform: translateX(-140%) skewX(-18deg); }
+    62% { opacity: 1; }
+    78%, 100% { opacity: 0; transform: translateX(680%) skewX(-18deg); }
+}
+
+@keyframes vp-badge-bolt {
+    0%, 72%, 100% { transform: scale(1) rotate(0deg); filter: none; }
+    78% { transform: scale(1.18) rotate(-7deg); filter: drop-shadow(0 0 5px #ffe5b5); }
+    84% { transform: scale(0.94) rotate(4deg); }
+}
+
+@keyframes vp-badge-hot-flow {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+@keyframes vp-badge-crown {
+    0%, 100% { transform: translateY(1px) rotate(-4deg); filter: none; }
+    48% { transform: translateY(-2px) rotate(4deg); filter: drop-shadow(0 0 5px rgba(255, 205, 99, 0.9)); }
+}
+
+@keyframes vp-badge-stamp {
+    0%, 68%, 100% { transform: scale(1); }
+    74% { transform: scale(1.28); }
+    82% { transform: scale(0.9); }
+}
+
+@keyframes vp-badge-verified-ring {
+    0%, 68% { opacity: 0; transform: translateY(-50%) scale(0.55); }
+    78% { opacity: 0.7; }
+    96%, 100% { opacity: 0; transform: translateY(-50%) scale(1.6); }
+}
+
+@keyframes vp-badge-progress-lines {
+    to { background-position: 30px 0; }
+}
+
+@keyframes vp-badge-progress-icon {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes vp-badge-community-signal {
+    0%, 100% { opacity: 0.28; transform: translateX(-3px) scaleX(0.82); }
+    50% { opacity: 0.78; transform: translateX(3px) scaleX(1); }
+}
+
+@keyframes vp-badge-community-icon {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.12); }
+}
+
+@keyframes vp-badge-gift-ribbon {
+    0%, 58% { opacity: 0; transform: translateX(-120%) skewX(-16deg); }
+    68% { opacity: 1; }
+    82%, 100% { opacity: 0; transform: translateX(760%) skewX(-16deg); }
+}
+
+@keyframes vp-badge-gift-hop {
+    0%, 70%, 100% { transform: translateY(0) rotate(0deg); }
+    77% { transform: translateY(-3px) rotate(-6deg); }
+    84% { transform: translateY(0) rotate(5deg); }
 }
 
 @media (max-width: 620px) {
     .games-grid .catalog-badge {
-        top: 9px;
-        left: 9px;
-        min-height: 24px;
-        gap: 4px;
-        padding: 0 8px;
+        top: 8px;
+        left: 8px;
+        min-height: 27px;
+        max-width: calc(100% - 16px);
+        gap: 5px;
+        padding: 0 13px 0 7px;
+        clip-path: polygon(0 0, calc(100% - 7px) 0, 100% 50%, calc(100% - 7px) 100%, 0 100%);
         font-size: 0.46rem;
         letter-spacing: 0.055em;
     }
 
     .games-grid .catalog-badge > i {
-        width: 11px;
-        height: 11px;
-        flex-basis: 11px;
-        font-size: 0.52rem;
+        width: 14px;
+        height: 14px;
+        flex-basis: 14px;
+        font-size: 0.5rem;
     }
 }
 

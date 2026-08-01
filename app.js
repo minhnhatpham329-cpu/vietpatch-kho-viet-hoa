@@ -3438,18 +3438,40 @@ function initHotTrailerBanner() {
 document.addEventListener("DOMContentLoaded", async () => {
     const cmsReady = initializeCmsContent();
     const authSecurityReady = initializeAuthSecurity();
+    const pageRoot = document.documentElement;
+    const mainContent = document.querySelector(".main-content");
+    const contentBoot = document.getElementById("vp-content-boot");
 
     // 1. Load User Session
     loadUserState();
     updateUIForUserSession();
-    const userRefresh = refreshUserFromServer({ silent: true });
-    Promise.allSettled([authSecurityReady, userRefresh]).then(handleGoogleAuthResult);
 
-    // 2. Render Initial views
+    // 2. Chờ nội dung đã xuất bản trước lần vẽ đầu tiên. Việc render dữ liệu
+    // mẫu rồi thay bằng CMS từ xa khiến giao diện cũ bị nháy khi tải trang.
+    let cmsLoadFailed = false;
+    try {
+        await cmsReady;
+    } catch (error) {
+        cmsLoadFailed = true;
+        console.warn("Không thể hoàn tất lần đồng bộ CMS đầu tiên.", error);
+    }
+
     renderGamesGrid();
     renderHeroSlider();
     renderArchiveTicker();
     initWeeklyTrailerPlayer();
+
+    mainContent?.setAttribute("aria-busy", "false");
+    contentBoot?.setAttribute("aria-hidden", "true");
+    pageRoot.classList.remove("cms-booting");
+    pageRoot.classList.add("cms-ready");
+
+    if (cmsLoadFailed) {
+        showToast("Đang dùng dữ liệu lưu sẵn vì chưa kết nối được máy chủ nội dung.", "info");
+    }
+
+    const userRefresh = refreshUserFromServer({ silent: true });
+    Promise.allSettled([authSecurityReady, userRefresh]).then(handleGoogleAuthResult);
 
     // Thanh tiến trình đọc trang (chỉ hiển thị, không ảnh hưởng bố cục)
     const scrollProgress = document.getElementById("vp-scroll-progress");
@@ -3470,16 +3492,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         paintScrollProgress();
     }
 
-    cmsReady
-        .then(() => {
-            renderGamesGrid();
-            renderHeroSlider();
-            renderArchiveTicker();
-        })
-        .catch(() => {
-            showToast("Đang dùng dữ liệu lưu sẵn vì chưa kết nối được máy chủ nội dung.", "info");
-        });
-    
     // 3. Tab switching listeners
     document.getElementById("open-catalog-index-btn")?.addEventListener("click", () => {
         document.querySelector(".catalog-section")?.scrollIntoView({ behavior: "smooth" });

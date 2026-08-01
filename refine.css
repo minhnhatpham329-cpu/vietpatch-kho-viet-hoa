@@ -1780,3 +1780,274 @@ html::after {
 @media (prefers-reduced-motion: reduce) {
     .archive-section-index::before { animation: none !important; }
 }
+
+/* ==========================================================================
+   B12 CARD TABS + CONTENT BOOT
+   Nhãn nằm ngoài mép trên card, không che artwork. Nội dung động chỉ xuất
+   hiện sau khi CMS hoàn tất lần đồng bộ đầu tiên để tránh nháy dữ liệu mẫu.
+   ========================================================================== */
+.vp-content-boot {
+    min-height: calc(100vh - 88px);
+    padding: 40px 24px;
+    display: none;
+    place-content: center;
+    grid-template-columns: auto minmax(0, 290px);
+    grid-template-areas:
+        "mark copy"
+        "track track";
+    align-items: center;
+    gap: 15px 17px;
+    color: var(--ink);
+    background:
+        linear-gradient(90deg, transparent calc(50% - 0.5px), rgba(17, 17, 15, 0.055) calc(50% - 0.5px), rgba(17, 17, 15, 0.055) calc(50% + 0.5px), transparent calc(50% + 0.5px)),
+        var(--ivory);
+}
+
+html.cms-booting .vp-content-boot { display: grid; }
+html.cms-booting .main-content { display: none; }
+html.cms-ready .vp-content-boot { display: none; }
+
+.vp-content-boot-mark {
+    grid-area: mark;
+    width: 54px;
+    height: 54px;
+    display: grid;
+    place-items: center;
+    background: var(--ink);
+    border-left: 4px solid var(--vermilion);
+    box-shadow: 5px 5px 0 rgba(17, 17, 15, 0.16);
+}
+
+.vp-content-boot-mark img {
+    width: 34px;
+    height: 34px;
+    object-fit: contain;
+}
+
+.vp-content-boot-copy {
+    grid-area: copy;
+    display: grid;
+    gap: 4px;
+}
+
+.vp-content-boot-copy strong {
+    font-size: 0.86rem;
+    font-weight: 850;
+}
+
+.vp-content-boot-copy small {
+    color: #777168;
+    font-family: var(--mono);
+    font-size: 0.56rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.vp-content-boot-track {
+    grid-area: track;
+    height: 2px;
+    overflow: hidden;
+    background: rgba(17, 17, 15, 0.13);
+}
+
+.vp-content-boot-track i {
+    width: 36%;
+    height: 100%;
+    display: block;
+    background: var(--vermilion);
+    animation: vp-content-boot-scan 1.05s cubic-bezier(0.45, 0, 0.25, 1) infinite;
+}
+
+@keyframes vp-content-boot-scan {
+    0% { transform: translateX(-115%); }
+    100% { transform: translateX(320%); }
+}
+
+@media (min-width: 621px) {
+    .games-grid {
+        padding-top: 36px;
+        row-gap: 50px;
+    }
+
+    .games-grid .game-card.catalog-row,
+    .games-grid .game-card.catalog-row:hover,
+    .games-grid .game-card.catalog-row:focus-within {
+        overflow: visible;
+    }
+
+    .games-grid .catalog-identity > .catalog-badge {
+        position: absolute;
+        top: -32px;
+        left: 14px;
+        z-index: 7;
+        min-height: 30px;
+        max-width: calc(100% - 28px);
+        margin: 0;
+        padding: 0 18px 0 9px;
+        gap: 7px;
+        overflow: hidden;
+        color: #4f4a43;
+        background: linear-gradient(180deg, #fffdf7 0%, #f5efe3 100%);
+        border: 1px solid #24231f;
+        border-top: 2px solid var(--badge-accent);
+        clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 50%, calc(100% - 8px) 100%, 0 100%);
+        filter: drop-shadow(4px 4px 0 rgba(17, 17, 15, 0.18));
+        font-size: 0.5rem;
+        letter-spacing: 0.075em;
+        line-height: 1;
+        pointer-events: none;
+        isolation: isolate;
+        animation: vp-card-tab-enter 520ms cubic-bezier(0.2, 0.78, 0.24, 1) both;
+    }
+
+    .games-grid .catalog-identity > .catalog-badge.badge-new,
+    .games-grid .catalog-identity > .catalog-badge.badge-hot,
+    .games-grid .catalog-identity > .catalog-badge.badge-verified,
+    .games-grid .catalog-identity > .catalog-badge.badge-progress,
+    .games-grid .catalog-identity > .catalog-badge.badge-community,
+    .games-grid .catalog-identity > .catalog-badge.badge-free {
+        background: linear-gradient(180deg, #fffdf7 0%, #f5efe3 100%);
+        border: 1px solid #24231f;
+        border-top: 2px solid var(--badge-accent);
+    }
+
+    .games-grid .catalog-identity > .catalog-badge::before {
+        position: absolute;
+        inset: auto 8px 0 0;
+        z-index: 0;
+        width: auto;
+        height: 2px;
+        content: "";
+        background: var(--badge-accent);
+        transform: scaleX(0.32);
+        transform-origin: left center;
+        animation: vp-card-tab-rail 3.8s ease-in-out infinite;
+    }
+
+    .games-grid .catalog-identity > .catalog-badge::after {
+        position: absolute;
+        inset: -45% auto -45% -22%;
+        z-index: 0;
+        width: 20px;
+        height: auto;
+        content: "";
+        opacity: 0;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.86), transparent);
+        transform: skewX(-18deg);
+        animation: vp-card-tab-sheen 4.8s ease-in-out infinite;
+    }
+
+    .games-grid .catalog-identity > .catalog-badge > i,
+    .games-grid .catalog-identity > .catalog-badge > span {
+        position: relative;
+        z-index: 1;
+    }
+
+    .games-grid .catalog-identity > .catalog-badge > i {
+        width: 17px;
+        height: 17px;
+        flex-basis: 17px;
+        color: var(--badge-accent);
+        background: color-mix(in srgb, var(--badge-accent) 9%, #fffdf7);
+        border-color: color-mix(in srgb, var(--badge-accent) 52%, #6f6a61 48%);
+        font-size: 0.54rem;
+    }
+}
+
+.games-grid .catalog-identity > .badge-new > i {
+    animation: vp-card-bolt-auto 3.5s ease-in-out infinite !important;
+}
+
+.games-grid .catalog-identity > .badge-hot > i {
+    animation: vp-card-crown-auto 4.1s ease-in-out infinite !important;
+}
+
+.games-grid .catalog-identity > .badge-verified > i {
+    animation: vp-card-check-auto 4.4s ease-in-out infinite !important;
+}
+
+.games-grid .catalog-identity > .badge-progress > i {
+    animation: vp-card-progress-auto 3.2s ease-in-out infinite !important;
+}
+
+.games-grid .catalog-identity > .badge-community > i {
+    animation: vp-card-community-auto 4.6s ease-in-out infinite !important;
+}
+
+.games-grid .catalog-identity > .badge-free > i {
+    animation: vp-card-gift-auto 4s ease-in-out infinite !important;
+}
+
+@keyframes vp-card-tab-enter {
+    from { opacity: 0; transform: translateY(7px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes vp-card-tab-rail {
+    0%, 28%, 100% { opacity: 0.7; transform: scaleX(0.32); }
+    48%, 68% { opacity: 1; transform: scaleX(1); }
+}
+
+@keyframes vp-card-tab-sheen {
+    0%, 58% { left: -22%; opacity: 0; }
+    64% { opacity: 0.55; }
+    78%, 100% { left: 112%; opacity: 0; }
+}
+
+@keyframes vp-card-bolt-auto {
+    0%, 70%, 100% { transform: scale(1) rotate(0); }
+    78% { transform: scale(1.18) rotate(-10deg); }
+    86% { transform: scale(0.94) rotate(5deg); }
+}
+
+@keyframes vp-card-crown-auto {
+    0%, 68%, 100% { transform: translateY(0) rotate(0); }
+    76% { transform: translateY(-2px) rotate(-6deg); }
+    84% { transform: translateY(-1px) rotate(5deg); }
+}
+
+@keyframes vp-card-check-auto {
+    0%, 72%, 100% { transform: scale(1); }
+    78% { transform: scale(0.82); }
+    86% { transform: scale(1.13); }
+}
+
+@keyframes vp-card-progress-auto {
+    0%, 64% { transform: rotate(0); }
+    84%, 100% { transform: rotate(180deg); }
+}
+
+@keyframes vp-card-community-auto {
+    0%, 70%, 100% { transform: scaleX(1) translateY(0); }
+    80% { transform: scaleX(1.18) translateY(-1px); }
+    88% { transform: scaleX(0.96) translateY(0); }
+}
+
+@keyframes vp-card-gift-auto {
+    0%, 68%, 100% { transform: translateY(0) rotate(0); }
+    76% { transform: translateY(-2px) rotate(-5deg); }
+    85% { transform: translateY(0) rotate(5deg); }
+}
+
+@media (max-width: 620px) {
+    .vp-content-boot {
+        min-height: calc(100vh - 64px);
+        grid-template-columns: auto minmax(0, 1fr);
+        padding-inline: 22px;
+    }
+
+    .games-grid .catalog-identity > .catalog-badge::before {
+        animation: vp-card-tab-rail 3.8s ease-in-out infinite;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .vp-content-boot-track i,
+    .games-grid .catalog-identity > .catalog-badge,
+    .games-grid .catalog-identity > .catalog-badge::before,
+    .games-grid .catalog-identity > .catalog-badge::after,
+    .games-grid .catalog-identity > .catalog-badge > i {
+        animation: none !important;
+        transition: none !important;
+    }
+}

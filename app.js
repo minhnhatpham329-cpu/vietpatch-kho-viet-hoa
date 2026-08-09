@@ -2106,9 +2106,9 @@ function renderGamesGrid() {
         const progress = Math.max(0, Math.min(100, Number(game.progress) || 0));
 
         card.innerHTML = `
-            <button class="card-header-img" type="button" data-game-id="${escapeHtml(game.id)}" aria-label="Xem chi tiết ${escapeHtml(game.title)}">
+            <a class="card-header-img" href="${escapeHtml(gameSeoPath(game))}" aria-label="Mở trang hồ sơ ${escapeHtml(game.title)}">
                 <img src="${escapeHtml(coverImage)}" alt="${escapeHtml(game.title)}" loading="lazy" onerror="this.src='${escapeHtml(getFallbackGameImage(game))}'">
-            </button>
+            </a>
             <div class="catalog-identity">
                 ${badge ? `
                     <span class="catalog-badge badge-${badge.key}" role="status" aria-label="${escapeHtml(badge.ariaLabel)}">
@@ -2116,7 +2116,7 @@ function renderGamesGrid() {
                         <span>${escapeHtml(badge.label)}</span>
                     </span>
                 ` : ""}
-                <h3 class="card-title"><a class="card-title-link" href="${escapeHtml(gameSeoPath(game))}" data-game-id="${escapeHtml(game.id)}" aria-label="Mở hồ sơ ${escapeHtml(game.title)}">${escapeHtml(game.title)}</a></h3>
+                <h3 class="card-title"><a class="card-title-link" href="${escapeHtml(gameSeoPath(game))}" aria-label="Mở trang hồ sơ ${escapeHtml(game.title)}">${escapeHtml(game.title)}</a></h3>
                 <p>${escapeHtml(game.developer)} · ${escapeHtml(game.engine)}</p>
             </div>
             <div class="catalog-status status-${releaseState.key}">
@@ -2137,9 +2137,9 @@ function renderGamesGrid() {
                 <span title="Điểm đánh giá"><i class="fa-solid fa-star" aria-hidden="true"></i><strong data-stat="rating">${getLiveGameStats(game.id).reviewCount > 0 ? Number(getLiveGameStats(game.id).ratingAverage).toFixed(1) : "—"}</strong><small data-stat-label="rating">${getLiveGameStats(game.id).reviewCount > 0 ? `${formatMetricCount(getLiveGameStats(game.id).reviewCount)} đánh giá` : "Chưa đánh giá"}</small></span>
             </div>
             <div class="card-footer">
-                <button class="card-detail-btn" type="button" data-game-id="${escapeHtml(game.id)}">
+                <a class="card-detail-btn" href="${escapeHtml(gameSeoPath(game))}" aria-label="Mở trang hồ sơ ${escapeHtml(game.title)}">
                     <span>Mở hồ sơ</span><i class="fa-solid fa-arrow-right"></i>
-                </button>
+                </a>
                 <button class="card-review-btn" type="button" data-review-game-id="${escapeHtml(game.id)}" aria-label="Đánh giá ${escapeHtml(game.title)}">
                     <i class="fa-solid fa-star" aria-hidden="true"></i><span>Đánh giá</span>
                 </button>
@@ -2200,9 +2200,9 @@ function renderHeroSlider() {
                 </dl>
                 <div class="action-zone">
                     <span class="feature-action-label">Thông tin kỹ thuật</span>
-                    <button class="primary-action btn-detail" type="button" data-game-id="${escapeHtml(game.id)}">
+                    <a class="primary-action profile-page-link" href="${escapeHtml(gameSeoPath(game))}" aria-label="Mở trang hồ sơ ${escapeHtml(game.title)}">
                         <span>Mở hồ sơ</span><i class="fa-solid fa-arrow-right"></i>
-                    </button>
+                    </a>
                 </div>
             </article>
         `;
@@ -2495,9 +2495,9 @@ function renderUserLibrary() {
                     <button class="action-btn-main btn-green btn-download-patch" type="button" data-game-id="${escapeHtml(game.id)}">
                         Tải bản Việt hóa <i class="fa-solid fa-arrow-down"></i>
                     </button>
-                    <button class="action-btn-secondary btn-detail" type="button" data-game-id="${escapeHtml(game.id)}">
+                    <a class="action-btn-secondary profile-page-link" href="${escapeHtml(gameSeoPath(game))}" aria-label="Mở trang hồ sơ ${escapeHtml(game.title)}">
                         Mở hồ sơ
-                    </button>
+                    </a>
                 </div>
             </div>
         `;
@@ -3910,12 +3910,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("catalog-results")?.scrollIntoView({ behavior: "smooth", block: "start" });
     });
 
-    // 8. Dynamic delegation for Game Cards (Detail Button)
+    // 8. Dynamic delegation for card-only actions.
+    // Profile links navigate to their crawlable /game/... pages directly.
     document.getElementById("games-grid-container").addEventListener("click", (e) => {
         const reviewBtn = e.target.closest(".card-review-btn");
-        const detailBtn = e.target.closest(".card-detail-btn");
-        const titleLink = e.target.closest(".card-title-link");
-        const coverEl = e.target.closest(".card-header-img");
         const btnEl = e.target.closest(".card-btn");
         const resetBtn = e.target.closest(".empty-reset-btn");
 
@@ -3924,16 +3922,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         } else if (reviewBtn) {
             const gameId = reviewBtn.getAttribute("data-review-game-id");
             openGameDetails(gameId, { focusReview: true });
-        } else if (detailBtn) {
-            const gameId = detailBtn.getAttribute("data-game-id");
-            openGameDetails(gameId);
-        } else if (titleLink && !e.ctrlKey && !e.metaKey && !e.shiftKey && !e.altKey) {
-            e.preventDefault();
-            const gameId = titleLink.getAttribute("data-game-id");
-            openGameDetails(gameId);
-        } else if (coverEl) {
-            const gameId = coverEl.getAttribute("data-game-id");
-            openGameDetails(gameId);
         } else if (btnEl) {
             const gameId = btnEl.getAttribute("data-game-id");
             const game = gamesDatabase.find(g => g.id === gameId);
@@ -3955,15 +3943,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     });
     
-    // Carousel slider details action delegation
-    document.getElementById("hero-slider-container").addEventListener("click", (e) => {
-        const btn = e.target.closest(".btn-detail");
-        if (btn) {
-            const gameId = btn.getAttribute("data-game-id");
-            openGameDetails(gameId);
-        }
-    });
-
     // Slider Prev/Next Controls
     const prevBtn = document.querySelector(".carousel-nav .prev");
     const nextBtn = document.querySelector(".carousel-nav .next");

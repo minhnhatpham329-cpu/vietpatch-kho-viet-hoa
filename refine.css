@@ -2192,6 +2192,21 @@ html.cms-ready .vp-content-boot { display: none; }
     text-decoration: underline;
 }
 
+a.card-header-img,
+a.card-detail-btn,
+a.primary-action,
+a.action-btn-secondary.profile-page-link {
+    text-decoration: none;
+}
+
+a.card-header-img:focus-visible,
+a.card-detail-btn:focus-visible,
+a.primary-action:focus-visible,
+a.action-btn-secondary.profile-page-link:focus-visible {
+    outline: 3px solid var(--vermilion, #e63d2f);
+    outline-offset: 3px;
+}
+
 .game-card.catalog-row .card-review-btn {
     min-height: 40px;
     padding: 0 12px;

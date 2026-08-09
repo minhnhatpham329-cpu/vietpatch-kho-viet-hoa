@@ -1905,7 +1905,7 @@ async function unlockFreeGame(game) {
 
 function getCatalogPageSize() {
     const configured = Number(cmsState?.site?.catalogPageSize);
-    return [6, 9, 12].includes(configured) ? configured : 9;
+    return [8, 12, 16].includes(configured) ? configured : 12;
 }
 
 function getCatalogBadge(game) {

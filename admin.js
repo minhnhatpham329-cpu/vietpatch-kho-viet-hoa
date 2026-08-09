@@ -289,7 +289,8 @@
         const enabledTrailers = state.trailers.filter(item => item.enabled).length;
         const publishedRequests = state.requests.filter(item => item.published).length;
         const totalGames = getAdminCatalog().length;
-        const pageSize = Number(state.site.catalogPageSize) || 9;
+        const configuredPageSize = Number(state.site.catalogPageSize);
+        const pageSize = [8, 12, 16].includes(configuredPageSize) ? configuredPageSize : 12;
         const featuredIds = Array.isArray(state.site.featuredGameIds)
             ? state.site.featuredGameIds
             : [state.site.featuredGameId].filter(Boolean);
@@ -363,7 +364,10 @@
         form.elements.featuredGameIds.value = selectedIds.join(",");
         form.elements.catalogHeading.value = state.site.catalogHeading || "Thư viện Việt hóa";
         form.elements.catalogIntro.value = state.site.catalogIntro || "";
-        form.elements.catalogPageSize.value = String(state.site.catalogPageSize || "9");
+        const configuredPageSize = String(state.site.catalogPageSize || "12");
+        form.elements.catalogPageSize.value = ["8", "12", "16"].includes(configuredPageSize)
+            ? configuredPageSize
+            : "12";
     }
 
     function renderTrailerManager() {

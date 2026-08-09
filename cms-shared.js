@@ -33,7 +33,7 @@
             featuredGameIds: ["wukong", "eldenring", "cyberpunk"],
             catalogHeading: "Thư viện Việt hóa",
             catalogIntro: "Tìm đúng game, phiên bản và trạng thái kiểm thử trong một danh mục gọn, có bộ lọc và phân trang rõ ràng.",
-            catalogPageSize: "9",
+            catalogPageSize: "12",
             trailerKicker: "TRAILER BOARD / GAME HOT GẦN ĐÂY",
             trailerHeading: "Trailer game hot tuần này.",
             trailerIntro: "Theo dõi những game đang được cộng đồng nhắc nhiều để VietPatch ưu tiên khảo sát text, font và khả năng đóng gói patch.",

@@ -117,7 +117,10 @@ function shell({ title, description, canonical, image, body, jsonLd, robots = "i
     <link rel="icon" type="image/png" sizes="192x192" href="/assets/brand/icon-192.png">
     <link rel="apple-touch-icon" href="/assets/brand/apple-touch-icon.png">
     <link rel="manifest" href="/site.webmanifest">
-    <link rel="stylesheet" href="/game-page.css?v=20260809-seo1">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap">
+    <link rel="stylesheet" href="/game-page.css?v=20260809-profile2">
     <script type="application/ld+json">${jsonLd}</script>
 </head>
 <body>
@@ -129,7 +132,7 @@ function shell({ title, description, canonical, image, body, jsonLd, robots = "i
         </a>
         <nav aria-label="Điều hướng chính">
             <a href="/#catalog">Kho sưu tập</a>
-            <a href="/game">Chỉ mục game</a>
+            <a class="is-active" href="/game">Chỉ mục game</a>
             <a href="/?tab=progress">Tiến độ</a>
             <a href="/?tab=requests">Đề xuất</a>
         </nav>
@@ -175,6 +178,7 @@ function gameIndexBody(games, publishedAt) {
                 <h2><a href="${escapeHtml(path)}">${escapeHtml(gameDisplayTitle(game))}</a></h2>
                 <p>${escapeHtml(summarize(game.description, 135))}</p>
                 <dl><div><dt>Patch</dt><dd>${escapeHtml(game.version)}</dd></div><div><dt>Cập nhật</dt><dd>${escapeHtml(formatDate(game.date))}</dd></div></dl>
+                <a class="index-card-action" href="${escapeHtml(path)}">Xem hồ sơ <span>→</span></a>
             </div>
         </article>`;
     }).join("");
@@ -182,10 +186,17 @@ function gameIndexBody(games, publishedAt) {
     return `<main id="noi-dung" class="index-main">
         <nav class="breadcrumbs" aria-label="Đường dẫn"><a href="/">Trang chủ</a><span>/</span><span>Chỉ mục game</span></nav>
         <header class="index-intro">
-            <p class="eyebrow">CHỈ MỤC VIETPATCH / ${String(games.length).padStart(2, "0")} HỒ SƠ</p>
-            <h1>Tất cả game có<br>trang Việt hóa riêng.</h1>
-            <p>Danh sách này được tạo trực tiếp từ nội dung đã xuất bản trong Content Studio. Khi game được thêm, sửa hoặc ẩn, chỉ mục và sitemap sẽ tự đồng bộ.</p>
-            <small>Cập nhật dữ liệu: ${escapeHtml(formatDate(publishedAt))}</small>
+            <div class="index-intro-copy">
+                <p class="eyebrow">CHỈ MỤC VIETPATCH / HỒ SƠ ĐÃ XUẤT BẢN</p>
+                <h1>Kho game<br>Việt hóa.</h1>
+                <p>Tra cứu đúng game, phiên bản và trạng thái trong một danh mục được đồng bộ trực tiếp từ Content Studio.</p>
+            </div>
+            <div class="index-ledger" aria-label="Tổng quan chỉ mục">
+                <span>ĐANG LƯU TRỮ</span>
+                <strong>${String(games.length).padStart(2, "0")}</strong>
+                <p>hồ sơ game</p>
+                <small>Cập nhật ${escapeHtml(formatDate(publishedAt))}</small>
+            </div>
         </header>
         <section class="index-grid" aria-label="Danh sách game Việt hóa">${cards}</section>
     </main>`;
@@ -210,11 +221,8 @@ function gameBody(game, stats) {
         <nav class="breadcrumbs" aria-label="Đường dẫn"><a href="/">Trang chủ</a><span>/</span><a href="/game">Game</a><span>/</span><span>${escapeHtml(displayTitle)}</span></nav>
         <article>
             <header class="game-hero">
-                <div class="game-cover">
-                    <img src="${escapeHtml(absoluteUrl(game.imageUrl))}" alt="Ảnh đại diện ${escapeHtml(displayTitle)}">
-                    <span class="cover-code">VP / ${escapeHtml(game.id.toUpperCase())}</span>
-                </div>
                 <div class="game-summary">
+                    <div class="summary-code"><span>VP / PATCH ARCHIVE</span><b>${escapeHtml(game.id.toUpperCase())}</b></div>
                     <p class="eyebrow"><span class="signal"></span> HỒ SƠ VIỆT HÓA · ${escapeHtml(status.detail.toUpperCase())}</p>
                     <h1>${escapeHtml(displayTitle)}</h1>
                     <p class="lead">${escapeHtml(summarize(game.description, 320))}</p>
@@ -228,6 +236,10 @@ function gameBody(game, stats) {
                         <a class="primary-action" href="/?game=${encodeURIComponent(game.id)}">Mở hồ sơ tương tác <span>→</span></a>
                         <a class="text-action" href="/game">Xem toàn bộ game</a>
                     </div>
+                </div>
+                <div class="game-cover">
+                    <img src="${escapeHtml(absoluteUrl(game.imageUrl))}" alt="Ảnh đại diện ${escapeHtml(displayTitle)}">
+                    <span class="cover-code">CẬP NHẬT / ${escapeHtml(formatDate(game.date))}</span>
                 </div>
             </header>
 

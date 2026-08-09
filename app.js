@@ -2116,7 +2116,7 @@ function renderGamesGrid() {
                         <span>${escapeHtml(badge.label)}</span>
                     </span>
                 ` : ""}
-                <h3 class="card-title"><a class="card-title-link" href="${escapeHtml(gameSeoPath(game))}">${escapeHtml(game.title)}</a></h3>
+                <h3 class="card-title"><a class="card-title-link" href="${escapeHtml(gameSeoPath(game))}" data-game-id="${escapeHtml(game.id)}" aria-label="Mở hồ sơ ${escapeHtml(game.title)}">${escapeHtml(game.title)}</a></h3>
                 <p>${escapeHtml(game.developer)} · ${escapeHtml(game.engine)}</p>
             </div>
             <div class="catalog-status status-${releaseState.key}">
@@ -3914,6 +3914,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("games-grid-container").addEventListener("click", (e) => {
         const reviewBtn = e.target.closest(".card-review-btn");
         const detailBtn = e.target.closest(".card-detail-btn");
+        const titleLink = e.target.closest(".card-title-link");
         const coverEl = e.target.closest(".card-header-img");
         const btnEl = e.target.closest(".card-btn");
         const resetBtn = e.target.closest(".empty-reset-btn");
@@ -3925,6 +3926,10 @@ document.addEventListener("DOMContentLoaded", async () => {
             openGameDetails(gameId, { focusReview: true });
         } else if (detailBtn) {
             const gameId = detailBtn.getAttribute("data-game-id");
+            openGameDetails(gameId);
+        } else if (titleLink && !e.ctrlKey && !e.metaKey && !e.shiftKey && !e.altKey) {
+            e.preventDefault();
+            const gameId = titleLink.getAttribute("data-game-id");
             openGameDetails(gameId);
         } else if (coverEl) {
             const gameId = coverEl.getAttribute("data-game-id");

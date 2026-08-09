@@ -2174,6 +2174,41 @@ html.cms-ready .vp-content-boot { display: none; }
 /* ==========================================================================
    COMMUNITY DATA — số liệu thật, đánh giá và báo phiên bản
    ========================================================================== */
+.game-card.catalog-row .card-footer {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px;
+}
+
+.game-card.catalog-row .card-review-btn {
+    min-height: 40px;
+    padding: 0 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    color: var(--vermilion);
+    background: transparent;
+    border: 1px solid var(--vermilion);
+    font: 800 0.62rem var(--sans);
+    white-space: nowrap;
+    transition: color 160ms ease, background 160ms ease, transform 160ms ease;
+}
+
+.game-card.catalog-row .card-review-btn:hover,
+.game-card.catalog-row .card-review-btn:focus-visible {
+    color: var(--paper-white);
+    background: var(--vermilion);
+}
+
+.game-card.catalog-row .card-review-btn:active {
+    transform: translateY(1px);
+}
+
+.detail-feedback-card.review-board:focus {
+    outline: 2px solid var(--vermilion);
+    outline-offset: 4px;
+}
+
 .catalog-community-stats {
     margin: 13px 18px 0;
     padding: 9px 0;

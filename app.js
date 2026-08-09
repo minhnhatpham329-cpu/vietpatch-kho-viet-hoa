@@ -2104,6 +2104,9 @@ function renderGamesGrid() {
                 <button class="card-detail-btn" type="button" data-game-id="${escapeHtml(game.id)}">
                     <span>Mở hồ sơ</span><i class="fa-solid fa-arrow-right"></i>
                 </button>
+                <button class="card-review-btn" type="button" data-review-game-id="${escapeHtml(game.id)}" aria-label="Đánh giá ${escapeHtml(game.title)}">
+                    <i class="fa-solid fa-star" aria-hidden="true"></i><span>Đánh giá</span>
+                </button>
             </div>
         `;
         gridContainer.appendChild(card);
@@ -2748,7 +2751,7 @@ function switchTab(tabId) {
 // ==========================================================================
 // DETAILS MODAL / DRAWER SYSTEM
 // ==========================================================================
-function openGameDetails(gameId) {
+function openGameDetails(gameId, { focusReview = false } = {}) {
     const game = gamesDatabase.find(g => g.id === gameId);
     if (!game) return;
     activeDetailGameId = game.id;
@@ -2867,7 +2870,22 @@ function openGameDetails(gameId) {
     overlay.classList.add("active");
     overlay.setAttribute("aria-hidden", "false");
     document.body.style.overflow = "hidden"; // Disable scroll behind
-    requestAnimationFrame(() => overlay.querySelector(".detail-panel")?.focus());
+    const detailPanel = overlay.querySelector(".detail-panel");
+    if (detailPanel) detailPanel.scrollTop = 0;
+    requestAnimationFrame(() => {
+        if (!focusReview) {
+            detailPanel?.focus();
+            return;
+        }
+        const reviewBoard = document.querySelector("#detail-community .review-board");
+        if (!reviewBoard) return;
+        reviewBoard.setAttribute("tabindex", "-1");
+        reviewBoard.scrollIntoView({
+            behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+            block: "start"
+        });
+        reviewBoard.focus({ preventScroll: true });
+    });
     loadDetailCommunity(game, { recordView: true });
 }
 
@@ -3857,6 +3875,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // 8. Dynamic delegation for Game Cards (Detail Button)
     document.getElementById("games-grid-container").addEventListener("click", (e) => {
+        const reviewBtn = e.target.closest(".card-review-btn");
         const detailBtn = e.target.closest(".card-detail-btn");
         const coverEl = e.target.closest(".card-header-img");
         const btnEl = e.target.closest(".card-btn");
@@ -3864,6 +3883,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         if (resetBtn) {
             resetCatalogFilters();
+        } else if (reviewBtn) {
+            const gameId = reviewBtn.getAttribute("data-review-game-id");
+            openGameDetails(gameId, { focusReview: true });
         } else if (detailBtn) {
             const gameId = detailBtn.getAttribute("data-game-id");
             openGameDetails(gameId);

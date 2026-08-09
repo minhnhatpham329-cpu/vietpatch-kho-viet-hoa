@@ -120,7 +120,7 @@ function shell({ title, description, canonical, image, body, jsonLd, robots = "i
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap">
-    <link rel="stylesheet" href="/game-page.css?v=20260809-profile2">
+    <link rel="stylesheet" href="/game-page.css?v=20260809-cover2">
     <script type="application/ld+json">${jsonLd}</script>
 </head>
 <body>
@@ -170,7 +170,8 @@ function gameIndexBody(games, publishedAt) {
         const status = statusFor(game);
         return `<article class="index-card">
             <a class="index-cover" href="${escapeHtml(path)}" aria-label="Xem ${escapeHtml(gameDisplayTitle(game))}">
-                <img src="${escapeHtml(absoluteUrl(game.imageUrl))}" alt="Ảnh ${escapeHtml(gameDisplayTitle(game))}" loading="lazy">
+                <img class="index-cover-backdrop" src="${escapeHtml(absoluteUrl(game.imageUrl))}" alt="" aria-hidden="true" loading="lazy">
+                <img class="index-cover-art" src="${escapeHtml(absoluteUrl(game.imageUrl))}" alt="Ảnh ${escapeHtml(gameDisplayTitle(game))}" loading="lazy">
                 <span class="status-chip ${status.className}">${escapeHtml(status.label)}</span>
             </a>
             <div class="index-card-copy">
@@ -238,7 +239,8 @@ function gameBody(game, stats) {
                     </div>
                 </div>
                 <div class="game-cover">
-                    <img src="${escapeHtml(absoluteUrl(game.imageUrl))}" alt="Ảnh đại diện ${escapeHtml(displayTitle)}">
+                    <img class="cover-backdrop" src="${escapeHtml(absoluteUrl(game.imageUrl))}" alt="" aria-hidden="true">
+                    <img class="cover-art" src="${escapeHtml(absoluteUrl(game.imageUrl))}" alt="Ảnh đại diện ${escapeHtml(displayTitle)}">
                     <span class="cover-code">CẬP NHẬT / ${escapeHtml(formatDate(game.date))}</span>
                 </div>
             </header>

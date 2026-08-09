@@ -571,6 +571,25 @@ function normalizeSearchText(value) {
         .trim();
 }
 
+function gameSeoSlug(game) {
+    const title = String(game?.title || "Game")
+        .replace(/\s+việt\s*hóa\s*$/iu, "")
+        .trim();
+    const slug = title
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[đĐ]/g, "d")
+        .toLocaleLowerCase("en")
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "")
+        .slice(0, 88);
+    return `${slug || "game"}-viet-hoa`;
+}
+
+function gameSeoPath(game) {
+    return `/game/${encodeURIComponent(String(game?.id || ""))}/${gameSeoSlug(game)}`;
+}
+
 function parseDownloadCount(value) {
     const source = String(value || "0").trim().toLowerCase().replace(/,/g, ".");
     const amount = Number.parseFloat(source.replace(/[^0-9.]/g, "")) || 0;
@@ -2097,7 +2116,7 @@ function renderGamesGrid() {
                         <span>${escapeHtml(badge.label)}</span>
                     </span>
                 ` : ""}
-                <h3 class="card-title">${escapeHtml(game.title)}</h3>
+                <h3 class="card-title"><a class="card-title-link" href="${escapeHtml(gameSeoPath(game))}">${escapeHtml(game.title)}</a></h3>
                 <p>${escapeHtml(game.developer)} · ${escapeHtml(game.engine)}</p>
             </div>
             <div class="catalog-status status-${releaseState.key}">
@@ -4319,6 +4338,18 @@ document.addEventListener("DOMContentLoaded", async () => {
                 switchTab("library");
             }
         });
+    }
+
+    const initialParams = new URLSearchParams(window.location.search);
+    const requestedTab = initialParams.get("tab");
+    if (["home", "progress", "requests", "library", "profile"].includes(requestedTab)) {
+        switchTab(requestedTab);
+    }
+    const requestedGameId = String(initialParams.get("game") || "").toLocaleLowerCase("en");
+    const requestedGame = getPublicGames().find(game => game.id === requestedGameId);
+    if (requestedGame) {
+        switchTab("home");
+        openGameDetails(requestedGame.id);
     }
     
     // 17. Intersection Observer for Scroll Animations

@@ -1,23 +1,25 @@
 const ADMIN_COOKIE = "vp_admin_session";
 
 export function securityHeaders(headers = new Headers()) {
-    headers.set("Content-Security-Policy", [
-        "default-src 'self'",
-        "base-uri 'self'",
-        "object-src 'none'",
-        "frame-ancestors 'none'",
-        "form-action 'self'",
-        "script-src 'self' https://www.youtube.com https://challenges.cloudflare.com",
-        "script-src-attr 'none'",
-        "style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com",
-        "font-src 'self' data: https://cdnjs.cloudflare.com https://fonts.gstatic.com",
-        "img-src 'self' data: blob: https:",
-        "frame-src https://www.youtube.com https://www.youtube-nocookie.com https://challenges.cloudflare.com",
-        "connect-src 'self' https://challenges.cloudflare.com",
-        "media-src 'self' blob:",
-        "worker-src 'self' blob:",
-        "upgrade-insecure-requests"
-    ].join("; "));
+    if (!headers.has("Content-Security-Policy")) {
+        headers.set("Content-Security-Policy", [
+            "default-src 'self'",
+            "base-uri 'self'",
+            "object-src 'none'",
+            "frame-ancestors 'none'",
+            "form-action 'self'",
+            "script-src 'self' https://www.youtube.com https://challenges.cloudflare.com",
+            "script-src-attr 'none'",
+            "style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com",
+            "font-src 'self' data: https://cdnjs.cloudflare.com https://fonts.gstatic.com",
+            "img-src 'self' data: blob: https:",
+            "frame-src https://www.youtube.com https://www.youtube-nocookie.com https://challenges.cloudflare.com",
+            "connect-src 'self' https://challenges.cloudflare.com",
+            "media-src 'self' blob:",
+            "worker-src 'self' blob:",
+            "upgrade-insecure-requests"
+        ].join("; "));
+    }
     headers.set("Cross-Origin-Opener-Policy", "same-origin");
     headers.set("Cross-Origin-Resource-Policy", "same-origin");
     headers.set("Origin-Agent-Cluster", "?1");

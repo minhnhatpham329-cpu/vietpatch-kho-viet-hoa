@@ -9,6 +9,7 @@
         homepage: "Bố cục trang chủ",
         trailers: "Quản lý trailer tuần",
         requests: "Đề xuất từ cộng đồng",
+        community: "Tương tác và kiểm duyệt",
         posts: "Quản lý bài đăng",
         patches: "Kho game và bản Việt hóa",
         backup: "Lịch sử và sao lưu"
@@ -31,6 +32,9 @@
     let selectedGameId = CMS.catalog[0]?.id || "";
     let saveQueue = Promise.resolve();
     let revisionsLoaded = false;
+    let communityData = null;
+    let communityLoaded = false;
+    let communityLoadPromise = null;
 
     const byId = id => document.getElementById(id);
     const escapeHtml = value => String(value ?? "")
@@ -274,6 +278,7 @@
         if (panelId === "requests") renderRequestManager();
         if (panelId === "posts") renderPostManager();
         if (panelId === "patches") renderPatchManager();
+        if (panelId === "community") loadCommunityModeration();
         if (panelId === "backup") {
             renderBackupReport();
             loadRevisions();
@@ -689,6 +694,181 @@
         return payload;
     }
 
+    function formatCommunityNumber(value) {
+        return Math.max(0, Math.round(Number(value) || 0)).toLocaleString("vi-VN");
+    }
+
+    function parseBaselineDownloads(value) {
+        const source = String(value || "0").trim().toLowerCase().replace(/,/g, ".");
+        const amount = Number.parseFloat(source.replace(/[^0-9.]/g, "")) || 0;
+        if (source.includes("m")) return amount * 1_000_000;
+        if (source.includes("k")) return amount * 1_000;
+        return amount;
+    }
+
+    function getCommunityGame(gameId) {
+        return getAdminCatalog().find(game => game.id === gameId) || null;
+    }
+
+    function formatCommunityDate(value) {
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) return "Chưa rõ";
+        return new Intl.DateTimeFormat("vi-VN", {
+            dateStyle: "short",
+            timeStyle: "short"
+        }).format(date);
+    }
+
+    function renderAdminStars(rating) {
+        const score = Math.max(0, Math.min(5, Math.round(Number(rating) || 0)));
+        return Array.from({ length: 5 }, (_, index) => (
+            `<i class="fa-${index < score ? "solid" : "regular"} fa-star"></i>`
+        )).join("");
+    }
+
+    function renderCommunityModeration() {
+        if (!communityData) return;
+        const overview = communityData.overview || {};
+        byId("community-metrics").innerHTML = `
+            <article><span>LƯỢT XEM THẬT</span><strong>${formatCommunityNumber(overview.totalViews)}</strong><small>Đã chống đếm lặp 6 giờ</small></article>
+            <article><span>LƯỢT TẢI MỚI</span><strong>${formatCommunityNumber(overview.totalDownloads)}</strong><small>Ghi khi link tải được mở</small></article>
+            <article><span>ĐÁNH GIÁ CÔNG KHAI</span><strong>${formatCommunityNumber(overview.reviewCount)}</strong><small>Từ người đã lưu patch</small></article>
+            <article class="${Number(overview.pendingReports) > 0 ? "needs-attention" : ""}"><span>BÁO CÁO CHỜ DUYỆT</span><strong>${formatCommunityNumber(overview.pendingReports)}</strong><small>Cần kiểm tra phiên bản</small></article>
+        `;
+
+        const stats = Array.isArray(communityData.stats) ? communityData.stats : [];
+        byId("community-game-stats").innerHTML = stats.length
+            ? stats.map(item => {
+                const game = getCommunityGame(item.gameId);
+                const baseline = parseBaselineDownloads(game?.downloads);
+                return `
+                    <article class="community-stat-row">
+                        <div><strong>${escapeHtml(game?.title || item.gameId)}</strong><small>${escapeHtml(item.gameId)}</small></div>
+                        <dl>
+                            <div><dt>Mắt xem</dt><dd>${formatCommunityNumber(item.views)}</dd></div>
+                            <div><dt>Tải mới</dt><dd>${formatCommunityNumber(item.downloads)}</dd></div>
+                            <div><dt>Tổng hiển thị</dt><dd>${formatCommunityNumber(baseline + Number(item.downloads || 0))}</dd></div>
+                        </dl>
+                    </article>
+                `;
+            }).join("")
+            : `<p class="community-admin-empty">Chưa có lượt xem hoặc lượt tải mới.</p>`;
+
+        const reports = Array.isArray(communityData.reports) ? communityData.reports : [];
+        const reportLabels = { pending: "Chờ kiểm tra", verified: "Đã xác minh", dismissed: "Đã bỏ qua" };
+        byId("community-report-list").innerHTML = reports.length
+            ? reports.map(report => {
+                const game = getCommunityGame(report.gameId);
+                return `
+                    <article class="community-moderation-card status-${escapeHtml(report.status)}">
+                        <header>
+                            <div><span>${escapeHtml(report.username || "Thành viên")}</span><strong>${escapeHtml(game?.title || report.gameId)}</strong></div>
+                            <em>${escapeHtml(reportLabels[report.status] || report.status)}</em>
+                        </header>
+                        <p><b>Phiên bản báo:</b> ${escapeHtml(report.reportedVersion)}</p>
+                        <p>${escapeHtml(report.note)}</p>
+                        ${report.sourceUrl ? `<a href="${escapeHtml(report.sourceUrl)}" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-arrow-up-right-from-square"></i> Mở nguồn</a>` : ""}
+                        <small>${escapeHtml(formatCommunityDate(report.updatedAt || report.createdAt))}${report.adminNote ? ` · ${escapeHtml(report.adminNote)}` : ""}</small>
+                        <div class="community-card-actions">
+                            ${game ? `<button type="button" data-edit-community-game="${escapeHtml(game.id)}"><i class="fa-solid fa-pen-to-square"></i> Mở hồ sơ game</button>` : ""}
+                            <button type="button" data-report-action="verified" data-community-id="${escapeHtml(report.id)}"><i class="fa-solid fa-check"></i> Xác minh</button>
+                            <button type="button" data-report-action="dismissed" data-community-id="${escapeHtml(report.id)}"><i class="fa-solid fa-xmark"></i> Bỏ qua</button>
+                            ${report.status !== "pending" ? `<button type="button" data-report-action="pending" data-community-id="${escapeHtml(report.id)}">Mở lại</button>` : ""}
+                        </div>
+                    </article>
+                `;
+            }).join("")
+            : `<p class="community-admin-empty">Chưa có báo cáo phiên bản mới.</p>`;
+
+        const reviews = Array.isArray(communityData.reviews) ? communityData.reviews : [];
+        byId("community-review-list").innerHTML = reviews.length
+            ? reviews.map(review => {
+                const game = getCommunityGame(review.gameId);
+                return `
+                    <article class="community-moderation-card status-${escapeHtml(review.status)}">
+                        <header>
+                            <div><span>${escapeHtml(review.username || "Thành viên")}</span><strong>${escapeHtml(game?.title || review.gameId)}</strong></div>
+                            <em>${review.status === "published" ? "Đang công khai" : "Đang ẩn"}</em>
+                        </header>
+                        <div class="community-admin-stars" aria-label="${Number(review.rating)} trên 5 sao">${renderAdminStars(review.rating)}</div>
+                        <p>${escapeHtml(review.body)}</p>
+                        <small>${escapeHtml(formatCommunityDate(review.updatedAt || review.createdAt))}</small>
+                        <div class="community-card-actions">
+                            <button type="button" data-review-action="${review.status === "published" ? "hidden" : "published"}" data-community-id="${escapeHtml(review.id)}">
+                                <i class="fa-solid ${review.status === "published" ? "fa-eye-slash" : "fa-eye"}"></i> ${review.status === "published" ? "Ẩn" : "Công khai"}
+                            </button>
+                            <button class="danger" type="button" data-review-action="delete" data-community-id="${escapeHtml(review.id)}"><i class="fa-solid fa-trash"></i> Xóa</button>
+                        </div>
+                    </article>
+                `;
+            }).join("")
+            : `<p class="community-admin-empty">Chưa có bình luận đánh giá.</p>`;
+    }
+
+    async function loadCommunityModeration(force = false) {
+        if (communityLoaded && !force) {
+            renderCommunityModeration();
+            return;
+        }
+        if (communityLoadPromise) return communityLoadPromise;
+        ["community-metrics", "community-game-stats", "community-report-list", "community-review-list"].forEach(id => {
+            const target = byId(id);
+            if (target) target.innerHTML = `<p class="community-admin-loading">Đang tải dữ liệu thật từ máy chủ…</p>`;
+        });
+        communityLoadPromise = (async () => {
+            try {
+                communityData = await adminRequest("/api/admin/community?limit=120");
+                communityLoaded = true;
+                renderCommunityModeration();
+            } catch (error) {
+                ["community-metrics", "community-game-stats", "community-report-list", "community-review-list"].forEach(id => {
+                    const target = byId(id);
+                    if (target) target.innerHTML = `<p class="community-admin-empty">Không tải được dữ liệu: ${escapeHtml(error.message)}</p>`;
+                });
+                showToast(`Không tải được phần tương tác: ${error.message}`, "error");
+            } finally {
+                communityLoadPromise = null;
+            }
+        })();
+        return communityLoadPromise;
+    }
+
+    async function moderateCommunity(button) {
+        const id = button.dataset.communityId;
+        const reviewAction = button.dataset.reviewAction;
+        const reportAction = button.dataset.reportAction;
+        if (!id || (!reviewAction && !reportAction)) return;
+        if (reviewAction === "delete" && !window.confirm("Xóa vĩnh viễn đánh giá này?")) return;
+        button.disabled = true;
+        try {
+            const body = reviewAction
+                ? (reviewAction === "delete"
+                    ? { action: "review-delete", id }
+                    : { action: "review-status", id, status: reviewAction })
+                : {
+                    action: "report-status",
+                    id,
+                    status: reportAction,
+                    adminNote: reportAction === "verified"
+                        ? "Đã đối chiếu nguồn và chuyển cho nhóm cập nhật patch."
+                        : reportAction === "dismissed"
+                            ? "Báo cáo chưa đủ căn cứ hoặc không ảnh hưởng patch hiện tại."
+                            : ""
+                };
+            communityData = await adminRequest("/api/admin/community", {
+                method: "POST",
+                mutation: true,
+                body
+            });
+            communityLoaded = true;
+            renderCommunityModeration();
+            showToast("Đã cập nhật trạng thái kiểm duyệt.");
+        } catch (error) {
+            button.disabled = false;
+            showToast(`Không cập nhật được: ${error.message}`, "error");
+        }
+    }
+
     function renderAllEditors() {
         refreshSelections();
         renderDashboard();
@@ -698,6 +878,7 @@
         renderPostManager();
         renderPatchManager();
         renderBackupReport();
+        if (communityLoaded) renderCommunityModeration();
         updatePublishUi();
     }
 
@@ -1277,6 +1458,17 @@
 
         byId("publish-btn").addEventListener("click", publishCurrentDraft);
         byId("refresh-revisions-btn").addEventListener("click", () => loadRevisions(true));
+        byId("refresh-community-btn").addEventListener("click", () => loadCommunityModeration(true));
+        byId("panel-community").addEventListener("click", event => {
+            const editButton = event.target.closest("[data-edit-community-game]");
+            if (editButton) {
+                selectedGameId = editButton.dataset.editCommunityGame;
+                switchPanel("patches");
+                return;
+            }
+            const button = event.target.closest("[data-review-action], [data-report-action]");
+            if (button) moderateCommunity(button);
+        });
         byId("revision-list").addEventListener("click", event => {
             const button = event.target.closest("[data-restore-revision]");
             if (button) restoreFromRevision(button.dataset.restoreRevision);

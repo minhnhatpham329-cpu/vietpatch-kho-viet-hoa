@@ -515,6 +515,10 @@ let currentCatalogPage = 1;
 let activeHeroSlide = 0;
 let heroRotationInterval = null;
 let detailReturnFocus = null;
+let activeDetailGameId = "";
+const gameStatsCache = new Map();
+let gameStatsLoadPromise = null;
+let gameStatsLoaded = false;
 let accountServiceAvailable = null;
 let authSecurityConfig = {
     googleEnabled: false,
@@ -573,6 +577,41 @@ function parseDownloadCount(value) {
     if (source.includes("m")) return amount * 1_000_000;
     if (source.includes("k")) return amount * 1_000;
     return amount;
+}
+
+function formatMetricCount(value) {
+    return Math.max(0, Math.round(Number(value) || 0)).toLocaleString("vi-VN");
+}
+
+function getLiveGameStats(gameId) {
+    return gameStatsCache.get(String(gameId || "")) || {
+        gameId: String(gameId || ""),
+        views: 0,
+        downloads: 0,
+        reviewCount: 0,
+        ratingAverage: 0
+    };
+}
+
+function getCombinedDownloadCount(game, stats = getLiveGameStats(game?.id)) {
+    return Math.max(0, parseDownloadCount(game?.downloads) + (Number(stats?.downloads) || 0));
+}
+
+function formatReviewDate(value) {
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return "Gần đây";
+    return new Intl.DateTimeFormat("vi-VN", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric"
+    }).format(date);
+}
+
+function renderReviewStars(rating) {
+    const score = Math.max(0, Math.min(5, Math.round(Number(rating) || 0)));
+    return Array.from({ length: 5 }, (_, index) => (
+        `<i class="fa-${index < score ? "solid" : "regular"} fa-star" aria-hidden="true"></i>`
+    )).join("");
 }
 
 function getGameReleaseState(game) {
@@ -1420,6 +1459,14 @@ async function apiRequest(path, options = {}) {
             INVALID_REQUEST_IMAGE: "Ảnh game chưa hợp lệ hoặc quá nặng.",
             INVALID_REQUEST_LINK: "Link cửa hàng chính thức chưa hợp lệ.",
             REQUEST_QUEUE_FULL: "Hàng chờ đề xuất đang đầy. Vui lòng thử lại sau.",
+            INVALID_GAME_ID: "Không xác định được game cần xử lý.",
+            GAME_NOT_FOUND: "Hồ sơ game này không còn được công khai.",
+            INVALID_REVIEW_RATING: "Hãy chọn từ 1 đến 5 sao.",
+            REVIEW_TOO_SHORT: "Nhận xét cần ít nhất 12 ký tự.",
+            PATCH_REQUIRED_FOR_REVIEW: "Bạn cần lưu patch vào thư viện trước khi đánh giá.",
+            INVALID_REPORTED_VERSION: "Hãy nhập phiên bản game mới.",
+            INVALID_REPORT_SOURCE: "Link nguồn phải là địa chỉ HTTPS công khai.",
+            REPORT_NOTE_TOO_SHORT: "Thông tin báo cáo cần ít nhất 12 ký tự.",
             TOO_MANY_REQUESTS: "Thiết bị này gửi quá nhiều yêu cầu. Vui lòng thử lại sau.",
             TOO_MANY_LOGIN_ATTEMPTS: "Bạn đã thử đăng nhập quá nhiều lần. Hãy chờ 15 phút.",
             USE_FREE_UNLOCK: "Bản Việt hóa này đang miễn phí, hãy thêm thẳng vào thư viện."
@@ -1435,6 +1482,185 @@ async function apiRequest(path, options = {}) {
         throw error;
     }
     return payload;
+}
+
+function paintVisibleGameStats() {
+    document.querySelectorAll("[data-game-stats-id]").forEach(container => {
+        const gameId = container.dataset.gameStatsId;
+        const game = gamesDatabase.find(item => item.id === gameId);
+        if (!game) return;
+        const stats = getLiveGameStats(gameId);
+        const values = {
+            views: formatMetricCount(stats.views),
+            downloads: formatMetricCount(getCombinedDownloadCount(game, stats)),
+            rating: stats.reviewCount > 0 ? Number(stats.ratingAverage).toFixed(1) : "—"
+        };
+        Object.entries(values).forEach(([key, value]) => {
+            const target = container.querySelector(`[data-stat="${key}"]`);
+            if (target) target.textContent = value;
+        });
+        const ratingLabel = container.querySelector('[data-stat-label="rating"]');
+        if (ratingLabel) {
+            ratingLabel.textContent = stats.reviewCount > 0
+                ? `${formatMetricCount(stats.reviewCount)} đánh giá`
+                : "Chưa đánh giá";
+        }
+    });
+}
+
+async function loadCatalogStats(force = false) {
+    if (gameStatsLoaded && !force) {
+        paintVisibleGameStats();
+        return gameStatsCache;
+    }
+    if (gameStatsLoadPromise && !force) return gameStatsLoadPromise;
+
+    gameStatsLoadPromise = apiRequest("/api/vietpatch/game-stats")
+        .then(payload => {
+            Object.entries(payload.stats || {}).forEach(([gameId, stats]) => {
+                gameStatsCache.set(gameId, stats);
+            });
+            gameStatsLoaded = true;
+            paintVisibleGameStats();
+            return gameStatsCache;
+        })
+        .catch(error => {
+            console.warn("Không tải được thống kê cộng đồng.", error);
+            return gameStatsCache;
+        })
+        .finally(() => {
+            gameStatsLoadPromise = null;
+        });
+    return gameStatsLoadPromise;
+}
+
+function paintDetailStats(game, stats = getLiveGameStats(game?.id)) {
+    if (!game || activeDetailGameId !== game.id) return;
+    const viewCount = document.getElementById("detail-view-count");
+    const downloadCount = document.getElementById("detail-download-count");
+    const ratingAverage = document.getElementById("detail-rating-average");
+    const ratingCount = document.getElementById("detail-rating-count");
+    const reviewScore = document.getElementById("detail-review-score");
+    if (viewCount) viewCount.textContent = formatMetricCount(stats.views);
+    if (downloadCount) downloadCount.textContent = formatMetricCount(getCombinedDownloadCount(game, stats));
+    if (ratingAverage) ratingAverage.textContent = stats.reviewCount > 0
+        ? `${Number(stats.ratingAverage).toFixed(1)}/5`
+        : "—";
+    if (ratingCount) ratingCount.textContent = stats.reviewCount > 0
+        ? `${formatMetricCount(stats.reviewCount)} đánh giá đã duyệt`
+        : "Chưa có đánh giá";
+    if (reviewScore) reviewScore.textContent = stats.reviewCount > 0
+        ? `${Number(stats.ratingAverage).toFixed(1)}/5 từ ${formatMetricCount(stats.reviewCount)} thành viên`
+        : "Chưa có đánh giá";
+}
+
+function renderDetailReviews(game, payload) {
+    if (!game || activeDetailGameId !== game.id) return;
+    const list = document.getElementById("detail-review-list");
+    const form = document.getElementById("detail-review-form");
+    const note = document.getElementById("detail-review-note");
+    if (!list || !form || !note) return;
+
+    const reviews = Array.isArray(payload?.reviews) ? payload.reviews : [];
+    list.innerHTML = reviews.length
+        ? reviews.map(review => `
+            <article class="detail-review-item">
+                <div class="review-author-row">
+                    <span class="review-avatar">${escapeHtml(String(review.username || "VP").slice(0, 2).toUpperCase())}</span>
+                    <div>
+                        <strong>${escapeHtml(review.username || "Thành viên VietPatch")}</strong>
+                        <span class="review-stars-display" aria-label="${Number(review.rating) || 0} trên 5 sao">${renderReviewStars(review.rating)}</span>
+                    </div>
+                    <time>${escapeHtml(formatReviewDate(review.updatedAt || review.createdAt))}</time>
+                </div>
+                <p>${escapeHtml(review.body)}</p>
+            </article>
+        `).join("")
+        : `<div class="community-empty"><i class="fa-regular fa-message"></i><p>Chưa có nhận xét nào. Người đã dùng patch có thể để lại đánh giá đầu tiên.</p></div>`;
+
+    const mine = payload?.mine || null;
+    form.reset();
+    if (mine) {
+        const ratingInput = form.querySelector(`input[name="rating"][value="${Number(mine.rating)}"]`);
+        if (ratingInput) ratingInput.checked = true;
+        form.elements.body.value = mine.body || "";
+    }
+    const canReview = Boolean(payload?.authenticated && payload?.canReview);
+    form.querySelectorAll("input, textarea, button").forEach(element => {
+        element.disabled = !canReview;
+    });
+    const submitButton = form.querySelector('button[type="submit"]');
+    if (submitButton) {
+        submitButton.innerHTML = mine
+            ? `<i class="fa-solid fa-pen"></i> Cập nhật đánh giá`
+            : `<i class="fa-solid fa-paper-plane"></i> Gửi đánh giá`;
+    }
+    if (!payload?.authenticated) {
+        note.textContent = "Đăng nhập và lưu patch vào bộ sưu tập để viết đánh giá.";
+    } else if (!payload?.canReview) {
+        note.textContent = "Bạn cần lưu patch này vào bộ sưu tập trước khi đánh giá.";
+    } else if (mine?.status === "hidden") {
+        note.textContent = "Đánh giá của bạn đang được quản trị viên kiểm tra; nội dung chỉnh sửa vẫn được lưu.";
+    } else if (mine) {
+        note.textContent = "Bạn đã đánh giá patch này và có thể chỉnh sửa bất cứ lúc nào.";
+    } else {
+        note.textContent = "Đánh giá gắn với tài khoản và chỉ hiển thị sau khi gửi thành công.";
+    }
+}
+
+function configureUpdateReportForm(authenticated) {
+    const form = document.getElementById("detail-update-report-form");
+    const note = document.getElementById("detail-report-note");
+    if (!form || !note) return;
+    form.querySelectorAll("input, textarea, button").forEach(element => {
+        element.disabled = !authenticated;
+    });
+    note.textContent = authenticated
+        ? "Báo cáo sẽ chờ quản trị viên kiểm tra trước khi cập nhật hồ sơ."
+        : "Đăng nhập để gửi báo cáo phiên bản mới.";
+}
+
+async function loadDetailCommunity(game, { recordView = false } = {}) {
+    if (!game || !document.getElementById("detail-community")) return;
+    const gamePath = encodeURIComponent(game.id);
+    const list = document.getElementById("detail-review-list");
+    if (list) list.innerHTML = `<p class="community-loading">Đang tải đánh giá…</p>`;
+    const reviewForm = document.getElementById("detail-review-form");
+    reviewForm?.reset();
+    reviewForm?.querySelectorAll("input, textarea, button").forEach(element => {
+        element.disabled = true;
+    });
+    const reportForm = document.getElementById("detail-update-report-form");
+    reportForm?.reset();
+    reportForm?.querySelectorAll("input, textarea, button").forEach(element => {
+        element.disabled = true;
+    });
+    paintDetailStats(game, getLiveGameStats(game.id));
+
+    const [statsResult, reviewsResult] = await Promise.allSettled([
+        apiRequest(`/api/vietpatch/games/${gamePath}/stats`, recordView ? { method: "POST" } : {}),
+        apiRequest(`/api/vietpatch/games/${gamePath}/reviews`)
+    ]);
+    if (activeDetailGameId !== game.id) return;
+
+    if (statsResult.status === "fulfilled" && statsResult.value?.stats) {
+        gameStatsCache.set(game.id, statsResult.value.stats);
+        paintDetailStats(game, statsResult.value.stats);
+        paintVisibleGameStats();
+    }
+    if (reviewsResult.status === "fulfilled") {
+        const payload = reviewsResult.value;
+        if (payload.stats) {
+            gameStatsCache.set(game.id, payload.stats);
+            paintDetailStats(game, payload.stats);
+            paintVisibleGameStats();
+        }
+        renderDetailReviews(game, payload);
+        configureUpdateReportForm(Boolean(payload.authenticated));
+    } else {
+        if (list) list.innerHTML = `<div class="community-empty"><i class="fa-solid fa-triangle-exclamation"></i><p>Chưa tải được đánh giá. Vui lòng thử lại sau.</p></div>`;
+        configureUpdateReportForm(userState.loggedIn);
+    }
 }
 
 function applyServerUser(serverUser) {
@@ -1609,6 +1835,11 @@ function updateUIForUserSession() {
     if (activeTab === "profile") {
         renderUserProfile();
     }
+
+    if (activeDetailGameId && document.getElementById("detail-overlay")?.classList.contains("active")) {
+        const activeGame = gamesDatabase.find(game => game.id === activeDetailGameId);
+        if (activeGame) queueMicrotask(() => loadDetailCommunity(activeGame, { recordView: false }));
+    }
 }
 
 function formatCurrency(val) {
@@ -1627,6 +1858,12 @@ function startPatchDownload(game) {
     showToast(`Đang mở nguồn tải patch của ${game.title}...`, "success");
     const downloadWindow = window.open(downloadUrl, "_blank", "noopener,noreferrer");
     if (downloadWindow) downloadWindow.opener = null;
+    setTimeout(async () => {
+        await loadCatalogStats(true);
+        if (activeDetailGameId === game.id) {
+            loadDetailCommunity(game, { recordView: false });
+        }
+    }, 1600);
 }
 
 async function unlockFreeGame(game) {
@@ -1793,7 +2030,7 @@ function renderGamesGrid() {
         if (currentSort === "newest") {
             return (new Date(b.date).getTime() || 0) - (new Date(a.date).getTime() || 0);
         } else if (currentSort === "popular") {
-            return parseDownloadCount(b.downloads) - parseDownloadCount(a.downloads);
+            return getCombinedDownloadCount(b) - getCombinedDownloadCount(a);
         } else if (currentSort === "a-z") {
             return String(a.title).localeCompare(String(b.title), "vi", { sensitivity: "base" });
         }
@@ -1858,6 +2095,11 @@ function renderGamesGrid() {
                 <div><dt>Dung lượng</dt><dd>${escapeHtml(game.size)}</dd></div>
                 <div><dt>Giá</dt><dd class="spec-price${Number(game.price) > 0 ? "" : " is-free"}">${Number(game.price) > 0 ? escapeHtml(formatCurrency(game.price)) : "Miễn phí"}</dd></div>
             </dl>
+            <div class="catalog-community-stats" data-game-stats-id="${escapeHtml(game.id)}" aria-label="Thống kê cộng đồng">
+                <span title="Lượt xem"><i class="fa-regular fa-eye" aria-hidden="true"></i><strong data-stat="views">${formatMetricCount(getLiveGameStats(game.id).views)}</strong></span>
+                <span title="Lượt tải"><i class="fa-solid fa-cloud-arrow-down" aria-hidden="true"></i><strong data-stat="downloads">${formatMetricCount(getCombinedDownloadCount(game))}</strong></span>
+                <span title="Điểm đánh giá"><i class="fa-solid fa-star" aria-hidden="true"></i><strong data-stat="rating">${getLiveGameStats(game.id).reviewCount > 0 ? Number(getLiveGameStats(game.id).ratingAverage).toFixed(1) : "—"}</strong><small data-stat-label="rating">${getLiveGameStats(game.id).reviewCount > 0 ? `${formatMetricCount(getLiveGameStats(game.id).reviewCount)} đánh giá` : "Chưa đánh giá"}</small></span>
+            </div>
             <div class="card-footer">
                 <button class="card-detail-btn" type="button" data-game-id="${escapeHtml(game.id)}">
                     <span>Mở hồ sơ</span><i class="fa-solid fa-arrow-right"></i>
@@ -1868,6 +2110,7 @@ function renderGamesGrid() {
     });
 
     renderCatalogPagination(filteredGames.length);
+    loadCatalogStats();
 }
 
 // Render Hero Carousel Slider
@@ -2508,6 +2751,7 @@ function switchTab(tabId) {
 function openGameDetails(gameId) {
     const game = gamesDatabase.find(g => g.id === gameId);
     if (!game) return;
+    activeDetailGameId = game.id;
     
     const overlay = document.getElementById("detail-overlay");
     const banner = document.getElementById("detail-banner");
@@ -2624,6 +2868,7 @@ function openGameDetails(gameId) {
     overlay.setAttribute("aria-hidden", "false");
     document.body.style.overflow = "hidden"; // Disable scroll behind
     requestAnimationFrame(() => overlay.querySelector(".detail-panel")?.focus());
+    loadDetailCommunity(game, { recordView: true });
 }
 
 function closeGameDetails() {
@@ -2633,6 +2878,7 @@ function closeGameDetails() {
     document.body.style.overflow = ""; // Enable scroll
     detailReturnFocus?.focus?.();
     detailReturnFocus = null;
+    activeDetailGameId = "";
 }
 
 function openImageLightbox(src, title = "Ảnh bản dịch Việt hóa") {
@@ -3691,6 +3937,77 @@ document.addEventListener("DOMContentLoaded", async () => {
         const button = e.target.closest(".screenshot-zoom-btn");
         if (!button) return;
         openImageLightbox(button.dataset.imageSrc, button.dataset.imageTitle || "Ảnh bản dịch Việt hóa");
+    });
+
+    document.getElementById("detail-review-form")?.addEventListener("submit", async event => {
+        event.preventDefault();
+        const game = gamesDatabase.find(item => item.id === activeDetailGameId);
+        if (!game) return;
+        if (!userState.loggedIn) {
+            showToast("Vui lòng đăng nhập để đánh giá bản Việt hóa.", "error");
+            openAuthModal();
+            return;
+        }
+        const form = event.currentTarget;
+        const selectedRating = form.querySelector('input[name="rating"]:checked');
+        const submitButton = form.querySelector('button[type="submit"]');
+        submitButton.disabled = true;
+        try {
+            const payload = await apiRequest(`/api/vietpatch/games/${encodeURIComponent(game.id)}/reviews`, {
+                method: "POST",
+                body: {
+                    rating: Number(selectedRating?.value || 0),
+                    body: form.elements.body.value.trim()
+                }
+            });
+            if (payload.stats) {
+                gameStatsCache.set(game.id, payload.stats);
+                paintDetailStats(game, payload.stats);
+                paintVisibleGameStats();
+            }
+            renderDetailReviews(game, payload);
+            configureUpdateReportForm(Boolean(payload.authenticated));
+            showToast("Đã lưu đánh giá của bạn.", "success");
+        } catch (error) {
+            if (error.status === 401) openAuthModal();
+            showToast(error.message || "Chưa gửi được đánh giá.", "error");
+            submitButton.disabled = false;
+        }
+    });
+
+    document.getElementById("detail-update-report-form")?.addEventListener("submit", async event => {
+        event.preventDefault();
+        const game = gamesDatabase.find(item => item.id === activeDetailGameId);
+        if (!game) return;
+        if (!userState.loggedIn) {
+            showToast("Vui lòng đăng nhập để báo phiên bản mới.", "error");
+            openAuthModal();
+            return;
+        }
+        const form = event.currentTarget;
+        const submitButton = form.querySelector('button[type="submit"]');
+        const note = document.getElementById("detail-report-note");
+        submitButton.disabled = true;
+        try {
+            const payload = await apiRequest(`/api/vietpatch/games/${encodeURIComponent(game.id)}/report-update`, {
+                method: "POST",
+                body: {
+                    reportedVersion: form.elements.reportedVersion.value.trim(),
+                    sourceUrl: form.elements.sourceUrl.value.trim(),
+                    note: form.elements.note.value.trim()
+                }
+            });
+            form.reset();
+            if (note) note.textContent = payload.report?.updated
+                ? "Đã cập nhật báo cáo đang chờ kiểm tra của bạn."
+                : "Đã gửi báo cáo; quản trị viên sẽ kiểm tra trước khi cập nhật hồ sơ.";
+            showToast("Đã gửi báo cáo phiên bản mới.", "success");
+        } catch (error) {
+            if (error.status === 401) openAuthModal();
+            showToast(error.message || "Chưa gửi được báo cáo.", "error");
+        } finally {
+            submitButton.disabled = false;
+        }
     });
 
     document.getElementById("image-lightbox-close").addEventListener("click", closeImageLightbox);

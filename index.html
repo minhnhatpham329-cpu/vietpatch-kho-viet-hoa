@@ -51,7 +51,7 @@
     <link rel="stylesheet" href="collection.css?v=20260725-mobile4">
     <link rel="stylesheet" href="motion.css?v=20260724-v1">
     <link rel="stylesheet" href="home.css?v=20260725-home11">
-    <link rel="stylesheet" href="refine.css?v=20260801-badges8">
+    <link rel="stylesheet" href="refine.css?v=20260809-community1">
     <noscript>
         <style>
             html.cms-booting .vp-content-boot { display: none !important; }
@@ -857,6 +857,94 @@
                         </div>
                     </div>
                 </div>
+
+                <section class="detail-community" id="detail-community" aria-labelledby="detail-community-title">
+                    <div class="detail-community-heading">
+                        <div>
+                            <span>PHẢN HỒI CỘNG ĐỒNG</span>
+                            <h3 id="detail-community-title">Lượt xem, lượt tải và đánh giá</h3>
+                        </div>
+                        <p>Số liệu được ghi nhận trực tiếp trên VietPatch; đánh giá chỉ dành cho tài khoản đã lưu patch.</p>
+                    </div>
+
+                    <div class="detail-live-stats" aria-live="polite">
+                        <article>
+                            <i class="fa-regular fa-eye" aria-hidden="true"></i>
+                            <span>Lượt xem</span>
+                            <strong id="detail-view-count">0</strong>
+                        </article>
+                        <article>
+                            <i class="fa-solid fa-cloud-arrow-down" aria-hidden="true"></i>
+                            <span>Lượt tải</span>
+                            <strong id="detail-download-count">0</strong>
+                        </article>
+                        <article>
+                            <i class="fa-solid fa-star" aria-hidden="true"></i>
+                            <span>Điểm đánh giá</span>
+                            <strong><b id="detail-rating-average">—</b><small id="detail-rating-count">Chưa có đánh giá</small></strong>
+                        </article>
+                    </div>
+
+                    <div class="detail-community-grid">
+                        <section class="detail-feedback-card review-board">
+                            <div class="feedback-card-heading">
+                                <div>
+                                    <span>ĐÁNH GIÁ BẢN VIỆT HÓA</span>
+                                    <h4 id="detail-review-score">Chưa có đánh giá</h4>
+                                </div>
+                                <i class="fa-solid fa-comments" aria-hidden="true"></i>
+                            </div>
+                            <div class="detail-review-list" id="detail-review-list">
+                                <p class="community-loading">Đang tải đánh giá…</p>
+                            </div>
+                            <form class="detail-community-form review-form" id="detail-review-form">
+                                <fieldset class="review-stars">
+                                    <legend>Chấm điểm</legend>
+                                    <div class="review-star-options" aria-label="Chọn từ 1 đến 5 sao">
+                                        <input type="radio" id="detail-star-5" name="rating" value="5"><label for="detail-star-5" title="5 sao"><i class="fa-solid fa-star"></i></label>
+                                        <input type="radio" id="detail-star-4" name="rating" value="4"><label for="detail-star-4" title="4 sao"><i class="fa-solid fa-star"></i></label>
+                                        <input type="radio" id="detail-star-3" name="rating" value="3"><label for="detail-star-3" title="3 sao"><i class="fa-solid fa-star"></i></label>
+                                        <input type="radio" id="detail-star-2" name="rating" value="2"><label for="detail-star-2" title="2 sao"><i class="fa-solid fa-star"></i></label>
+                                        <input type="radio" id="detail-star-1" name="rating" value="1"><label for="detail-star-1" title="1 sao"><i class="fa-solid fa-star"></i></label>
+                                    </div>
+                                </fieldset>
+                                <label>
+                                    <span>Nhận xét của bạn</span>
+                                    <textarea name="body" rows="4" maxlength="1200" placeholder="Chia sẻ chất lượng câu chữ, font, cài đặt hoặc lỗi bạn gặp…"></textarea>
+                                </label>
+                                <button type="submit"><i class="fa-solid fa-paper-plane"></i> Gửi đánh giá</button>
+                                <p class="community-form-note" id="detail-review-note">Đăng nhập và lưu patch để viết đánh giá.</p>
+                            </form>
+                        </section>
+
+                        <section class="detail-feedback-card update-report-card">
+                            <div class="feedback-card-heading">
+                                <div>
+                                    <span>THEO DÕI PHIÊN BẢN</span>
+                                    <h4>Báo game vừa cập nhật</h4>
+                                </div>
+                                <i class="fa-solid fa-code-branch" aria-hidden="true"></i>
+                            </div>
+                            <p class="report-explainer">Nếu game có phiên bản mới khiến patch không còn tương thích, hãy gửi nguồn để quản trị viên kiểm tra.</p>
+                            <form class="detail-community-form" id="detail-update-report-form">
+                                <label>
+                                    <span>Phiên bản game mới</span>
+                                    <input name="reportedVersion" maxlength="80" placeholder="Ví dụ: 1.0.5.0" required>
+                                </label>
+                                <label>
+                                    <span>Link thông báo chính thức (không bắt buộc)</span>
+                                    <input type="url" name="sourceUrl" maxlength="600" placeholder="https://…">
+                                </label>
+                                <label>
+                                    <span>Thông tin cần kiểm tra</span>
+                                    <textarea name="note" rows="5" maxlength="800" placeholder="Nêu thay đổi, lỗi tương thích hoặc nơi bạn thấy thông báo…" required></textarea>
+                                </label>
+                                <button type="submit"><i class="fa-solid fa-flag"></i> Gửi báo cáo</button>
+                                <p class="community-form-note" id="detail-report-note">Báo cáo sẽ chờ kiểm tra trước khi cập nhật hồ sơ.</p>
+                            </form>
+                        </section>
+                    </div>
+                </section>
             </div>
         </div>
     </div>
@@ -1069,7 +1157,7 @@
     <!-- Custom App Script -->
     <script src="cms-public-seed.js?v=20260724-secure1"></script>
     <script src="cms-shared.js?v=20260801-badges2"></script>
-    <script src="app.js?v=20260801-badges7"></script>
+    <script src="app.js?v=20260809-community1"></script>
     <script src="motion.js?v=20260724-v1"></script>
     <script src="brand-entry.js?v=20260725-home1"></script>
 </body>

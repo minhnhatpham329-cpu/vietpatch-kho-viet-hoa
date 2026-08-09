@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="admin.css?v=20260626-trailerfix1">
-    <link rel="stylesheet" href="admin-redesign.css?v=20260724-trailer1">
+    <link rel="stylesheet" href="admin-redesign.css?v=20260809-community1">
 </head>
 <body>
     <div class="studio-shell">
@@ -39,6 +39,9 @@
                 </button>
                 <button class="studio-nav-btn" type="button" data-panel="requests">
                     <i class="fa-solid fa-envelope-open-text"></i><span>Đề xuất</span>
+                </button>
+                <button class="studio-nav-btn" type="button" data-panel="community">
+                    <i class="fa-solid fa-comments"></i><span>Tương tác</span>
                 </button>
                 <button class="studio-nav-btn" type="button" data-panel="backup">
                     <i class="fa-solid fa-clock-rotate-left"></i><span>Lịch sử & sao lưu</span>
@@ -475,8 +478,9 @@
                                 <input type="number" name="progress" min="0" max="100" step="1" placeholder="100">
                             </label>
                             <label class="field">
-                                <span>Lượt tải</span>
+                                <span>Lượt tải nền (trước thống kê)</span>
                                 <input name="downloads" maxlength="20" placeholder="12.5k">
+                                <small>Số lịch sử cũ để giữ mốc hiển thị. Lượt tải mới được máy chủ tự cộng, không cần sửa tại đây.</small>
                             </label>
                             <label class="field">
                                 <span>Ngày cập nhật</span>
@@ -549,6 +553,54 @@
                 </div>
             </section>
 
+            <section class="studio-panel" id="panel-community">
+                <section class="studio-section community-console">
+                    <div class="section-heading">
+                        <div>
+                            <span>LIVE COMMUNITY</span>
+                            <h2>Tương tác và kiểm duyệt</h2>
+                        </div>
+                        <button class="secondary-command" id="refresh-community-btn" type="button">
+                            <i class="fa-solid fa-rotate"></i> Làm mới số liệu
+                        </button>
+                    </div>
+                    <p class="section-copy">Lượt xem và lượt tải được ghi nhận tự động. Tại đây bạn duyệt báo cáo phiên bản và xử lý đánh giá không phù hợp.</p>
+
+                    <div class="community-admin-metrics" id="community-metrics">
+                        <p class="community-admin-loading">Mở mục này để tải số liệu…</p>
+                    </div>
+
+                    <div class="community-admin-layout">
+                        <section class="community-admin-block community-stats-block">
+                            <div class="community-block-heading">
+                                <div><span>GAME SIGNALS</span><h3>Số liệu theo game</h3></div>
+                            </div>
+                            <div class="community-game-stats" id="community-game-stats">
+                                <p class="community-admin-loading">Đang tải…</p>
+                            </div>
+                        </section>
+
+                        <section class="community-admin-block community-reports-block">
+                            <div class="community-block-heading">
+                                <div><span>VERSION REPORTS</span><h3>Báo phiên bản mới</h3></div>
+                            </div>
+                            <div class="community-moderation-list" id="community-report-list">
+                                <p class="community-admin-loading">Đang tải…</p>
+                            </div>
+                        </section>
+
+                        <section class="community-admin-block community-reviews-block">
+                            <div class="community-block-heading">
+                                <div><span>PATCH REVIEWS</span><h3>Bình luận và đánh giá</h3></div>
+                            </div>
+                            <div class="community-moderation-list" id="community-review-list">
+                                <p class="community-admin-loading">Đang tải…</p>
+                            </div>
+                        </section>
+                    </div>
+                </section>
+            </section>
+
             <section class="studio-panel" id="panel-backup">
                 <section class="studio-section backup-section">
                     <div class="section-heading">
@@ -600,6 +652,6 @@
 
     <script src="cms-public-seed.js?v=20260724-secure1"></script>
     <script src="cms-shared.js?v=20260801-badges2"></script>
-    <script src="admin.js?v=20260801-badges2"></script>
+    <script src="admin.js?v=20260809-community1"></script>
 </body>
 </html>

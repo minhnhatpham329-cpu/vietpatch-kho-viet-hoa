@@ -1,4 +1,5 @@
 import { resolvePublishedOffer, sanitizeGameId } from "./cms.js";
+import { getAdminTrafficOverview } from "./analytics.js";
 import { checksum, ensureSchema, writeAudit } from "./db.js";
 import {
     assertSameOrigin,
@@ -373,7 +374,9 @@ export async function listAdminCommunity(env, limitValue = 100) {
         )
     ]);
     const overview = overviewResult.results?.[0] || {};
+    const traffic = await getAdminTrafficOverview(env, 14);
     return {
+        traffic,
         overview: {
             totalViews: Number(overview.total_views) || 0,
             totalDownloads: Number(overview.total_downloads) || 0,

@@ -733,12 +733,34 @@
     function renderCommunityModeration() {
         if (!communityData) return;
         const overview = communityData.overview || {};
+        const traffic = communityData.traffic || {};
+        const today = traffic.today || {};
         byId("community-metrics").innerHTML = `
+            <article class="traffic-primary"><span>KHÁCH HÔM NAY</span><strong>${formatCommunityNumber(today.uniqueVisitors)}</strong><small>Trình duyệt duy nhất · giờ Việt Nam</small></article>
+            <article class="traffic-primary"><span>PHIÊN HÔM NAY</span><strong>${formatCommunityNumber(today.pageViews)}</strong><small>Mỗi thẻ trình duyệt ghi một lần/ngày</small></article>
             <article><span>LƯỢT XEM THẬT</span><strong>${formatCommunityNumber(overview.totalViews)}</strong><small>Đã chống đếm lặp 6 giờ</small></article>
             <article><span>LƯỢT TẢI MỚI</span><strong>${formatCommunityNumber(overview.totalDownloads)}</strong><small>Ghi khi link tải được mở</small></article>
             <article><span>ĐÁNH GIÁ CÔNG KHAI</span><strong>${formatCommunityNumber(overview.reviewCount)}</strong><small>Từ người đã lưu patch</small></article>
             <article class="${Number(overview.pendingReports) > 0 ? "needs-attention" : ""}"><span>BÁO CÁO CHỜ DUYỆT</span><strong>${formatCommunityNumber(overview.pendingReports)}</strong><small>Cần kiểm tra phiên bản</small></article>
         `;
+
+        const trafficDays = Array.isArray(traffic.daily) ? traffic.daily : [];
+        const maxVisitors = Math.max(1, ...trafficDays.map(item => Number(item.uniqueVisitors) || 0));
+        byId("community-traffic-history").innerHTML = trafficDays.length
+            ? `<div class="traffic-bars" role="img" aria-label="Biểu đồ khách truy cập 14 ngày">
+                ${trafficDays.map(item => {
+                    const visitors = Math.max(0, Number(item.uniqueVisitors) || 0);
+                    const pageViews = Math.max(0, Number(item.pageViews) || 0);
+                    const level = Math.max(visitors > 0 ? 8 : 2, Math.round((visitors / maxVisitors) * 100));
+                    const label = String(item.date || "").slice(5).split("-").reverse().join("/");
+                    return `<article class="traffic-day" title="${escapeHtml(item.date)}: ${formatCommunityNumber(visitors)} khách, ${formatCommunityNumber(pageViews)} phiên">
+                        <strong>${formatCommunityNumber(visitors)}</strong>
+                        <div class="traffic-bar"><i style="height:${level}%"></i></div>
+                        <span>${escapeHtml(label)}</span>
+                    </article>`;
+                }).join("")}
+            </div>`
+            : `<p class="community-admin-empty">Chưa có dữ liệu truy cập.</p>`;
 
         const stats = Array.isArray(communityData.stats) ? communityData.stats : [];
         byId("community-game-stats").innerHTML = stats.length
@@ -815,7 +837,7 @@
             return;
         }
         if (communityLoadPromise) return communityLoadPromise;
-        ["community-metrics", "community-game-stats", "community-report-list", "community-review-list"].forEach(id => {
+        ["community-metrics", "community-traffic-history", "community-game-stats", "community-report-list", "community-review-list"].forEach(id => {
             const target = byId(id);
             if (target) target.innerHTML = `<p class="community-admin-loading">Đang tải dữ liệu thật từ máy chủ…</p>`;
         });
@@ -825,7 +847,7 @@
                 communityLoaded = true;
                 renderCommunityModeration();
             } catch (error) {
-                ["community-metrics", "community-game-stats", "community-report-list", "community-review-list"].forEach(id => {
+                ["community-metrics", "community-traffic-history", "community-game-stats", "community-report-list", "community-review-list"].forEach(id => {
                     const target = byId(id);
                     if (target) target.innerHTML = `<p class="community-admin-empty">Không tải được dữ liệu: ${escapeHtml(error.message)}</p>`;
                 });

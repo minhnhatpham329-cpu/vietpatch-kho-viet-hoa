@@ -658,8 +658,17 @@ textarea:focus-visible {
 .community-admin-metrics {
     margin: 1.25rem 0;
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(172px, 1fr));
     gap: 0.8rem;
+}
+
+.community-admin-metrics article.traffic-primary {
+    background: linear-gradient(150deg, rgba(61, 213, 152, 0.12), rgba(16, 24, 39, 0.92));
+    border-color: rgba(61, 213, 152, 0.32);
+}
+
+.community-admin-metrics article.traffic-primary strong {
+    color: var(--green);
 }
 
 .community-admin-metrics article {
@@ -707,6 +716,64 @@ textarea:focus-visible {
     grid-template-columns: minmax(300px, 0.8fr) minmax(380px, 1.2fr);
     gap: 1rem;
     align-items: start;
+}
+
+.community-traffic-block {
+    grid-column: 1 / -1;
+}
+
+.community-traffic-note {
+    margin: -0.15rem 0 1rem;
+    color: var(--muted);
+    font-size: 0.68rem;
+    line-height: 1.55;
+}
+
+.traffic-bars {
+    min-height: 172px;
+    display: grid;
+    grid-template-columns: repeat(14, minmax(42px, 1fr));
+    gap: 0.5rem;
+    align-items: end;
+}
+
+.traffic-day {
+    min-width: 0;
+    display: grid;
+    grid-template-rows: auto 118px auto;
+    gap: 0.4rem;
+    text-align: center;
+}
+
+.traffic-day strong,
+.traffic-day span {
+    overflow: hidden;
+    color: var(--muted);
+    font: 700 0.58rem var(--font-mono);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.traffic-day strong {
+    color: var(--ink);
+}
+
+.traffic-bar {
+    min-height: 118px;
+    padding: 4px;
+    display: flex;
+    align-items: end;
+    background: rgba(183, 203, 232, 0.05);
+    border: 1px solid rgba(183, 203, 232, 0.12);
+    border-radius: 8px;
+}
+
+.traffic-bar i {
+    width: 100%;
+    min-height: 2px;
+    display: block;
+    background: linear-gradient(180deg, var(--green), rgba(61, 213, 152, 0.36));
+    border-radius: 4px;
 }
 
 .community-admin-block {
@@ -945,6 +1012,15 @@ textarea:focus-visible {
 @media (max-width: 680px) {
     .community-admin-metrics {
         grid-template-columns: 1fr;
+    }
+
+    .community-traffic-history {
+        overflow-x: auto;
+        padding-bottom: 0.5rem;
+    }
+
+    .traffic-bars {
+        width: 720px;
     }
 
     .community-stat-row {

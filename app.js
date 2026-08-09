@@ -614,6 +614,23 @@ function renderReviewStars(rating) {
     )).join("");
 }
 
+async function recordAnonymousSiteVisit() {
+    const vietnamDay = new Date(Date.now() + (7 * 60 * 60 * 1000)).toISOString().slice(0, 10);
+    const sessionKey = `vietpatch-visit:${vietnamDay}`;
+    try {
+        if (sessionStorage.getItem(sessionKey)) return;
+        const response = await fetch("/api/vietpatch/analytics/visit", {
+            method: "POST",
+            credentials: "same-origin",
+            keepalive: true,
+            headers: { "Accept": "application/json" }
+        });
+        if (response.ok) sessionStorage.setItem(sessionKey, "1");
+    } catch {
+        // Traffic analytics must never interrupt the visitor experience.
+    }
+}
+
 function getGameReleaseState(game) {
     const progress = Math.max(0, Math.min(100, Number(game?.progress) || 0));
     const downloadUrl = window.VietPatchCMS?.safeUrl(game?.downloadUrl) || "";
@@ -3700,6 +3717,7 @@ function initHotTrailerBanner() {
 // INITIALIZATION & EVENT LISTENERS ATTACHMENTS
 // ==========================================================================
 document.addEventListener("DOMContentLoaded", async () => {
+    recordAnonymousSiteVisit();
     const cmsReady = initializeCmsContent();
     const authSecurityReady = initializeAuthSecurity();
     const pageRoot = document.documentElement;

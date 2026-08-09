@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="admin.css?v=20260626-trailerfix1">
-    <link rel="stylesheet" href="admin-redesign.css?v=20260809-community1">
+    <link rel="stylesheet" href="admin-redesign.css?v=20260809-traffic1">
 </head>
 <body>
     <div class="studio-shell">
@@ -564,13 +564,23 @@
                             <i class="fa-solid fa-rotate"></i> Làm mới số liệu
                         </button>
                     </div>
-                    <p class="section-copy">Lượt xem và lượt tải được ghi nhận tự động. Tại đây bạn duyệt báo cáo phiên bản và xử lý đánh giá không phù hợp.</p>
+                    <p class="section-copy">Khách và phiên truy cập, lượt xem hồ sơ cùng lượt tải được ghi nhận tự động. Tại đây bạn theo dõi quy mô sử dụng, duyệt báo cáo phiên bản và xử lý đánh giá không phù hợp.</p>
 
                     <div class="community-admin-metrics" id="community-metrics">
                         <p class="community-admin-loading">Mở mục này để tải số liệu…</p>
                     </div>
 
                     <div class="community-admin-layout">
+                        <section class="community-admin-block community-traffic-block">
+                            <div class="community-block-heading">
+                                <div><span>WEBSITE TRAFFIC</span><h3>Khách truy cập 14 ngày</h3></div>
+                            </div>
+                            <p class="community-traffic-note">Mỗi khách được ước tính theo một trình duyệt hoặc thiết bị trong ngày. VietPatch chỉ lưu mã ẩn danh đã băm, không lưu IP, tên hoặc email.</p>
+                            <div class="community-traffic-history" id="community-traffic-history">
+                                <p class="community-admin-loading">Đang tải…</p>
+                            </div>
+                        </section>
+
                         <section class="community-admin-block community-stats-block">
                             <div class="community-block-heading">
                                 <div><span>GAME SIGNALS</span><h3>Số liệu theo game</h3></div>
@@ -652,6 +662,6 @@
 
     <script src="cms-public-seed.js?v=20260724-secure1"></script>
     <script src="cms-shared.js?v=20260809-grid4"></script>
-    <script src="admin.js?v=20260809-grid4"></script>
+    <script src="admin.js?v=20260809-traffic1"></script>
 </body>
 </html>

@@ -177,7 +177,21 @@ const SCHEMA_STATEMENTS = [
     `CREATE INDEX IF NOT EXISTS vietpatch_reports_status_created_idx
         ON vietpatch_update_reports (status, created_at DESC)`,
     `CREATE INDEX IF NOT EXISTS vietpatch_reports_game_idx
-        ON vietpatch_update_reports (game_id, created_at DESC)`
+        ON vietpatch_update_reports (game_id, created_at DESC)`,
+    `CREATE TABLE IF NOT EXISTS vietpatch_traffic_visitors (
+        visit_date TEXT NOT NULL,
+        visitor_hash TEXT NOT NULL,
+        page_views INTEGER NOT NULL DEFAULT 0 CHECK (page_views >= 0),
+        first_seen_at TEXT NOT NULL,
+        last_seen_at TEXT NOT NULL,
+        PRIMARY KEY (visit_date, visitor_hash)
+    )`,
+    `CREATE TABLE IF NOT EXISTS vietpatch_traffic_daily (
+        visit_date TEXT PRIMARY KEY,
+        unique_visitors INTEGER NOT NULL DEFAULT 0 CHECK (unique_visitors >= 0),
+        page_views INTEGER NOT NULL DEFAULT 0 CHECK (page_views >= 0),
+        updated_at TEXT NOT NULL
+    )`
 ];
 
 export async function ensureSchema(env) {

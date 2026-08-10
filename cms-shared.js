@@ -78,6 +78,22 @@
                 enabled: true
             }
         ],
+        automation: {
+            trailer: {
+                lastRunAt: "",
+                sourceAt: "",
+                chartAt: "",
+                source: "Steam Most Played",
+                mode: "not-run",
+                model: "",
+                warning: "",
+                selectedCount: 0,
+                candidateCount: 0,
+                publishMode: "review",
+                publishedAt: "",
+                selected: []
+            }
+        },
         posts: [
             {
                 id: "post-patch-notes-june",
@@ -195,14 +211,52 @@
     function normalizeTrailers(trailers) {
         const source = Array.isArray(trailers) ? trailers : defaults.trailers;
 
-        return source.map((item, index) => ({
-            id: text(item.id, `trailer-${index + 1}`),
-            videoId: extractYouTubeId(item.videoId || item.url),
-            title: text(item.title, `Trailer ${index + 1}`),
-            category: text(item.category, "GAME TRAILER"),
-            description: text(item.description),
-            enabled: item.enabled !== false
-        })).filter(item => item.videoId && item.title);
+        return source.map((item, index) => {
+            const videoUrl = safeSteamTrailerUrl(item.videoUrl);
+            const sourceType = item.source === "steam" && videoUrl ? "steam" : "youtube";
+            return {
+                id: text(item.id, `trailer-${index + 1}`),
+                source: sourceType,
+                videoId: sourceType === "youtube" ? extractYouTubeId(item.videoId || item.url) : "",
+                videoUrl: sourceType === "steam" ? videoUrl : "",
+                posterUrl: sourceType === "steam" ? safeAssetUrl(item.posterUrl) : "",
+                externalUrl: sourceType === "steam" ? safeUrl(item.externalUrl) : "",
+                steamAppId: sourceType === "steam" && /^\d{1,12}$/.test(text(item.steamAppId))
+                    ? text(item.steamAppId)
+                    : "",
+                title: text(item.title, `Trailer ${index + 1}`),
+                category: text(item.category, "GAME TRAILER"),
+                description: text(item.description),
+                enabled: item.enabled !== false,
+                automated: item.automated === true,
+                generatedAt: text(item.generatedAt),
+                trend: item.trend && typeof item.trend === "object" ? clone(item.trend) : null
+            };
+        }).filter(item => item.title && (
+            (item.source === "youtube" && item.videoId)
+            || (item.source === "steam" && item.videoUrl && item.posterUrl)
+        ));
+    }
+
+    function normalizeAutomation(automation) {
+        const source = automation && typeof automation === "object" ? automation : {};
+        const trailer = source.trailer && typeof source.trailer === "object" ? source.trailer : {};
+        return {
+            trailer: {
+                lastRunAt: text(trailer.lastRunAt),
+                sourceAt: text(trailer.sourceAt),
+                chartAt: text(trailer.chartAt),
+                source: text(trailer.source, defaults.automation.trailer.source),
+                mode: text(trailer.mode, "not-run"),
+                model: text(trailer.model),
+                warning: text(trailer.warning),
+                selectedCount: Math.max(0, Number(trailer.selectedCount) || 0),
+                candidateCount: Math.max(0, Number(trailer.candidateCount) || 0),
+                publishMode: text(trailer.publishMode, "review"),
+                publishedAt: text(trailer.publishedAt),
+                selected: Array.isArray(trailer.selected) ? clone(trailer.selected).slice(0, 8) : []
+            }
+        };
     }
 
     function normalizePosts(posts) {
@@ -467,6 +521,7 @@
             updatedAt: source.updatedAt || null,
             site: normalizeSite(source.site),
             trailers: normalizeTrailers(source.trailers),
+            automation: normalizeAutomation(source.automation),
             posts: normalizePosts(source.posts),
             requests: normalizeRequests(source.requests),
             hiddenGameIds: normalizeHiddenGameIds(source.hiddenGameIds),
@@ -609,6 +664,21 @@
         }
     }
 
+    function safeSteamTrailerUrl(value) {
+        const candidate = safeUrl(value);
+        if (!candidate) return "";
+        try {
+            const url = new URL(candidate);
+            const host = url.hostname.toLowerCase();
+            if (url.protocol !== "https:" || !host.startsWith("video.") || !/(^|\.)steamstatic\.com$/.test(host)) {
+                return "";
+            }
+            return url.href;
+        } catch {
+            return "";
+        }
+    }
+
     function extractYouTubeId(value) {
         const candidate = text(value);
         if (!candidate) return "";
@@ -650,6 +720,7 @@
         reset,
         normalize,
         safeUrl,
+        safeSteamTrailerUrl,
         safeAssetUrl,
         prepareImageUpload,
         normalizeTags,

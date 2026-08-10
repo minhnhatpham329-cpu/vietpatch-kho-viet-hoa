@@ -11,7 +11,7 @@
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <meta name="referrer" content="strict-origin-when-cross-origin">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; form-action 'self'; script-src 'self' 'sha256-YEu8GwWdF4CDeFCLktdzc0N7ooqeUWN7NuW/xtDzamg=' https://www.youtube.com https://challenges.cloudflare.com; script-src-attr 'none'; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' data: https://cdnjs.cloudflare.com https://fonts.gstatic.com; img-src 'self' data: blob: https:; frame-src https://www.youtube.com https://www.youtube-nocookie.com https://challenges.cloudflare.com; connect-src 'self' https://challenges.cloudflare.com; media-src 'self' blob:; worker-src 'self' blob:; upgrade-insecure-requests">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; form-action 'self'; script-src 'self' 'sha256-YEu8GwWdF4CDeFCLktdzc0N7ooqeUWN7NuW/xtDzamg=' https://www.youtube.com https://challenges.cloudflare.com; script-src-attr 'none'; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' data: https://cdnjs.cloudflare.com https://fonts.gstatic.com; img-src 'self' data: blob: https:; frame-src https://www.youtube.com https://www.youtube-nocookie.com https://challenges.cloudflare.com; connect-src 'self' https://challenges.cloudflare.com https://video.akamai.steamstatic.com; media-src 'self' blob: https://video.akamai.steamstatic.com; worker-src 'self' blob:; upgrade-insecure-requests">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="vi_VN">
     <meta property="og:site_name" content="VietPatch">
@@ -47,8 +47,8 @@
     
     <!-- Custom CSS -->
     <link rel="stylesheet" href="style.css?v=20260726-requests1">
-    <link rel="stylesheet" href="redesign.css?v=20260724-library1">
-    <link rel="stylesheet" href="collection.css?v=20260809-grid4">
+    <link rel="stylesheet" href="redesign.css?v=20260810-trailerbot1">
+    <link rel="stylesheet" href="collection.css?v=20260810-trailerbot1">
     <link rel="stylesheet" href="motion.css?v=20260724-v1">
     <link rel="stylesheet" href="home.css?v=20260725-home11">
     <link rel="stylesheet" href="refine.css?v=20260809-seo3">
@@ -179,6 +179,14 @@
                         allow="autoplay; encrypted-media"
                         hidden>
                     </iframe>
+                    <video
+                        id="weekly-trailer-steam-player"
+                        title="Trailer Steam"
+                        playsinline
+                        preload="metadata"
+                        muted
+                        hidden>
+                    </video>
                     <div class="weekly-trailer-controls" id="weekly-trailer-controls" hidden>
                         <button class="weekly-trailer-sound is-muted" id="weekly-trailer-sound" type="button" aria-label="Bật tiếng trailer" aria-pressed="false">
                             <i class="fa-solid fa-volume-xmark" aria-hidden="true"></i>
@@ -1157,8 +1165,9 @@
 
     <!-- Custom App Script -->
     <script src="cms-public-seed.js?v=20260724-secure1"></script>
-    <script src="cms-shared.js?v=20260809-grid4"></script>
-    <script src="app.js?v=20260809-seo3"></script>
+    <script src="cms-shared.js?v=20260810-trailerbot1"></script>
+    <script type="module" src="assets/vendor/hls-loader.js?v=1.6.16"></script>
+    <script src="app.js?v=20260810-trailerbot1"></script>
     <script src="motion.js?v=20260724-v1"></script>
     <script src="brand-entry.js?v=20260725-home1"></script>
 </body>

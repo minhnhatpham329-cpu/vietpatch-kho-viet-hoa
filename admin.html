@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="admin.css?v=20260626-trailerfix1">
-    <link rel="stylesheet" href="admin-redesign.css?v=20260809-traffic1">
+    <link rel="stylesheet" href="admin-redesign.css?v=20260810-trailerbot1">
 </head>
 <body>
     <div class="studio-shell">
@@ -175,6 +175,24 @@
             </section>
 
             <section class="studio-panel" id="panel-trailers">
+                <section class="studio-section trailer-automation-panel" aria-labelledby="trailer-automation-title">
+                    <div class="trailer-automation-copy">
+                        <span class="automation-kicker"><i class="fa-solid fa-wand-magic-sparkles"></i> STEAM + GEMINI</span>
+                        <h2 id="trailer-automation-title">Tự chọn trailer game hot mỗi tuần</h2>
+                        <p>Steam cung cấp bảng xếp hạng và video chính chủ. Gemini chỉ chọn game, phân loại và viết mô tả tiếng Việt; không được tự tạo link video.</p>
+                        <div class="automation-status-line" id="trailer-automation-status" role="status">Chưa chạy lần nào.</div>
+                    </div>
+                    <div class="trailer-automation-metrics" aria-label="Trạng thái đồng bộ trailer">
+                        <div><span>Lịch chạy</span><strong>Thứ Hai · 08:15</strong></div>
+                        <div><span>Chế độ</span><strong id="trailer-automation-mode">Duyệt trước</strong></div>
+                        <div><span>Đã chọn</span><strong id="trailer-automation-count">0 game</strong></div>
+                    </div>
+                    <button class="primary-command trailer-sync-command" id="sync-trailers-btn" type="button">
+                        <i class="fa-solid fa-arrows-rotate"></i>
+                        <span>Quét Steam ngay<small>Tạo bản nháp để kiểm tra</small></span>
+                    </button>
+                </section>
+
                 <div class="manager-layout">
                     <section class="manager-list">
                         <div class="section-heading">
@@ -208,9 +226,28 @@
                         </div>
 
                         <div class="field-grid">
+                            <label class="field">
+                                <span>Nguồn trailer</span>
+                                <select name="source">
+                                    <option value="youtube">YouTube</option>
+                                    <option value="steam">Steam chính chủ</option>
+                                </select>
+                            </label>
                             <label class="field field-wide">
                                 <span>Link YouTube hoặc Video ID</span>
-                                <input name="videoId" placeholder="https://youtube.com/watch?v=..." required>
+                                <input name="videoId" placeholder="https://youtube.com/watch?v=..." data-trailer-source-field="youtube">
+                            </label>
+                            <label class="field field-wide" data-trailer-source-field="steam">
+                                <span>Luồng HLS từ Steam</span>
+                                <input name="videoUrl" placeholder="https://video...steamstatic.com/...m3u8">
+                            </label>
+                            <label class="field field-wide" data-trailer-source-field="steam">
+                                <span>Ảnh trailer Steam</span>
+                                <input name="posterUrl" placeholder="https://shared...steamstatic.com/...jpg">
+                            </label>
+                            <label class="field field-wide" data-trailer-source-field="steam">
+                                <span>Trang game trên Steam</span>
+                                <input name="externalUrl" placeholder="https://store.steampowered.com/app/...">
                             </label>
                             <label class="field">
                                 <span>Tên game</span>
@@ -661,7 +698,7 @@
     <div class="studio-toast-wrap" id="studio-toast-wrap"></div>
 
     <script src="cms-public-seed.js?v=20260724-secure1"></script>
-    <script src="cms-shared.js?v=20260809-grid4"></script>
-    <script src="admin.js?v=20260809-traffic1"></script>
+    <script src="cms-shared.js?v=20260810-trailerbot1"></script>
+    <script src="admin.js?v=20260810-trailerbot1"></script>
 </body>
 </html>

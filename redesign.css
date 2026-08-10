@@ -546,12 +546,14 @@ img {
     background: linear-gradient(180deg, transparent 52%, rgba(0, 0, 0, 0.72));
 }
 
-.weekly-trailer-media:has(iframe:not([hidden]))::before {
+.weekly-trailer-media:has(iframe:not([hidden]))::before,
+.weekly-trailer-media:has(video:not([hidden]))::before {
     display: none;
 }
 
 .weekly-trailer-media > img,
-.weekly-trailer-media iframe {
+.weekly-trailer-media iframe,
+.weekly-trailer-media video {
     width: 100%;
     height: 100%;
     display: block;
@@ -559,11 +561,13 @@ img {
     border: 0;
 }
 
-.weekly-trailer-media iframe:not([hidden]) {
+.weekly-trailer-media iframe:not([hidden]),
+.weekly-trailer-media video:not([hidden]) {
     pointer-events: none;
 }
 
-.weekly-trailer-media > img {
+.weekly-trailer-media > img,
+.weekly-trailer-media video {
     object-fit: cover;
 }
 

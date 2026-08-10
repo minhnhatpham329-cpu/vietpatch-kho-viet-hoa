@@ -14,8 +14,8 @@ export function securityHeaders(headers = new Headers()) {
             "font-src 'self' data: https://cdnjs.cloudflare.com https://fonts.gstatic.com",
             "img-src 'self' data: blob: https:",
             "frame-src https://www.youtube.com https://www.youtube-nocookie.com https://challenges.cloudflare.com",
-            "connect-src 'self' https://challenges.cloudflare.com",
-            "media-src 'self' blob:",
+            "connect-src 'self' https://challenges.cloudflare.com https://video.akamai.steamstatic.com",
+            "media-src 'self' blob: https://video.akamai.steamstatic.com",
             "worker-src 'self' blob:",
             "upgrade-insecure-requests"
         ].join("; "));
@@ -46,7 +46,9 @@ export function errorResponse(error) {
     const serverSafeErrors = new Set([
         "ACCOUNT_SERVICE_NOT_CONFIGURED",
         "CMS_DATABASE_NOT_CONFIGURED",
-        "PAYMENT_NOT_CONFIGURED"
+        "PAYMENT_NOT_CONFIGURED",
+        "GEMINI_API_NOT_CONFIGURED",
+        "TRAILER_SYNC_NOT_CONFIGURED"
     ]);
     const message = String(error?.message || "REQUEST_FAILED");
     const safeMessage = status >= 500 && !serverSafeErrors.has(message)

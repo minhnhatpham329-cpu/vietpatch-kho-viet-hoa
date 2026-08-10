@@ -1,0 +1,36 @@
+name: Weekly Steam trailer sync
+
+on:
+  schedule:
+    # 08:15 sáng thứ Hai theo giờ Việt Nam (UTC+7).
+    - cron: "15 1 * * 1"
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: "Tự xuất bản sau khi kiểm tra dữ liệu Steam và Gemini"
+        required: true
+        default: true
+        type: boolean
+
+permissions: {}
+
+jobs:
+  update-trailers:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Update VietPatch weekly trailers
+        env:
+          TRAILER_SYNC_SECRET: ${{ secrets.TRAILER_SYNC_SECRET }}
+          SHOULD_PUBLISH: ${{ github.event_name == 'schedule' || inputs.publish }}
+        run: |
+          if [ -z "$TRAILER_SYNC_SECRET" ]; then
+            echo "Missing repository secret TRAILER_SYNC_SECRET"
+            exit 1
+          fi
+          curl --fail-with-body --silent --show-error \
+            --retry 2 --retry-all-errors --max-time 180 \
+            -X POST "https://vietpatch.online/api/admin/trailer-sync" \
+            -H "Authorization: Bearer $TRAILER_SYNC_SECRET" \
+            -H "Content-Type: application/json" \
+            --data "{\"publish\":${SHOULD_PUBLISH}}"

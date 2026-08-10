@@ -100,6 +100,7 @@ export function normalizeCmsState(input) {
         trailers: Array.isArray(source.trailers) ? source.trailers.slice(0, 60) : [],
         posts: Array.isArray(source.posts) ? source.posts.slice(0, 200) : [],
         requests: Array.isArray(source.requests) ? source.requests.slice(0, 300) : [],
+        automation: plainObject(source.automation),
         hiddenGameIds: Array.isArray(source.hiddenGameIds) ? source.hiddenGameIds.slice(0, 1000) : [],
         customGames: Array.isArray(source.customGames) ? source.customGames.slice(0, 1000) : [],
         gameOverrides: plainObject(source.gameOverrides)

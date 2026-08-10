@@ -1035,3 +1035,197 @@ textarea:focus-visible {
         flex-direction: column;
     }
 }
+
+/* Weekly Steam + Gemini editorial assistant */
+.trailer-automation-panel {
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: minmax(260px, 1.25fr) minmax(260px, 0.85fr) auto;
+    gap: 1.25rem;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding: 1.3rem;
+    background:
+        linear-gradient(120deg, rgba(94, 233, 198, 0.09), transparent 42%),
+        #0b1220;
+    border: 1px solid rgba(94, 233, 198, 0.2);
+    border-radius: 16px;
+}
+
+.trailer-automation-panel::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(100deg, transparent 25%, rgba(255, 255, 255, 0.035) 50%, transparent 75%);
+    transform: translateX(-100%);
+    animation: trailer-automation-scan 8s ease-in-out infinite;
+}
+
+.trailer-automation-copy,
+.trailer-automation-metrics,
+.trailer-sync-command {
+    position: relative;
+    z-index: 1;
+}
+
+.automation-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: var(--orange);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.64rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+}
+
+.trailer-automation-copy h2 {
+    margin: 0.42rem 0 0.35rem;
+    color: var(--ink);
+    font-size: clamp(1.05rem, 2vw, 1.42rem);
+}
+
+.trailer-automation-copy p,
+.automation-status-line {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.72rem;
+    line-height: 1.6;
+}
+
+.automation-status-line {
+    margin-top: 0.65rem;
+    color: var(--ink-soft);
+}
+
+.automation-status-line em {
+    color: var(--yellow);
+    font-style: normal;
+}
+
+.trailer-automation-metrics {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    border: 1px solid rgba(183, 203, 232, 0.13);
+    border-radius: 12px;
+}
+
+.trailer-automation-metrics > div {
+    min-width: 0;
+    padding: 0.8rem;
+}
+
+.trailer-automation-metrics > div + div {
+    border-left: 1px solid rgba(183, 203, 232, 0.13);
+}
+
+.trailer-automation-metrics span,
+.trailer-automation-metrics strong {
+    display: block;
+}
+
+.trailer-automation-metrics span {
+    margin-bottom: 0.35rem;
+    color: var(--muted);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.55rem;
+    text-transform: uppercase;
+}
+
+.trailer-automation-metrics strong {
+    overflow: hidden;
+    color: var(--ink);
+    font-size: 0.7rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.trailer-sync-command {
+    min-width: 185px;
+    justify-content: flex-start;
+}
+
+.trailer-sync-command span,
+.trailer-sync-command small {
+    display: block;
+    text-align: left;
+}
+
+.trailer-sync-command small {
+    margin-top: 0.18rem;
+    opacity: 0.72;
+    font-size: 0.56rem;
+    font-weight: 500;
+}
+
+.weekly-auto-badge,
+.weekly-home-badge {
+    margin-left: 0.45rem;
+    padding: 0.15rem 0.35rem;
+    display: inline-block;
+    color: #06110e;
+    background: var(--orange);
+    border-radius: 4px;
+    font-size: 0.48rem;
+    font-style: normal;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+}
+
+.weekly-home-badge {
+    color: #241600;
+    background: var(--yellow);
+}
+
+.trailer-preview.steam-preview {
+    color: var(--ink-soft);
+    background:
+        radial-gradient(circle at 20% 20%, rgba(115, 148, 255, 0.18), transparent 40%),
+        #07101e;
+}
+
+.trailer-preview.steam-preview > i {
+    color: #7ba7ff;
+}
+
+@keyframes trailer-automation-scan {
+    0%, 62% { transform: translateX(-100%); }
+    82%, 100% { transform: translateX(100%); }
+}
+
+@media (max-width: 1180px) {
+    .trailer-automation-panel {
+        grid-template-columns: 1fr;
+    }
+
+    .trailer-sync-command {
+        width: max-content;
+    }
+}
+
+@media (max-width: 680px) {
+    .trailer-automation-panel {
+        padding: 1rem;
+    }
+
+    .trailer-automation-metrics {
+        grid-template-columns: 1fr;
+    }
+
+    .trailer-automation-metrics > div + div {
+        border-top: 1px solid rgba(183, 203, 232, 0.13);
+        border-left: 0;
+    }
+
+    .trailer-sync-command {
+        width: 100%;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .trailer-automation-panel::after {
+        animation: none;
+    }
+}

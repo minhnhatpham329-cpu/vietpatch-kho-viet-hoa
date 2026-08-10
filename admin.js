@@ -371,6 +371,7 @@
     }
 
     function renderTrailerManager() {
+        renderTrailerAutomationStatus();
         if (selectedTrailerId && !state.trailers.some(item => item.id === selectedTrailerId)) {
             selectedTrailerId = state.trailers[0]?.id || "";
         }
@@ -382,7 +383,7 @@
                 <div class="manager-item ${item.id === selectedTrailerId ? "active" : ""}">
                     <button class="manager-item-main" type="button" data-edit-trailer="${escapeHtml(item.id)}">
                         <strong>${escapeHtml(item.title)}</strong>
-                        <span><i class="status-dot ${item.enabled ? "" : "off"}"></i> ${escapeHtml(item.category)} / ${escapeHtml(item.videoId)}${item.id === featuredTrailerId ? `<em class="weekly-home-badge">TRANG CHỦ</em>` : ""}</span>
+                        <span><i class="status-dot ${item.enabled ? "" : "off"}"></i> ${escapeHtml(item.category)} / ${item.source === "steam" ? `STEAM #${escapeHtml(item.steamAppId || "AUTO")}` : escapeHtml(item.videoId)}${item.automated ? `<em class="weekly-auto-badge">TỰ ĐỘNG</em>` : ""}${item.id === featuredTrailerId ? `<em class="weekly-home-badge">TRANG CHỦ</em>` : ""}</span>
                     </button>
                     <div class="manager-item-actions">
                         <button type="button" data-move-trailer="-1" data-id="${escapeHtml(item.id)}" title="Đưa lên" ${index === 0 ? "disabled" : ""}><i class="fa-solid fa-arrow-up"></i></button>
@@ -396,23 +397,77 @@
         fillTrailerForm(state.trailers.find(item => item.id === selectedTrailerId));
     }
 
+    function renderTrailerAutomationStatus() {
+        const automation = state.automation?.trailer || {};
+        const status = byId("trailer-automation-status");
+        const mode = byId("trailer-automation-mode");
+        const count = byId("trailer-automation-count");
+        if (!status || !mode || !count) return;
+
+        const lastRun = new Date(automation.lastRunAt || "");
+        if (Number.isNaN(lastRun.getTime())) {
+            status.textContent = "Chưa chạy lần nào. Lần quét đầu tiên sẽ tạo bản nháp để bạn kiểm tra.";
+        } else {
+            const formatted = new Intl.DateTimeFormat("vi-VN", {
+                dateStyle: "medium",
+                timeStyle: "short"
+            }).format(lastRun);
+            const engine = automation.mode === "gemini"
+                ? `Gemini ${automation.model || ""}`.trim()
+                : "Steam dự phòng";
+            status.innerHTML = `<strong>Lần gần nhất:</strong> ${escapeHtml(formatted)} · ${escapeHtml(engine)}${automation.warning ? ` · <em>${escapeHtml(automation.warning)}</em>` : ""}`;
+        }
+        mode.textContent = automation.publishMode === "automatic" ? "Tự xuất bản" : "Duyệt trước";
+        count.textContent = `${Number(automation.selectedCount) || 0} game`;
+    }
+
+    function syncTrailerSourceFields() {
+        const form = byId("trailer-form");
+        const source = form.elements.source.value === "steam" ? "steam" : "youtube";
+        form.querySelectorAll("[data-trailer-source-field]").forEach(element => {
+            const container = element.matches(".field") ? element : element.closest(".field");
+            if (container) container.hidden = element.dataset.trailerSourceField !== source;
+        });
+    }
+
     function fillTrailerForm(item) {
         const form = byId("trailer-form");
         form.reset();
         form.elements.id.value = item?.id || "";
+        form.elements.source.value = item?.source === "steam" ? "steam" : "youtube";
         form.elements.videoId.value = item?.videoId || "";
+        form.elements.videoUrl.value = item?.videoUrl || "";
+        form.elements.posterUrl.value = item?.posterUrl || "";
+        form.elements.externalUrl.value = item?.externalUrl || "";
         form.elements.title.value = item?.title || "";
         form.elements.category.value = item?.category || "";
         form.elements.description.value = item?.description || "";
         form.elements.enabled.checked = item ? item.enabled : true;
         byId("trailer-editor-title").textContent = item ? "Chỉnh sửa trailer" : "Thêm trailer";
+        syncTrailerSourceFields();
         updateTrailerPreview();
     }
 
     function updateTrailerPreview() {
         const form = byId("trailer-form");
+        const source = form.elements.source.value === "steam" ? "steam" : "youtube";
         const videoId = CMS.extractYouTubeId(form.elements.videoId.value);
         const preview = byId("trailer-preview");
+        syncTrailerSourceFields();
+
+        if (source === "steam") {
+            const posterUrl = CMS.safeAssetUrl(form.elements.posterUrl.value);
+            if (!posterUrl) {
+                preview.className = "trailer-preview steam-preview";
+                preview.removeAttribute("style");
+                preview.innerHTML = `<i class="fa-brands fa-steam"></i><span>Trailer Steam sẽ hiện ảnh chính chủ tại đây</span>`;
+                return;
+            }
+            preview.className = "trailer-preview steam-preview has-image";
+            preview.style.backgroundImage = `url("${posterUrl}")`;
+            preview.innerHTML = `<span><i class="fa-brands fa-steam"></i> ${escapeHtml(form.elements.title.value || "Trailer Steam")}</span>`;
+            return;
+        }
 
         if (!videoId) {
             preview.className = "trailer-preview";
@@ -424,6 +479,40 @@
         preview.className = "trailer-preview has-image";
         preview.style.backgroundImage = `url("https://img.youtube.com/vi/${videoId}/hqdefault.jpg")`;
         preview.innerHTML = `<span>${escapeHtml(form.elements.title.value || "Trailer mới")}</span>`;
+    }
+
+    async function syncTrailersFromSteam() {
+        const button = byId("sync-trailers-btn");
+        if (!button || button.disabled) return;
+        const original = button.innerHTML;
+        button.disabled = true;
+        button.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i><span>Đang đọc Steam<small>Gemini đang biên tập mô tả</small></span>`;
+        setSaveState("Đang quét trailer", true);
+        try {
+            const payload = await adminRequest("/api/admin/trailer-sync", {
+                method: "POST",
+                mutation: true,
+                body: { publish: false }
+            });
+            state = CMS.normalize(payload.state);
+            CMS.updateSyncMeta(payload.meta);
+            selectedTrailerId = state.trailers[0]?.id || "";
+            revisionsLoaded = false;
+            renderAllEditors();
+            setSaveState("Bản nháp trailer đã đồng bộ", false);
+            showToast(`Đã chọn ${Number(payload.status?.selectedCount) || 0} trailer Steam. Kiểm tra rồi bấm Xuất bản.`);
+        } catch (error) {
+            const messages = {
+                GEMINI_API_NOT_CONFIGURED: "Chưa cài secret GEMINI_API_KEY trên Cloudflare Pages.",
+                STEAM_CHART_EMPTY: "Steam chưa trả về bảng xếp hạng. Hãy thử lại sau.",
+                STEAM_TRAILER_POOL_TOO_SMALL: "Steam chưa trả đủ trailer hợp lệ cho tuần này."
+            };
+            setSaveState("Quét trailer chưa thành công", false, true);
+            showToast(messages[error.message] || `Không quét được trailer: ${error.message}`, "error");
+        } finally {
+            button.disabled = false;
+            button.innerHTML = original;
+        }
     }
 
     function renderRequestManager() {
@@ -1051,20 +1140,47 @@
             renderTrailerManager();
         });
 
+        byId("sync-trailers-btn")?.addEventListener("click", syncTrailersFromSteam);
+        byId("trailer-form").elements.source.addEventListener("change", () => {
+            syncTrailerSourceFields();
+            updateTrailerPreview();
+        });
         byId("trailer-form").addEventListener("input", updateTrailerPreview);
         byId("trailer-form").addEventListener("submit", event => {
             event.preventDefault();
             const form = event.currentTarget;
-            const videoId = CMS.extractYouTubeId(form.elements.videoId.value);
-            if (!videoId) {
+            const source = form.elements.source.value === "steam" ? "steam" : "youtube";
+            const videoId = source === "youtube"
+                ? CMS.extractYouTubeId(form.elements.videoId.value)
+                : "";
+            const videoUrl = source === "steam"
+                ? CMS.safeSteamTrailerUrl(form.elements.videoUrl.value)
+                : "";
+            const posterUrl = source === "steam"
+                ? CMS.safeAssetUrl(form.elements.posterUrl.value)
+                : "";
+            const externalUrl = source === "steam"
+                ? CMS.safeAssetUrl(form.elements.externalUrl.value)
+                : "";
+            if (source === "youtube" && !videoId) {
                 showToast("Link YouTube hoặc Video ID chưa hợp lệ.", "error");
+                return;
+            }
+            if (source === "steam" && (!videoUrl || !posterUrl || !externalUrl)) {
+                showToast("Trailer Steam cần đủ luồng HLS, ảnh xem trước và trang game hợp lệ.", "error");
                 return;
             }
 
             const id = form.elements.id.value || CMS.createId("trailer");
+            const existing = state.trailers.find(entry => entry.id === id) || {};
             const item = {
+                ...existing,
                 id,
+                source,
                 videoId,
+                videoUrl,
+                posterUrl,
+                externalUrl,
                 title: form.elements.title.value.trim(),
                 category: form.elements.category.value.trim(),
                 description: form.elements.description.value.trim(),

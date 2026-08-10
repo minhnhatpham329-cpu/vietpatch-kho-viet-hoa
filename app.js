@@ -7,6 +7,7 @@ let weeklyTrailerItems = [];
 let weeklyTrailerIndex = 0;
 let weeklyTrailerPlayer = null;
 let weeklyTrailerApiPromise = null;
+let weeklySteamHls = null;
 let weeklyTrailerFailureCount = 0;
 let weeklyTrailerMuted = true;
 let weeklyTrailerMetadataTimer = null;
@@ -927,6 +928,7 @@ function renderWeeklyTrailer() {
     const section = document.querySelector(".weekly-trailer");
     const media = document.getElementById("weekly-trailer-media");
     const player = document.getElementById("weekly-trailer-player");
+    const steamPlayer = document.getElementById("weekly-trailer-steam-player");
     const poster = document.getElementById("weekly-trailer-poster");
     const playButton = document.getElementById("weekly-trailer-play");
     const controls = document.getElementById("weekly-trailer-controls");
@@ -945,15 +947,24 @@ function renderWeeklyTrailer() {
     }
 
     weeklyTrailerItems = Array.isArray(cmsState.trailers)
-        ? cmsState.trailers.filter(item => item.enabled && /^[A-Za-z0-9_-]{6,20}$/.test(String(item.videoId || "").trim()))
+        ? cmsState.trailers.filter(item => {
+            if (!item.enabled) return false;
+            if (item.source === "steam") {
+                return Boolean(window.VietPatchCMS?.safeSteamTrailerUrl(item.videoUrl)
+                    && window.VietPatchCMS?.safeAssetUrl(item.posterUrl));
+            }
+            return /^[A-Za-z0-9_-]{6,20}$/.test(String(item.videoId || "").trim());
+        })
         : [];
     const trailer = weeklyTrailerItems[0] || null;
 
     if (!trailer) {
         section.classList.add("is-empty");
         stopWeeklyTrailerMetadataTracking();
+        stopWeeklySteamTrailerPlayback();
         weeklyTrailerPlayer?.stopVideo?.();
         player.hidden = true;
+        if (steamPlayer) steamPlayer.hidden = true;
         if (!weeklyTrailerPlayer) player.removeAttribute("src");
         delete media.dataset.videoId;
         if (poster) poster.hidden = true;
@@ -986,6 +997,7 @@ function renderWeeklyTrailer() {
 function renderWeeklyTrailerItem(index) {
     const media = document.getElementById("weekly-trailer-media");
     const player = document.getElementById("weekly-trailer-player");
+    const steamPlayer = document.getElementById("weekly-trailer-steam-player");
     const poster = document.getElementById("weekly-trailer-poster");
     const playButton = document.getElementById("weekly-trailer-play");
     const category = document.getElementById("weekly-trailer-category");
@@ -996,11 +1008,16 @@ function renderWeeklyTrailerItem(index) {
     const trailer = weeklyTrailerItems[index];
     if (!trailer || !media || !player) return;
 
-    const videoId = String(trailer.videoId).trim();
+    const source = trailer.source === "steam" ? "steam" : "youtube";
+    const videoId = String(trailer.videoId || "").trim();
+    media.dataset.source = source;
     media.dataset.videoId = videoId;
     player.title = `${trailer.title || "Trailer tuần"} - Trailer`;
+    if (steamPlayer) steamPlayer.title = `${trailer.title || "Trailer tuần"} - Trailer Steam`;
     if (poster) {
-        poster.src = `https://i.ytimg.com/vi/${encodeURIComponent(videoId)}/hqdefault.jpg`;
+        poster.src = source === "steam"
+            ? window.VietPatchCMS.safeAssetUrl(trailer.posterUrl)
+            : `https://i.ytimg.com/vi/${encodeURIComponent(videoId)}/hqdefault.jpg`;
         poster.alt = `Ảnh xem trước trailer ${trailer.title || "tuần này"}`;
     }
     if (playButton) playButton.setAttribute("aria-label", `Phát trailer ${trailer.title || "tuần này"}`);
@@ -1012,8 +1029,11 @@ function renderWeeklyTrailerItem(index) {
     }
     if (externalLink) {
         externalLink.hidden = false;
-        externalLink.href = `https://www.youtube.com/watch?v=${encodeURIComponent(videoId)}`;
-        externalLink.setAttribute("aria-label", `Mở trailer ${trailer.title || "tuần này"} trên YouTube`);
+        externalLink.href = source === "steam"
+            ? (window.VietPatchCMS.safeUrl(trailer.externalUrl) || `https://store.steampowered.com/app/${encodeURIComponent(trailer.steamAppId || "")}/`)
+            : `https://www.youtube.com/watch?v=${encodeURIComponent(videoId)}`;
+        externalLink.innerHTML = `${source === "steam" ? "Steam" : "YouTube"} <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>`;
+        externalLink.setAttribute("aria-label", `Mở trailer ${trailer.title || "tuần này"} trên ${source === "steam" ? "Steam" : "YouTube"}`);
     }
     if (caption) {
         caption.classList.remove("is-copy-entering");
@@ -1026,6 +1046,8 @@ function syncWeeklyTrailerSound() {
     const button = document.getElementById("weekly-trailer-sound");
     const icon = button?.querySelector("i");
     const label = button?.querySelector("span");
+    const media = document.getElementById("weekly-trailer-media");
+    const steamPlayer = document.getElementById("weekly-trailer-steam-player");
 
     if (button) {
         button.classList.toggle("is-muted", weeklyTrailerMuted);
@@ -1034,6 +1056,13 @@ function syncWeeklyTrailerSound() {
     }
     if (icon) icon.className = `fa-solid ${weeklyTrailerMuted ? "fa-volume-xmark" : "fa-volume-high"}`;
     if (label) label.textContent = weeklyTrailerMuted ? "Bật tiếng" : "Tắt tiếng";
+
+    if (media?.dataset.source === "steam" && steamPlayer && !steamPlayer.hidden) {
+        steamPlayer.muted = weeklyTrailerMuted;
+        steamPlayer.volume = 0.75;
+        if (!weeklyTrailerMuted) steamPlayer.play().catch(() => {});
+        return;
+    }
 
     if (weeklyTrailerPlayer) {
         if (weeklyTrailerMuted) {
@@ -1083,6 +1112,77 @@ function stopWeeklyTrailerMetadataTracking() {
     weeklyTrailerMetadataTimer = null;
 }
 
+function stopWeeklySteamTrailerPlayback() {
+    const steamPlayer = document.getElementById("weekly-trailer-steam-player");
+    if (weeklySteamHls) {
+        weeklySteamHls.destroy();
+        weeklySteamHls = null;
+    }
+    if (!steamPlayer) return;
+    steamPlayer.pause();
+    steamPlayer.removeAttribute("src");
+    steamPlayer.load();
+    steamPlayer.hidden = true;
+}
+
+function startWeeklySteamTrailerPlayback(index) {
+    const trailer = weeklyTrailerItems[index];
+    const playerFrame = document.getElementById("weekly-trailer-player");
+    const steamPlayer = document.getElementById("weekly-trailer-steam-player");
+    const poster = document.getElementById("weekly-trailer-poster");
+    const playButton = document.getElementById("weekly-trailer-play");
+    const videoUrl = window.VietPatchCMS?.safeSteamTrailerUrl(trailer?.videoUrl) || "";
+    if (!trailer || !steamPlayer || !videoUrl || window.location.protocol === "file:") return;
+
+    stopWeeklyTrailerMetadataTracking();
+    weeklyTrailerPlayer?.stopVideo?.();
+    if (playerFrame) playerFrame.hidden = true;
+    stopWeeklySteamTrailerPlayback();
+    steamPlayer.hidden = false;
+    steamPlayer.muted = weeklyTrailerMuted;
+    steamPlayer.volume = 0.75;
+    if (poster) poster.hidden = true;
+    if (playButton) playButton.hidden = true;
+
+    const beginPlayback = () => {
+        steamPlayer.play()
+            .then(() => {
+                weeklyTrailerFailureCount = 0;
+                syncWeeklyTrailerSound();
+            })
+            .catch(showWeeklyTrailerFallback);
+    };
+
+    if (steamPlayer.canPlayType("application/vnd.apple.mpegurl")) {
+        steamPlayer.src = videoUrl;
+        steamPlayer.addEventListener("loadedmetadata", beginPlayback, { once: true });
+        return;
+    }
+
+    if (!window.Hls?.isSupported?.()) {
+        showWeeklyTrailerFallback();
+        return;
+    }
+
+    weeklySteamHls = new window.Hls({
+        enableWorker: true,
+        lowLatencyMode: false,
+        maxBufferLength: 30,
+        backBufferLength: 10
+    });
+    weeklySteamHls.on(window.Hls.Events.MEDIA_ATTACHED, () => {
+        weeklySteamHls?.loadSource(videoUrl);
+    });
+    weeklySteamHls.on(window.Hls.Events.MANIFEST_PARSED, beginPlayback);
+    weeklySteamHls.on(window.Hls.Events.ERROR, (_event, data) => {
+        if (!data?.fatal) return;
+        weeklyTrailerFailureCount += 1;
+        if (weeklyTrailerFailureCount < weeklyTrailerItems.length) advanceWeeklyTrailer();
+        else showWeeklyTrailerFallback();
+    });
+    weeklySteamHls.attachMedia(steamPlayer);
+}
+
 function startWeeklyTrailerPlayback(index = weeklyTrailerIndex) {
     const trailer = weeklyTrailerItems[index];
     const playerFrame = document.getElementById("weekly-trailer-player");
@@ -1092,6 +1192,11 @@ function startWeeklyTrailerPlayback(index = weeklyTrailerIndex) {
 
     weeklyTrailerIndex = index;
     renderWeeklyTrailerItem(index);
+    if (trailer.source === "steam") {
+        startWeeklySteamTrailerPlayback(index);
+        return;
+    }
+    stopWeeklySteamTrailerPlayback();
     const videoId = String(trailer.videoId).trim();
     playerFrame.hidden = false;
     if (poster) poster.hidden = true;
@@ -1105,10 +1210,7 @@ function startWeeklyTrailerPlayback(index = weeklyTrailerIndex) {
     }
 
     const origin = encodeURIComponent(window.location.origin);
-    const rotation = [...weeklyTrailerItems.slice(index + 1), ...weeklyTrailerItems.slice(0, index + 1)]
-        .map(item => String(item.videoId).trim())
-        .join(",");
-    playerFrame.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(videoId)}?rel=0&autoplay=1&mute=1&playsinline=1&controls=0&disablekb=1&fs=0&iv_load_policy=3&enablejsapi=1&loop=1&playlist=${encodeURIComponent(rotation)}&start=${HOT_TRAILER_START_SECONDS}&origin=${origin}`;
+    playerFrame.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(videoId)}?rel=0&autoplay=1&mute=1&playsinline=1&controls=0&disablekb=1&fs=0&iv_load_policy=3&enablejsapi=1&loop=0&start=${HOT_TRAILER_START_SECONDS}&origin=${origin}`;
 
     loadWeeklyYouTubeApi()
         .then(() => {
@@ -1147,7 +1249,7 @@ function startWeeklyTrailerPlayback(index = weeklyTrailerIndex) {
             });
         })
         .catch(() => {
-            // The embed URL already contains a rotating playlist, so playback still works without the JS API.
+            // Video vẫn phát được; nếu API bị chặn thì nút phát ngoài vẫn dùng được.
         });
 }
 
@@ -1160,11 +1262,14 @@ function advanceWeeklyTrailer() {
 
 function showWeeklyTrailerFallback() {
     const playerFrame = document.getElementById("weekly-trailer-player");
+    const steamPlayer = document.getElementById("weekly-trailer-steam-player");
     const poster = document.getElementById("weekly-trailer-poster");
     const playButton = document.getElementById("weekly-trailer-play");
     stopWeeklyTrailerMetadataTracking();
     weeklyTrailerPlayer?.stopVideo?.();
+    stopWeeklySteamTrailerPlayback();
     if (playerFrame) playerFrame.hidden = true;
+    if (steamPlayer) steamPlayer.hidden = true;
     if (poster) poster.hidden = false;
     if (playButton) playButton.hidden = false;
 }
@@ -1206,17 +1311,25 @@ function initWeeklyTrailerPlayer() {
     if (!media || !playButton) return;
 
     playButton.addEventListener("click", () => {
+        const trailer = weeklyTrailerItems[weeklyTrailerIndex];
+        const source = trailer?.source === "steam" ? "steam" : "youtube";
         const videoId = String(media.dataset.videoId || "").trim();
-        if (!/^[A-Za-z0-9_-]{6,20}$/.test(videoId)) return;
+        if (!trailer) return;
 
-        const watchUrl = `https://www.youtube.com/watch?v=${encodeURIComponent(videoId)}`;
+        const watchUrl = source === "steam"
+            ? window.VietPatchCMS.safeUrl(trailer.externalUrl)
+            : `https://www.youtube.com/watch?v=${encodeURIComponent(videoId)}`;
         if (window.location.protocol === "file:") {
-            window.open(watchUrl, "_blank", "noopener,noreferrer");
+            if (watchUrl) window.open(watchUrl, "_blank", "noopener,noreferrer");
             return;
         }
 
+        if (source === "youtube" && !/^[A-Za-z0-9_-]{6,20}$/.test(videoId)) return;
+
         startWeeklyTrailerPlayback(weeklyTrailerIndex);
     });
+
+    document.getElementById("weekly-trailer-steam-player")?.addEventListener("ended", advanceWeeklyTrailer);
 
     soundButton?.addEventListener("click", () => {
         weeklyTrailerMuted = !weeklyTrailerMuted;
@@ -1229,7 +1342,9 @@ function renderCmsTrailerPlaylist() {
     const list = document.querySelector("#hot-trailer-list");
     if (!list || !cmsState) return;
 
-    const trailers = cmsState.trailers.filter(item => item.enabled);
+    const trailers = cmsState.trailers.filter(item => item.enabled
+        && item.source !== "steam"
+        && /^[A-Za-z0-9_-]{6,20}$/.test(String(item.videoId || "").trim()));
     if (!trailers.length) {
         list.innerHTML = "";
         return;

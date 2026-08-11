@@ -223,6 +223,13 @@
             size: form.elements.size.value.trim(),
             price: type.toLocaleLowerCase("en") === "free" ? 0 : form.elements.price.value,
             progress: form.elements.progress.value,
+            progressBreakdown: {
+                translate: form.elements.progressTranslate.value,
+                proofread: form.elements.progressProofread.value,
+                edit: form.elements.progressEdit.value,
+                test: form.elements.progressTest.value
+            },
+            progressEta: form.elements.progressEta.value.trim(),
             downloads: form.elements.downloads.value.trim(),
             date: form.elements.date.value,
             badge: CARD_BADGE_VALUES.includes(form.elements.badge.value) ? form.elements.badge.value : "",
@@ -813,6 +820,11 @@
         form.elements.size.value = entry.size || "";
         form.elements.price.value = entry.price === "" || entry.price == null ? "" : entry.price;
         form.elements.progress.value = entry.progress === "" || entry.progress == null ? "" : entry.progress;
+        form.elements.progressTranslate.value = entry.progressBreakdown?.translate === "" || entry.progressBreakdown?.translate == null ? "" : entry.progressBreakdown.translate;
+        form.elements.progressProofread.value = entry.progressBreakdown?.proofread === "" || entry.progressBreakdown?.proofread == null ? "" : entry.progressBreakdown.proofread;
+        form.elements.progressEdit.value = entry.progressBreakdown?.edit === "" || entry.progressBreakdown?.edit == null ? "" : entry.progressBreakdown.edit;
+        form.elements.progressTest.value = entry.progressBreakdown?.test === "" || entry.progressBreakdown?.test == null ? "" : entry.progressBreakdown.test;
+        form.elements.progressEta.value = entry.progressEta || "";
         form.elements.downloads.value = entry.downloads || "";
         form.elements.date.value = entry.date || "";
         form.elements.badge.value = CARD_BADGE_VALUES.includes(entry.badge) ? entry.badge : "";
@@ -1566,6 +1578,8 @@
                     size: payload.size || "Đang cập nhật",
                     price: payload.price === "" ? 0 : payload.price,
                     progress: payload.progress === "" ? 100 : payload.progress,
+                    progressBreakdown: payload.progressBreakdown,
+                    progressEta: payload.progressEta,
                     downloads: payload.downloads || "0",
                     date: payload.date || new Date().toISOString().slice(0, 10),
                     badge: payload.badge,

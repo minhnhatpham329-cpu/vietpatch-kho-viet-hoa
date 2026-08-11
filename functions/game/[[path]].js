@@ -120,7 +120,7 @@ function shell({ title, description, canonical, image, body, jsonLd, robots = "i
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap">
-    <link rel="stylesheet" href="/game-page.css?v=20260811-v3-video">
+    <link rel="stylesheet" href="/game-page.css?v=20260811-v4-ultrawide-progress">
     <script type="application/ld+json">${jsonLd}</script>
 </head>
 <body>

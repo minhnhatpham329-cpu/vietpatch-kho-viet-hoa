@@ -394,71 +394,7 @@ const gamesDatabase = [
     }
 ];
 
-// 2. IN PROGRESS TRANSLATIONS
-const progressProjects = [
-    {
-        id: "gtavi",
-        title: "Grand Theft Auto VI",
-        engine: "RAGE",
-        developer: "Rockstar Games",
-        appid: 271590, // mock with GTA V ID
-        releaseDate: "Dự kiến: Cuối năm 2026",
-        overallProgress: 15,
-        breakdown: {
-            translate: 25,
-            proofread: 5,
-            edit: 0,
-            test: 0
-        }
-    },
-    {
-        id: "silenthill2",
-        title: "Silent Hill 2 Remake",
-        engine: "Unreal Engine 5",
-        developer: "Bloober Team / Konami",
-        appid: 2124490,
-        releaseDate: "Dự kiến: Tháng sau",
-        overallProgress: 75,
-        breakdown: {
-            translate: 90,
-            proofread: 80,
-            edit: 70,
-            test: 60
-        }
-    },
-    {
-        id: "monsterhunter",
-        title: "Monster Hunter: Wilds",
-        engine: "RE Engine",
-        developer: "Capcom",
-        appid: 2246340,
-        releaseDate: "Dự kiến: Quý 3 2026",
-        overallProgress: 40,
-        breakdown: {
-            translate: 55,
-            proofread: 40,
-            edit: 30,
-            test: 15
-        }
-    },
-    {
-        id: "hades2",
-        title: "Hades II",
-        engine: "Custom Engine",
-        developer: "Supergiant Games",
-        appid: 1145350,
-        releaseDate: "Dự kiến: Tháng sau",
-        overallProgress: 82,
-        breakdown: {
-            translate: 95,
-            proofread: 85,
-            edit: 80,
-            test: 70
-        }
-    }
-];
-
-// 3. INITIAL COMMUNITY REQUESTS
+// 2. INITIAL COMMUNITY REQUESTS
 const initialRequests = [
     {
         id: "request-dragons-dogma-2",
@@ -560,6 +496,63 @@ async function initializeCmsContent() {
 
 function getPublicGames() {
     return gamesDatabase.filter(game => !hiddenGameIds.has(game.id));
+}
+
+const progressStageKeys = ["translate", "proofread", "edit", "test"];
+
+function clampPercent(value) {
+    return Math.max(0, Math.min(100, Math.round(Number(value) || 0)));
+}
+
+function getDerivedProgressBreakdown(overallProgress) {
+    const overall = clampPercent(overallProgress);
+    return {
+        translate: clampPercent((overall / 55) * 100),
+        proofread: clampPercent(((overall - 20) / 55) * 100),
+        edit: clampPercent(((overall - 45) / 45) * 100),
+        test: clampPercent(((overall - 70) / 30) * 100)
+    };
+}
+
+function getGameProgressBreakdown(game) {
+    const derived = getDerivedProgressBreakdown(game?.progress);
+    const configured = game?.progressBreakdown && typeof game.progressBreakdown === "object"
+        ? game.progressBreakdown
+        : {};
+    let hasConfiguredStage = false;
+
+    progressStageKeys.forEach(key => {
+        if (configured[key] === "" || configured[key] == null || !Number.isFinite(Number(configured[key]))) return;
+        derived[key] = clampPercent(configured[key]);
+        hasConfiguredStage = true;
+    });
+
+    return { values: derived, configured: hasConfiguredStage };
+}
+
+function getActiveProgressProjects() {
+    return getPublicGames()
+        .filter(game => clampPercent(game.progress) < 100)
+        .sort((left, right) => {
+            const progressDifference = clampPercent(right.progress) - clampPercent(left.progress);
+            if (progressDifference) return progressDifference;
+            return (Date.parse(right.date) || 0) - (Date.parse(left.date) || 0);
+        })
+        .map(game => {
+            const breakdown = getGameProgressBreakdown(game);
+            return {
+                id: game.id,
+                title: game.title,
+                engine: game.engine || "Đang cập nhật",
+                developer: game.developer || "VietPatch",
+                overallProgress: clampPercent(game.progress),
+                breakdown: breakdown.values,
+                hasConfiguredBreakdown: breakdown.configured,
+                releaseDate: game.progressEta || `Cập nhật ${formatGameDate(game.date)}`,
+                coverImage: getGameCoverImage(game),
+                detailsUrl: gameSeoPath(game)
+            };
+        });
 }
 
 function normalizeSearchText(value) {
@@ -707,7 +700,7 @@ function updateCatalogSummary(filteredGames = getPublicGames()) {
         "stat-total-games": publicGames.length,
         "stat-ready-games": readyGames.length,
         "stat-free-games": freeGames.length,
-        "stat-active-projects": progressProjects.length,
+        "stat-active-projects": getActiveProgressProjects().length,
         "catalog-result-count": filteredGames.length,
         "overview-total-count": publicGames.length,
         "overview-ready-count": readyGames.length,
@@ -814,6 +807,10 @@ function applyCmsCustomGames(customGames) {
             videoEnabled: entry.videoEnabled !== false,
             videoTitle: entry.videoTitle || "",
             videoSummary: entry.videoSummary || "",
+            progressBreakdown: entry.progressBreakdown && typeof entry.progressBreakdown === "object"
+                ? { ...entry.progressBreakdown }
+                : {},
+            progressEta: entry.progressEta || "",
             badge: entry.badge || "",
             tags: Array.isArray(entry.tags) ? entry.tags : []
         });
@@ -848,6 +845,12 @@ function applyCmsGameOverrides(overrides) {
         if (Object.prototype.hasOwnProperty.call(entry, "videoEnabled")) game.videoEnabled = entry.videoEnabled !== false;
         if (Object.prototype.hasOwnProperty.call(entry, "videoTitle")) game.videoTitle = entry.videoTitle || "";
         if (Object.prototype.hasOwnProperty.call(entry, "videoSummary")) game.videoSummary = entry.videoSummary || "";
+        if (Object.prototype.hasOwnProperty.call(entry, "progressBreakdown")) {
+            game.progressBreakdown = entry.progressBreakdown && typeof entry.progressBreakdown === "object"
+                ? { ...entry.progressBreakdown }
+                : {};
+        }
+        if (Object.prototype.hasOwnProperty.call(entry, "progressEta")) game.progressEta = entry.progressEta || "";
         if (entry.imageUrl) {
             game.imageUrl = entry.imageUrl;
             game.screenshots = [entry.imageUrl, ...(game.screenshots || [])].slice(0, 4);
@@ -2380,6 +2383,8 @@ function renderProgressTracker() {
     const container = document.getElementById("progress-list-container");
     if (!container) return;
 
+    const progressProjects = getActiveProgressProjects();
+
     const averageProgress = progressProjects.length
         ? Math.round(progressProjects.reduce((total, project) => total + project.overallProgress, 0) / progressProjects.length)
         : 0;
@@ -2389,6 +2394,18 @@ function renderProgressTracker() {
     if (average) average.textContent = String(averageProgress);
 
     container.innerHTML = "";
+
+    if (!progressProjects.length) {
+        container.innerHTML = `
+            <div class="progress-empty-linked">
+                <span><i class="fa-solid fa-circle-check" aria-hidden="true"></i> XƯỞNG DỊCH ĐANG TRỐNG</span>
+                <h2>Chưa có game nào đang trong quá trình dịch.</h2>
+                <p>Khi một hồ sơ trong kho được đặt tiến độ dưới 100%, dự án đó sẽ tự xuất hiện tại đây.</p>
+                <a href="/?tab=home">Mở kho game <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+            </div>
+        `;
+        return;
+    }
     
     progressProjects.forEach((proj, index) => {
         const stage = proj.breakdown.test >= 50
@@ -2410,7 +2427,7 @@ function renderProgressTracker() {
         item.innerHTML = `
             <div class="production-cover">
                 <span class="production-index">${String(index + 1).padStart(2, "0")}</span>
-                <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/${escapeHtml(proj.appid)}/header.jpg" alt="${escapeHtml(proj.title)}" loading="lazy" onerror="this.src='${escapeHtml(getFallbackGameImage(proj))}'">
+                <img src="${escapeHtml(proj.coverImage)}" alt="${escapeHtml(proj.title)}" loading="lazy" onerror="this.src='${escapeHtml(getFallbackGameImage(proj))}'">
                 <span class="production-stage stage-${stage.className}">${stage.label}</span>
             </div>
 
@@ -2443,8 +2460,13 @@ function renderProgressTracker() {
 
                 <footer class="production-card-foot">
                     <span><i class="fa-regular fa-calendar"></i>${escapeHtml(proj.releaseDate)}</span>
-                    <small>Cập nhật theo từng công đoạn</small>
+                    <small>${proj.hasConfiguredBreakdown ? "Công đoạn do Content Studio cập nhật" : "Công đoạn tạm tính từ tiến độ tổng"}</small>
                 </footer>
+
+                <a class="production-profile-link" href="${escapeHtml(proj.detailsUrl)}">
+                    <span>Mở hồ sơ trong kho game</span>
+                    <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                </a>
             </div>
         `;
         container.appendChild(item);

@@ -2819,3 +2819,212 @@ a.action-btn-secondary.profile-page-link:focus-visible {
     .detail-video-screen-code { top: 17px; left: 17px; }
     .detail-video-copy { padding: 22px 18px; }
 }
+
+/* ==========================================================================
+   V8 ULTRAWIDE — dùng thêm chiều ngang mà không kéo giãn chữ và biểu mẫu.
+   Các mốc tương ứng 1920, 2560, 21:9 và 32:9; màn hình thường giữ nguyên.
+   ========================================================================== */
+.production-profile-link {
+    min-height: 44px;
+    margin-top: 20px;
+    padding: 0 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    color: var(--paper-white);
+    background: var(--ink);
+    border: 1px solid var(--ink);
+    font-size: 0.68rem;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+.production-profile-link:hover,
+.production-profile-link:focus-visible {
+    background: var(--vermilion);
+    border-color: var(--vermilion);
+}
+
+.progress-empty-linked {
+    min-height: 330px;
+    padding: clamp(34px, 5vw, 72px);
+    display: grid;
+    align-content: center;
+    justify-items: start;
+    background: var(--paper-white);
+    border: 1px solid var(--ink);
+    border-top: 5px solid var(--vermilion);
+}
+
+.progress-empty-linked > span {
+    color: var(--vermilion);
+    font: 800 var(--label-min)/1.2 var(--mono);
+    letter-spacing: 0.12em;
+}
+
+.progress-empty-linked h2 {
+    max-width: 720px;
+    margin: 18px 0 12px;
+    font-size: clamp(1.8rem, 3vw, 3rem);
+    line-height: 1.04;
+    letter-spacing: -0.045em;
+}
+
+.progress-empty-linked p {
+    max-width: 640px;
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.8rem;
+    line-height: 1.7;
+}
+
+.progress-empty-linked a {
+    margin-top: 26px;
+    padding: 13px 16px;
+    display: inline-flex;
+    align-items: center;
+    gap: 22px;
+    color: var(--paper-white);
+    background: var(--ink);
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+.progress-empty-linked a:hover,
+.progress-empty-linked a:focus-visible { background: var(--vermilion); }
+
+@media (min-width: 1800px) {
+    :root {
+        --vp-ultra-canvas: 2200px;
+        --vp-ultra-page: 2040px;
+    }
+
+    .main-header,
+    .main-content {
+        width: min(var(--vp-ultra-canvas), calc(100% - 64px));
+    }
+
+    .header-container {
+        grid-template-columns: 330px minmax(400px, max-content) minmax(0, 1fr);
+    }
+
+    .header-actions > .search-box {
+        width: clamp(260px, 15vw, 400px);
+        margin: auto 18px;
+        display: block;
+    }
+
+    .header-actions > .search-box input {
+        min-height: 40px;
+        color: var(--ink);
+        background: var(--paper-white);
+        border: 1px solid var(--rule);
+        border-radius: 0;
+    }
+
+    .header-actions > .search-box:focus-within input { border-color: var(--ink); }
+    .header-actions > .search-box kbd { display: none; }
+
+    #tab-home .hero-carousel {
+        min-height: clamp(650px, 34vw, 780px);
+    }
+
+    #tab-home .feature-sheet {
+        width: min(1420px, 72%);
+        right: clamp(48px, 4vw, 96px);
+        bottom: 46px;
+    }
+
+    #tab-home .weekly-trailer {
+        min-height: 480px;
+        grid-template-columns: minmax(620px, 0.9fr) minmax(0, 1.1fr);
+    }
+
+    .catalog-section {
+        padding-right: clamp(56px, 4vw, 104px);
+        padding-left: clamp(56px, 4vw, 104px);
+    }
+
+    .games-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+
+    .page-container.archive-page-shell {
+        width: min(var(--vp-ultra-page), calc(100% - 96px));
+        max-width: none;
+    }
+
+    .archive-masthead {
+        grid-template-columns: minmax(0, 1.45fr) minmax(430px, 0.55fr);
+        gap: clamp(64px, 6vw, 130px);
+    }
+
+    .archive-masthead-copy { max-width: 1120px; }
+
+    .progress-list {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 24px;
+        padding-top: 24px;
+    }
+
+    .progress-card.production-card {
+        grid-template-columns: minmax(240px, 0.7fr) minmax(0, 1.3fr);
+        border: 1px solid var(--rule);
+    }
+
+    .production-body { padding: clamp(24px, 2vw, 36px); }
+    .production-card-head h2 { font-size: clamp(1.45rem, 1.75vw, 2.35rem); }
+
+    .requests-layout {
+        grid-template-columns: minmax(370px, 0.56fr) minmax(0, 1.44fr);
+    }
+
+    .library-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+    .detail-panel {
+        width: min(1760px, calc(100% - 112px));
+        max-width: none;
+    }
+}
+
+@media (min-width: 2320px) {
+    :root {
+        --vp-ultra-canvas: 2740px;
+        --vp-ultra-page: 2540px;
+    }
+
+    #tab-home .hero-carousel { min-height: clamp(720px, 31vw, 840px); }
+    #tab-home .feature-sheet { width: min(1540px, 64%); }
+    #tab-home .weekly-trailer { grid-template-columns: minmax(760px, 0.88fr) minmax(0, 1.12fr); }
+    .games-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+    .library-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+    .detail-panel { width: min(2140px, calc(100% - 144px)); }
+}
+
+@media (min-width: 2800px) {
+    :root {
+        --vp-ultra-canvas: 3180px;
+        --vp-ultra-page: 2980px;
+    }
+
+    .main-header,
+    .main-content { width: min(var(--vp-ultra-canvas), calc(100% - 112px)); }
+
+    .games-grid { grid-template-columns: repeat(7, minmax(0, 1fr)); }
+    .library-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+    .archive-masthead { grid-template-columns: minmax(0, 1.6fr) minmax(480px, 0.4fr); }
+    .detail-panel { width: min(2520px, calc(100% - 176px)); }
+}
+
+@media (min-width: 3320px) {
+    :root {
+        --vp-ultra-canvas: 3400px;
+        --vp-ultra-page: 3200px;
+    }
+
+    .main-header,
+    .main-content { width: min(var(--vp-ultra-canvas), calc(100% - 128px)); }
+    .games-grid { grid-template-columns: repeat(8, minmax(0, 1fr)); }
+    .progress-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}

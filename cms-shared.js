@@ -400,6 +400,20 @@
         return Math.min(100, Math.max(0, Math.round(number)));
     }
 
+    function normalizeProgressBreakdown(value, fallback = {}) {
+        const source = value && typeof value === "object" ? value : {};
+        const fallbackSource = fallback && typeof fallback === "object" ? fallback : {};
+        return ["translate", "proofread", "edit", "test"].reduce((result, key) => {
+            const fallbackValue = fallbackSource[key] === "" || fallbackSource[key] == null
+                ? ""
+                : normalizeProgress(fallbackSource[key], "");
+            result[key] = source[key] === "" || source[key] == null
+                ? fallbackValue
+                : normalizeProgress(source[key], fallbackValue);
+            return result;
+        }, {});
+    }
+
     function normalizeCredits(value, fallback = {}, partial = false) {
         const source = value && typeof value === "object" ? value : {};
         const defaultCredits = partial
@@ -463,6 +477,8 @@
             progress: source.progress === "" || source.progress == null
                 ? (fallback.progress ?? (partial ? "" : 100))
                 : normalizeProgress(source.progress, fallback.progress ?? 100),
+            progressBreakdown: normalizeProgressBreakdown(source.progressBreakdown, fallback.progressBreakdown),
+            progressEta: text(source.progressEta, fallback.progressEta),
             downloads: text(source.downloads, fallback.downloads || (partial ? "" : "0")),
             date: text(source.date, fallback.date || (partial ? "" : new Date().toISOString().slice(0, 10))),
             description: text(source.description ?? source.desc, fallback.description ?? fallback.desc),

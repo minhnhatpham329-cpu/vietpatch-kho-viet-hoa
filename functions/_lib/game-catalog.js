@@ -109,6 +109,13 @@ function normalizeGame(gameIdValue, rawValue) {
         ? 0
         : Math.max(0, Math.round(Number(raw.price) || 0));
     const progress = Math.max(0, Math.min(100, Number(raw.progress) || 0));
+    const progressBreakdownSource = plainObject(raw.progressBreakdown);
+    const progressBreakdown = ["translate", "proofread", "edit", "test"].reduce((result, key) => {
+        if (progressBreakdownSource[key] === "" || progressBreakdownSource[key] == null) return result;
+        const stageValue = Number(progressBreakdownSource[key]);
+        if (Number.isFinite(stageValue)) result[key] = Math.max(0, Math.min(100, Math.round(stageValue)));
+        return result;
+    }, {});
     const imageUrl = publicImage(raw.imageUrl || raw.coverImage)
         || screenshots[0]
         || fallbackImage;
@@ -128,6 +135,8 @@ function normalizeGame(gameIdValue, rawValue) {
         type,
         price,
         progress,
+        progressBreakdown,
+        progressEta: cleanText(raw.progressEta),
         date: cleanText(raw.date),
         description,
         notes: cleanLongText(raw.notes),

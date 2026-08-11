@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="admin.css?v=20260811-v3-video">
-    <link rel="stylesheet" href="admin-redesign.css?v=20260811-v3-video">
+    <link rel="stylesheet" href="admin-redesign.css?v=20260811-v4-ultrawide-progress">
 </head>
 <body>
     <div class="studio-shell">
@@ -528,7 +528,37 @@
                             <label class="field">
                                 <span>Tiến độ (%)</span>
                                 <input type="number" name="progress" min="0" max="100" step="1" placeholder="100">
+                                <small>Dưới 100%: tự hiện ở trang Tiến độ. Đủ 100%: tự rời khỏi trang đó.</small>
                             </label>
+                            <fieldset class="field-wide patch-fieldset progress-sync-editor">
+                                <legend>Đồng bộ xưởng dịch</legend>
+                                <div class="progress-sync-note">
+                                    <i class="fa-solid fa-link" aria-hidden="true"></i>
+                                    <p>Bốn công đoạn là tùy chọn. Nếu để trống, website sẽ tạm phân bổ theo tiến độ tổng và vẫn dùng đúng hồ sơ game này.</p>
+                                </div>
+                                <div class="field-grid progress-stage-fields">
+                                    <label class="field">
+                                        <span>Dịch thuật (%)</span>
+                                        <input type="number" name="progressTranslate" min="0" max="100" step="1" placeholder="Tự tính">
+                                    </label>
+                                    <label class="field">
+                                        <span>Hiệu đính (%)</span>
+                                        <input type="number" name="progressProofread" min="0" max="100" step="1" placeholder="Tự tính">
+                                    </label>
+                                    <label class="field">
+                                        <span>Giao diện & font (%)</span>
+                                        <input type="number" name="progressEdit" min="0" max="100" step="1" placeholder="Tự tính">
+                                    </label>
+                                    <label class="field">
+                                        <span>Kiểm thử (%)</span>
+                                        <input type="number" name="progressTest" min="0" max="100" step="1" placeholder="Tự tính">
+                                    </label>
+                                </div>
+                                <label class="field field-wide progress-eta-field">
+                                    <span>Mốc cập nhật / dự kiến</span>
+                                    <input name="progressEta" maxlength="100" placeholder="Ví dụ: Dự kiến kiểm thử trong tháng 8">
+                                </label>
+                            </fieldset>
                             <label class="field">
                                 <span>Lượt tải nền (trước thống kê)</span>
                                 <input name="downloads" maxlength="20" placeholder="12.5k">
@@ -755,7 +785,7 @@
     <div class="studio-toast-wrap" id="studio-toast-wrap"></div>
 
     <script src="cms-public-seed.js?v=20260724-secure1"></script>
-    <script src="cms-shared.js?v=20260811-v3-video"></script>
-    <script src="admin.js?v=20260811-v3-video"></script>
+    <script src="cms-shared.js?v=20260811-v4-ultrawide-progress"></script>
+    <script src="admin.js?v=20260811-v4-ultrawide-progress"></script>
 </body>
 </html>

@@ -633,3 +633,39 @@ h1, h2 { margin: 0; font-weight: 900; line-height: .98; letter-spacing: -.052em;
     .game-main .shot-grid { grid-template-columns: 1fr; }
     .site-foot > div { max-width: none; }
 }
+
+/* Ultrawide dossiers: preserve the editorial composition instead of stretching the copy. */
+@media (min-width: 1800px) {
+    .game-main { width: min(2180px, calc(100% - 64px)); }
+    .game-main .game-hero {
+        grid-template-columns: minmax(0, 1.44fr) minmax(460px, 0.56fr);
+        min-height: 700px;
+    }
+    .game-main .game-cover { min-height: 700px; }
+    .game-main .game-summary { padding-inline: clamp(48px, 3vw, 76px); }
+    .game-main .game-summary h1 { max-width: 720px; }
+    .game-main .content-layout { grid-template-columns: minmax(0, 1.65fr) minmax(350px, 0.35fr); }
+}
+
+@media (min-width: 2400px) {
+    .game-main { width: min(2680px, calc(100% - 96px)); }
+    .game-main .game-hero {
+        grid-template-columns: minmax(0, 1.55fr) minmax(520px, 0.45fr);
+        min-height: 780px;
+    }
+    .game-main .game-cover { min-height: 780px; }
+    .game-main .game-summary h1 { max-width: 820px; }
+    .index-main { width: min(2600px, calc(100% - 96px)); }
+    .index-grid { grid-template-columns: repeat(7, minmax(0, 1fr)); }
+}
+
+@media (min-width: 3000px) {
+    .game-main { width: min(3180px, calc(100% - 128px)); }
+    .game-main .game-hero {
+        grid-template-columns: minmax(0, 1.68fr) minmax(560px, 0.42fr);
+        min-height: 860px;
+    }
+    .game-main .game-cover { min-height: 860px; }
+    .index-main { width: min(3080px, calc(100% - 128px)); }
+    .index-grid { grid-template-columns: repeat(8, minmax(0, 1fr)); }
+}

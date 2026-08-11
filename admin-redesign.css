@@ -1266,6 +1266,102 @@ textarea:focus-visible {
     #panel-dashboard .metric-grid { grid-template-columns: 1fr; }
 }
 
+/* Progress synchronization: one catalog record controls both the library and progress page. */
+.progress-sync-editor {
+    overflow: hidden;
+    margin-top: 1rem;
+    padding: 0 !important;
+    border: 1px solid rgba(183, 203, 232, 0.14) !important;
+    border-radius: 14px;
+    background: rgba(8, 12, 22, 0.48);
+}
+
+.progress-sync-editor > legend {
+    margin-left: 1rem;
+    padding: 0 0.45rem;
+    color: var(--orange);
+    font: 800 0.62rem/1.2 var(--font-mono);
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+}
+
+.progress-sync-note {
+    display: grid;
+    grid-template-columns: 36px minmax(0, 1fr);
+    gap: 0.75rem;
+    align-items: center;
+    padding: 1rem 1.1rem;
+    border-bottom: 1px solid rgba(183, 203, 232, 0.13);
+}
+
+.progress-sync-note > i {
+    display: grid;
+    width: 36px;
+    height: 36px;
+    place-items: center;
+    color: #07110f;
+    border-radius: 10px;
+    background: var(--orange);
+    font-weight: 900;
+}
+
+.progress-sync-note > p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.65rem;
+    line-height: 1.55;
+}
+
+.progress-stage-fields {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.85rem;
+    padding: 1rem 1.1rem 0;
+}
+
+.progress-eta-field { padding: 0 1.1rem 1.1rem; }
+
+@media (max-width: 900px) {
+    .progress-stage-fields { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 560px) {
+    .progress-stage-fields { grid-template-columns: 1fr; }
+}
+
+/* Ultrawide studio: use the canvas for data, while keeping editor fields readable. */
+@media (min-width: 1800px) {
+    .studio-shell { grid-template-columns: 268px minmax(0, 1fr); }
+    .studio-panel {
+        width: min(2100px, calc(100% - 64px));
+        max-width: none;
+        margin-inline: auto;
+    }
+    .manager-layout.patch-manager-layout {
+        grid-template-columns: minmax(380px, 0.5fr) minmax(760px, 1.5fr);
+        gap: 1.35rem;
+    }
+    .dashboard-live-grid { grid-template-columns: minmax(0, 1.7fr) minmax(320px, 0.3fr); }
+}
+
+@media (min-width: 2400px) {
+    .studio-panel { width: min(2640px, calc(100% - 96px)); }
+    .manager-layout.patch-manager-layout {
+        grid-template-columns: minmax(430px, 0.42fr) minmax(980px, 1.58fr);
+        gap: 1.6rem;
+    }
+    #panel-dashboard .metric-grid { grid-template-columns: repeat(6, minmax(180px, 1fr)); }
+    .game-video-setup-grid { grid-template-columns: minmax(0, 1.18fr) minmax(420px, 0.82fr); }
+}
+
+@media (min-width: 3000px) {
+    .studio-panel { width: min(3140px, calc(100% - 128px)); }
+    .manager-layout.patch-manager-layout {
+        grid-template-columns: minmax(480px, 0.36fr) minmax(1200px, 1.64fr);
+    }
+    .dashboard-live-grid { grid-template-columns: minmax(0, 2fr) minmax(360px, 0.35fr); }
+}
+
 /* Per-game screening setup — compact editor plus a truthful live preview. */
 .game-video-setup { overflow: hidden; padding: 0 !important; border-radius: 14px; background: rgba(8,12,22,.48); }
 .game-video-setup > legend { margin-left: 1rem; padding: 0 .45rem; color: var(--orange); font: 800 .62rem/1.2 var(--font-mono); letter-spacing: .09em; text-transform: uppercase; }

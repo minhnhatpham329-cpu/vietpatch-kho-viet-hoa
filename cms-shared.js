@@ -461,6 +461,8 @@
             date: text(source.date, fallback.date || (partial ? "" : new Date().toISOString().slice(0, 10))),
             description: text(source.description ?? source.desc, fallback.description ?? fallback.desc),
             notes: text(source.notes, fallback.notes),
+            videoId: extractYouTubeId(source.videoId || source.videoUrl || fallback.videoId || fallback.videoUrl),
+            videoTitle: text(source.videoTitle, fallback.videoTitle),
             downloadUrl: safeUrl(source.downloadUrl || fallback.downloadUrl),
             imageUrl: safeAssetUrl(source.imageUrl || source.coverImage || fallback.imageUrl),
             badge: normalizeBadge(source.badge, fallback.badge),

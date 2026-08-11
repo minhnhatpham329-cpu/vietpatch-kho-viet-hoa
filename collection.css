@@ -2205,6 +2205,19 @@ textarea {
     cursor: not-allowed;
 }
 
+@media (min-width: 1760px) {
+    .catalog-section { padding-inline: clamp(42px, 4vw, 96px); }
+    .games-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 20px; }
+    .game-card.catalog-row,
+    .game-card.catalog-row:hover,
+    .game-card.catalog-row:focus-within { min-height: 410px; }
+}
+
+@media (min-width: 2320px) {
+    .catalog-section { padding-inline: clamp(64px, 4.5vw, 132px); }
+    .games-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+}
+
 @media (max-width: 1180px) {
     .games-grid {
         grid-template-columns: repeat(3, minmax(0, 1fr));

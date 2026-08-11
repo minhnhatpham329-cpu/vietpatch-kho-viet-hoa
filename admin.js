@@ -161,8 +161,10 @@
     function getPatchPayload(form, fallback = {}) {
         const rawDownload = form.elements.downloadUrl.value.trim();
         const rawImage = form.elements.imageUrl.value.trim();
+        const rawVideo = form.elements.videoUrl.value.trim();
         const downloadUrl = CMS.safeUrl(rawDownload);
         const imageUrl = CMS.safeAssetUrl(rawImage);
+        const videoId = CMS.extractYouTubeId(rawVideo);
         const screenshots = parseAssetList(form.elements.screenshots.value);
         const type = form.elements.type.value;
 
@@ -176,6 +178,10 @@
 
         if (screenshots.invalid) {
             return { error: `Link ảnh gallery chưa hợp lệ: ${screenshots.invalid}` };
+        }
+
+        if (rawVideo && !videoId) {
+            return { error: "Video phải là link YouTube hợp lệ." };
         }
 
         return {
@@ -194,6 +200,8 @@
             tags: Array.isArray(fallback.tags) ? fallback.tags : [],
             imageUrl,
             downloadUrl,
+            videoId,
+            videoTitle: form.elements.videoTitle.value.trim(),
             screenshots: screenshots.items,
             credits: {
                 translator: form.elements.creditTranslator.value.trim(),
@@ -278,6 +286,7 @@
         if (panelId === "requests") renderRequestManager();
         if (panelId === "posts") renderPostManager();
         if (panelId === "patches") renderPatchManager();
+        if (panelId === "dashboard") loadCommunityModeration();
         if (panelId === "community") loadCommunityModeration();
         if (panelId === "backup") {
             renderBackupReport();
@@ -302,18 +311,64 @@
         const updatedText = state.updatedAt
             ? new Intl.DateTimeFormat("vi-VN", { dateStyle: "short", timeStyle: "short" }).format(new Date(state.updatedAt))
             : "Chưa chỉnh sửa";
+        const overview = communityData?.overview || {};
+        const traffic = communityData?.traffic || {};
+        const today = traffic.today || {};
+        const hasLiveData = Boolean(communityData);
+        const pendingReports = Number(overview.pendingReports) || 0;
 
         byId("dashboard-metrics").innerHTML = [
-            ["Trailer đang bật", enabledTrailers, "fa-film"],
-            ["Yêu cầu đang hiện", publishedRequests, "fa-square-poll-vertical"],
-            ["Game có link tải", linkedPatches, "fa-link"],
-            ["Tổng game trong kho", totalGames, "fa-box-archive"]
-        ].map(([label, value, icon]) => `
-            <article class="metric">
+            ["Khách hôm nay", hasLiveData ? formatCommunityNumber(today.uniqueVisitors) : "…", "fa-users", "metric-live"],
+            ["Phiên hôm nay", hasLiveData ? formatCommunityNumber(today.pageViews) : "…", "fa-chart-line", "metric-live"],
+            ["Lượt xem hồ sơ", hasLiveData ? formatCommunityNumber(overview.totalViews) : "…", "fa-eye", ""],
+            ["Lượt tải mới", hasLiveData ? formatCommunityNumber(overview.totalDownloads) : "…", "fa-cloud-arrow-down", ""],
+            ["Báo cáo chờ duyệt", hasLiveData ? formatCommunityNumber(pendingReports) : "…", "fa-triangle-exclamation", pendingReports ? "metric-alert" : ""],
+            ["Game trong kho", totalGames, "fa-box-archive", ""]
+        ].map(([label, value, icon, className]) => `
+            <article class="metric ${className}">
                 <div class="metric-head"><span>${label}</span><i class="fa-solid ${icon}"></i></div>
                 <strong>${value}</strong>
             </article>
         `).join("");
+
+        const chart = byId("dashboard-traffic-chart");
+        const focus = byId("dashboard-focus");
+        const trafficDays = Array.isArray(traffic.daily) ? traffic.daily : [];
+        if (chart) {
+            if (!hasLiveData) {
+                chart.innerHTML = `<p class="dashboard-loading">Đang tải dữ liệu truy cập thật…</p>`;
+            } else if (!trafficDays.length) {
+                chart.innerHTML = `<p class="dashboard-loading">Chưa có lượt truy cập trong 14 ngày gần đây.</p>`;
+            } else {
+                const maxVisitors = Math.max(1, ...trafficDays.map(item => Number(item.uniqueVisitors) || 0));
+                chart.innerHTML = `<div class="dashboard-bars" role="img" aria-label="Khách truy cập 14 ngày">
+                    ${trafficDays.map(item => {
+                        const visitors = Math.max(0, Number(item.uniqueVisitors) || 0);
+                        const views = Math.max(0, Number(item.pageViews) || 0);
+                        const height = Math.max(visitors ? 10 : 3, Math.round((visitors / maxVisitors) * 100));
+                        const label = String(item.date || "").slice(5).split("-").reverse().join("/");
+                        return `<span title="${escapeHtml(item.date)} · ${formatCommunityNumber(visitors)} khách · ${formatCommunityNumber(views)} phiên"><b>${formatCommunityNumber(visitors)}</b><i style="height:${height}%"></i><small>${escapeHtml(label)}</small></span>`;
+                    }).join("")}
+                </div>`;
+            }
+        }
+
+        if (focus) {
+            const stats = Array.isArray(communityData?.stats) ? communityData.stats : [];
+            const top = [...stats].sort((left, right) => (Number(right.views) + Number(right.downloads)) - (Number(left.views) + Number(left.downloads)))[0];
+            const topGame = top ? getCommunityGame(top.gameId) : null;
+            const videoCount = getAdminCatalog().filter(game => game.videoId).length;
+            focus.innerHTML = `
+                <span>ĐIỂM CẦN CHÚ Ý</span>
+                <strong>${pendingReports ? `${formatCommunityNumber(pendingReports)} báo cáo đang chờ` : "Không có báo cáo tồn"}</strong>
+                <dl>
+                    <div><dt>Game được quan tâm</dt><dd>${escapeHtml(topGame?.title || "Chưa đủ dữ liệu")}</dd></div>
+                    <div><dt>Hồ sơ có video</dt><dd>${videoCount}/${totalGames}</dd></div>
+                    <div><dt>Game có link tải</dt><dd>${linkedPatches}/${totalGames}</dd></div>
+                    <div><dt>Trailer tự động</dt><dd>${enabledTrailers ? `${enabledTrailers} đang bật` : "Cần kiểm tra"}</dd></div>
+                </dl>
+            `;
+        }
 
         byId("content-health").innerHTML = `
             <div class="health-row">
@@ -339,6 +394,10 @@
             <div class="health-row">
                 <div><strong>Lần lưu cuối</strong><br><span>Bản nháp trên máy chủ trung tâm</span></div>
                 <div class="health-value">${escapeHtml(updatedText)}</div>
+            </div>
+            <div class="health-row">
+                <div><strong>License Launcher V2.1</strong><br><span>Luồng mã máy và giấy phép đang ở mức thiết kế, chưa khóa khách tải.</span></div>
+                <div class="health-value">ROADMAP</div>
             </div>
         `;
     }
@@ -678,6 +737,7 @@
             const hasImage = Boolean(entry?.imageUrl);
             const badge = CARD_BADGE_LABELS[entry?.badge] || "";
             const hasGallery = Array.isArray(entry?.screenshots) && entry.screenshots.length > 0;
+            const hasVideo = Boolean(entry?.videoId);
             const hasCredits = entry?.credits && Object.values(entry.credits).some(Boolean);
             const hasOverride = Boolean(entry);
             const status = [
@@ -686,6 +746,7 @@
                 hasLink ? "Link tải" : "",
                 hasImage ? "Có ảnh" : "",
                 hasGallery ? "Gallery" : "",
+                hasVideo ? "Video" : "",
                 hasCredits ? "Nhân sự" : "",
                 badge ? `Nhãn ${badge}` : ""
             ].filter(Boolean).join(" / ");
@@ -693,7 +754,7 @@
                 <div class="manager-item ${game.id === selectedGameId ? "active" : ""}">
                     <button class="manager-item-main" type="button" data-edit-game="${escapeHtml(game.id)}">
                         <strong>${escapeHtml(game.title)}</strong>
-                        <span><i class="status-dot ${game.hidden || hasLink || hasImage || hasGallery || hasCredits || badge ? "" : "off"}"></i> ${status || (hasOverride ? "Đã chỉnh nội dung" : "Dùng dữ liệu gốc")}</span>
+                        <span><i class="status-dot ${game.hidden || hasLink || hasImage || hasGallery || hasVideo || hasCredits || badge ? "" : "off"}"></i> ${status || (hasOverride ? "Đã chỉnh nội dung" : "Dùng dữ liệu gốc")}</span>
                     </button>
                 </div>
             `;
@@ -723,6 +784,8 @@
         form.elements.badge.value = CARD_BADGE_VALUES.includes(entry.badge) ? entry.badge : "";
         form.elements.imageUrl.value = entry.imageUrl || "";
         form.elements.downloadUrl.value = entry.downloadUrl || "";
+        form.elements.videoUrl.value = entry.videoId ? `https://www.youtube.com/watch?v=${entry.videoId}` : "";
+        form.elements.videoTitle.value = entry.videoTitle || "";
         form.elements.description.value = entry.description || "";
         form.elements.creditTranslator.value = entry.credits?.translator || "";
         form.elements.creditEditor.value = entry.credits?.editor || "";
@@ -935,11 +998,16 @@
                 communityData = await adminRequest("/api/admin/community?limit=120");
                 communityLoaded = true;
                 renderCommunityModeration();
+                renderDashboard();
             } catch (error) {
                 ["community-metrics", "community-traffic-history", "community-game-stats", "community-report-list", "community-review-list"].forEach(id => {
                     const target = byId(id);
                     if (target) target.innerHTML = `<p class="community-admin-empty">Không tải được dữ liệu: ${escapeHtml(error.message)}</p>`;
                 });
+                const dashboardChart = byId("dashboard-traffic-chart");
+                const dashboardFocus = byId("dashboard-focus");
+                if (dashboardChart) dashboardChart.innerHTML = `<p class="dashboard-loading">Chưa kết nối được số liệu truy cập. Hãy thử làm mới sau.</p>`;
+                if (dashboardFocus) dashboardFocus.innerHTML = `<p class="dashboard-loading">Chưa thể tổng hợp việc cần chú ý.</p>`;
                 showToast(`Không tải được phần tương tác: ${error.message}`, "error");
             } finally {
                 communityLoadPromise = null;
@@ -1073,6 +1141,7 @@
             CMS.updateSyncMeta(payload.meta);
             revisionsLoaded = false;
             renderAllEditors();
+            loadCommunityModeration();
             await loadRevisions(true);
             setSaveState("Đã khôi phục vào bản nháp", false);
             showToast("Đã khôi phục. Hãy kiểm tra rồi bấm Xuất bản khi sẵn sàng.");
@@ -1091,6 +1160,7 @@
             byId("server-status").innerHTML = `<i class="fa-solid fa-cloud"></i> MÁY CHỦ ĐÃ KẾT NỐI`;
             setSaveState("Bản nháp đã đồng bộ", false);
             renderAllEditors();
+            loadCommunityModeration();
         } catch (error) {
             if (error.status === 401 || /CMS_READ_401/.test(error.message)) {
                 window.location.replace("/admin-login.html?returnTo=%2Fadmin.html");
@@ -1459,6 +1529,8 @@
                     tags: payload.tags,
                     imageUrl: payload.imageUrl,
                     downloadUrl: payload.downloadUrl,
+                    videoId: payload.videoId,
+                    videoTitle: payload.videoTitle || `Video Việt hóa ${payload.title}`,
                     credits: {
                         translator: payload.credits.translator || "VietPatch Community",
                         editor: payload.credits.editor || "Content Studio",
@@ -1601,6 +1673,7 @@
         byId("publish-btn").addEventListener("click", publishCurrentDraft);
         byId("refresh-revisions-btn").addEventListener("click", () => loadRevisions(true));
         byId("refresh-community-btn").addEventListener("click", () => loadCommunityModeration(true));
+        byId("dashboard-refresh-btn").addEventListener("click", () => loadCommunityModeration(true));
         byId("panel-community").addEventListener("click", event => {
             const editButton = event.target.closest("[data-edit-community-game]");
             if (editButton) {

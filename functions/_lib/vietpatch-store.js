@@ -415,7 +415,7 @@ export async function createPaymentOrder(env, account, input) {
 
     if (itemType === "deposit") {
         amount = sanitizeDepositAmount(input?.amount);
-        itemTitle = "Nạp tiền ví VietPatch";
+        itemTitle = "Donate VietPatch";
     } else if (itemType === "purchase") {
         gameId = sanitizeGameId(input?.gameId);
         if (!gameId) throw httpError(400, "INVALID_GAME");

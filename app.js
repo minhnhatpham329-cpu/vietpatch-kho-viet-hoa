@@ -810,6 +810,8 @@ function applyCmsCustomGames(customGames) {
             notes: entry.notes || "Thông tin cài đặt sẽ được cập nhật trong hồ sơ patch.",
             downloadUrl: entry.downloadUrl || "",
             imageUrl: entry.imageUrl || "",
+            videoId: entry.videoId || "",
+            videoTitle: entry.videoTitle || "",
             badge: entry.badge || "",
             tags: Array.isArray(entry.tags) ? entry.tags : []
         });
@@ -840,6 +842,8 @@ function applyCmsGameOverrides(overrides) {
         if (entry.date) game.date = entry.date;
         if (entry.description) game.desc = entry.description;
         if (entry.notes) game.notes = entry.notes;
+        if (Object.prototype.hasOwnProperty.call(entry, "videoId")) game.videoId = entry.videoId || "";
+        if (Object.prototype.hasOwnProperty.call(entry, "videoTitle")) game.videoTitle = entry.videoTitle || "";
         if (entry.imageUrl) {
             game.imageUrl = entry.imageUrl;
             game.screenshots = [entry.imageUrl, ...(game.screenshots || [])].slice(0, 4);
@@ -1595,8 +1599,8 @@ async function apiRequest(path, options = {}) {
         const friendlyErrors = {
             ACCOUNT_SERVICE_NOT_CONFIGURED: "Hệ thống tài khoản chưa được cấu hình khóa bảo mật.",
             ALREADY_OWNED: "Bản Việt hóa này đã có trong thư viện của bạn.",
-            AMOUNT_MUST_BE_AT_LEAST_10000: "Số tiền nạp tối thiểu là 10.000đ.",
-            AMOUNT_TOO_LARGE: "Mỗi lần chỉ có thể nạp tối đa 10.000.000đ.",
+            AMOUNT_MUST_BE_AT_LEAST_10000: "Mức donate tối thiểu là 10.000đ.",
+            AMOUNT_TOO_LARGE: "Mỗi lần chỉ có thể donate tối đa 10.000.000đ.",
             AUTH_REQUIRED: "Vui lòng đăng nhập để tiếp tục.",
             INSUFFICIENT_BALANCE: "Số dư ví không đủ.",
             INVALID_LOGIN: "Email hoặc mật khẩu không đúng.",
@@ -2692,7 +2696,7 @@ function renderGameTags(game) {
 
 function getTransactionLabel(tx) {
     const labels = {
-        deposit: "Nạp ví",
+        deposit: "Donate",
         bonus: "Quà tài khoản",
         purchase: "Thanh toán patch",
         unlock: "Mở khóa miễn phí"
@@ -2759,7 +2763,7 @@ function renderUserProfile() {
                 <div class="profile-guest-icon"><i class="fa-solid fa-user-lock"></i></div>
                 <div>
                     <h2>Đăng nhập để mở hồ sơ ví</h2>
-                    <p>Hồ sơ sẽ hiển thị số dư, lịch sử nạp, lịch sử thanh toán và các patch bạn đã sở hữu.</p>
+                    <p>Hồ sơ sẽ hiển thị số dư, lịch sử donate, lịch sử thanh toán và các patch bạn đã sở hữu.</p>
                 </div>
                 <button class="action-btn-main profile-login-btn"><i class="fa-solid fa-right-to-bracket"></i> Đăng nhập</button>
             </div>
@@ -2802,9 +2806,9 @@ function renderUserProfile() {
             <section class="wallet-card">
                 <span class="profile-kicker">VÍ VIETPATCH</span>
                 <div class="wallet-balance">${formatCurrency(userState.balance)}</div>
-                <p>Cập nhật sau mỗi giao dịch nạp, thanh toán bằng ví hoặc mua qua QR.</p>
+                <p>Cập nhật sau mỗi lần donate, thanh toán bằng ví hoặc mua qua QR.</p>
                 <div class="wallet-actions">
-                    <button class="action-btn-main profile-deposit-btn"><i class="fa-solid fa-wallet"></i> Nạp tiền</button>
+                    <button class="action-btn-main profile-deposit-btn"><i class="fa-solid fa-heart"></i> Donate</button>
                     <button class="action-btn-secondary profile-library-btn"><i class="fa-solid fa-bookmark"></i> Thư viện</button>
                 </div>
             </section>
@@ -2815,7 +2819,7 @@ function renderUserProfile() {
                 <small>${ownedTitles.length ? escapeHtml(ownedTitles.join(", ")) : "Chưa có patch"}</small>
             </section>
             <section class="profile-stat-card">
-                <span>Tổng đã nạp</span>
+                <span>Tổng donate</span>
                 <strong>${formatCurrency(totalDeposited)}</strong>
                 <small>Không tính quà hệ thống</small>
             </section>
@@ -2827,11 +2831,11 @@ function renderUserProfile() {
 
             <section class="profile-history-card">
                 <div class="profile-section-head">
-                    <h3><i class="fa-solid fa-building-columns"></i> Lịch sử nạp ví</h3>
+                    <h3><i class="fa-solid fa-heart"></i> Lịch sử donate</h3>
                     <span>${depositHistory.length} giao dịch</span>
                 </div>
                 <div class="history-list">
-                    ${renderTransactionRows(depositHistory, "Chưa có giao dịch nạp ví.")}
+                    ${renderTransactionRows(depositHistory, "Chưa có giao dịch donate.")}
                 </div>
             </section>
 
@@ -2924,6 +2928,10 @@ function openGameDetails(gameId, { focusReview = false } = {}) {
     const creditsContainer = document.getElementById("detail-credits-container");
     const screenshotsContainer = document.getElementById("detail-screenshots-container");
     const notes = document.getElementById("detail-notes");
+    const videoCard = document.getElementById("detail-video-card");
+    const videoFrame = document.getElementById("detail-video-frame");
+    const videoTitle = document.getElementById("detail-video-title");
+    const videoLink = document.getElementById("detail-video-link");
     
     // Render content
     banner.style.backgroundImage = `url('${getGameHeroImage(game)}')`;
@@ -2940,6 +2948,21 @@ function openGameDetails(gameId, { focusReview = false } = {}) {
     
     desc.textContent = game.desc;
     notes.textContent = game.notes;
+
+    const videoId = /^[A-Za-z0-9_-]{11}$/.test(String(game.videoId || "")) ? String(game.videoId) : "";
+    if (videoCard && videoFrame && videoTitle && videoLink) {
+        videoCard.hidden = !videoId;
+        if (videoId) {
+            const watchUrl = `https://www.youtube.com/watch?v=${encodeURIComponent(videoId)}`;
+            videoTitle.textContent = game.videoTitle || `Video Việt hóa ${game.title}`;
+            videoFrame.title = videoTitle.textContent;
+            videoFrame.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(videoId)}?rel=0&modestbranding=1`;
+            videoLink.href = watchUrl;
+        } else {
+            videoFrame.removeAttribute("src");
+            videoLink.removeAttribute("href");
+        }
+    }
     
     // Credits
     const credits = game.credits || {};
@@ -3048,6 +3071,8 @@ function closeGameDetails() {
     detailReturnFocus?.focus?.();
     detailReturnFocus = null;
     activeDetailGameId = "";
+    const videoFrame = document.getElementById("detail-video-frame");
+    if (videoFrame) videoFrame.removeAttribute("src");
 }
 
 function openImageLightbox(src, title = "Ảnh bản dịch Việt hóa") {
@@ -3181,7 +3206,7 @@ async function openDepositCheckout(amount, method) {
     const checkoutAmount = document.getElementById("checkout-amount");
     const checkoutTxId = document.getElementById("checkout-txid");
     
-    checkoutItemName.textContent = `Nạp tiền ví tài khoản VietPatch`;
+    checkoutItemName.textContent = `Donate VietPatch`;
     checkoutAmount.textContent = formatCurrency(amount);
     
     checkoutTxId.textContent = "Đang tạo...";
@@ -3192,7 +3217,7 @@ async function openDepositCheckout(amount, method) {
     try {
         const order = await createVietPatchPaymentOrder({
             amount,
-            itemTitle: "Nạp tiền ví VietPatch",
+            itemTitle: "Donate VietPatch",
             itemType: "deposit",
             gameId: "wallet"
         });
@@ -3200,7 +3225,7 @@ async function openDepositCheckout(amount, method) {
         setTransactionView("paying");
     } catch (error) {
         closeTransactionModal();
-        showToast(error.message || "Không tạo được VietQR nạp tiền.", "error");
+        showToast(error.message || "Không tạo được VietQR donate.", "error");
     }
 }
 
@@ -3272,7 +3297,7 @@ async function processPaymentVerification() {
                 return;
             }
 
-            showTransactionSuccess(`Nạp tiền thành công! Đã nạp thêm ${formatCurrency(pendingDepositAmount)} vào ví tài khoản của bạn.`);
+            showTransactionSuccess(`Donate thành công! Số dư ví đã tăng ${formatCurrency(pendingDepositAmount)}.`);
         } catch (error) {
             setTransactionView("paying");
             showToast(error.message || "Không kiểm tra được thanh toán.", "error");
@@ -3328,7 +3353,7 @@ function closeTransactionModal() {
 function openDepositModal() {
     // Check login
     if (!userState.loggedIn) {
-        showToast("Vui lòng đăng nhập để nạp tiền vào tài khoản.", "error");
+        showToast("Vui lòng đăng nhập để donate và nhận số dư ví.", "error");
         openAuthModal();
         return;
     }
@@ -3850,6 +3875,43 @@ function initHotTrailerBanner() {
 // ==========================================================================
 // INITIALIZATION & EVENT LISTENERS ATTACHMENTS
 // ==========================================================================
+const FIRST_USE_GUIDE_KEY = "vietpatch:v2-guide-seen";
+
+function setFirstUseGuide(open) {
+    const guide = document.getElementById("first-use-guide");
+    if (!guide) return;
+    guide.hidden = !open;
+    guide.setAttribute("aria-hidden", open ? "false" : "true");
+    guide.classList.toggle("active", open);
+    if (open) {
+        requestAnimationFrame(() => guide.querySelector(".first-use-guide-card")?.focus());
+    } else {
+        try { localStorage.setItem(FIRST_USE_GUIDE_KEY, "1"); } catch {}
+    }
+}
+
+function initFirstUseGuide() {
+    const guide = document.getElementById("first-use-guide");
+    const replay = document.getElementById("btn-open-guide");
+    if (!guide) return;
+    replay?.addEventListener("click", event => {
+        event.preventDefault();
+        setFirstUseGuide(true);
+    });
+    ["first-use-guide-close", "first-use-guide-done"].forEach(id => {
+        document.getElementById(id)?.addEventListener("click", () => setFirstUseGuide(false));
+    });
+    guide.addEventListener("click", event => {
+        if (event.target === guide) setFirstUseGuide(false);
+    });
+    document.addEventListener("keydown", event => {
+        if (event.key === "Escape" && !guide.hidden) setFirstUseGuide(false);
+    });
+    let seen = false;
+    try { seen = localStorage.getItem(FIRST_USE_GUIDE_KEY) === "1"; } catch {}
+    if (!seen) window.setTimeout(() => setFirstUseGuide(true), 900);
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
     recordAnonymousSiteVisit();
     const cmsReady = initializeCmsContent();
@@ -3881,6 +3943,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     contentBoot?.setAttribute("aria-hidden", "true");
     pageRoot.classList.remove("cms-booting");
     pageRoot.classList.add("cms-ready");
+    initFirstUseGuide();
 
     if (cmsLoadFailed) {
         showToast("Đang dùng dữ liệu lưu sẵn vì chưa kết nối được máy chủ nội dung.", "info");

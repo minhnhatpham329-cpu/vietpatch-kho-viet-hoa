@@ -19,6 +19,39 @@
     --body-min: 0.78rem;    /* sàn cỡ chữ cho chữ phụ */
 }
 
+.detail-video-card[hidden] { display: none !important; }
+.detail-video-heading { display: flex; align-items: center; justify-content: space-between; gap: 18px; margin-bottom: 10px; }
+.detail-video-heading h3 { margin: 0; }
+.detail-video-heading > a { color: var(--accent, #e63d2f); font-size: .72rem; font-weight: 800; text-decoration: none; }
+.detail-video-frame { position: relative; overflow: hidden; aspect-ratio: 16 / 9; margin-top: 18px; border: 1px solid rgba(17,17,15,.28); background: #090909; }
+.detail-video-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+
+.first-use-guide[hidden] { display: none !important; }
+.first-use-guide { position: fixed; inset: 0; z-index: 12000; display: grid; place-items: center; padding: 20px; background: rgba(9,9,8,.74); backdrop-filter: blur(9px); opacity: 0; transition: opacity .2s ease; }
+.first-use-guide.active { opacity: 1; }
+.first-use-guide-card { position: relative; width: min(760px, 100%); padding: clamp(24px, 4vw, 42px); border-top: 5px solid #e63d2f; background: #faf7ef; box-shadow: 18px 20px 0 rgba(0,0,0,.24); outline: 0; transform: translateY(10px); transition: transform .24s ease; }
+.first-use-guide.active .first-use-guide-card { transform: none; }
+.first-use-guide-card > header { display: flex; align-items: center; gap: 16px; padding-right: 34px; }
+.first-use-guide-card > header img { flex: 0 0 auto; }
+.first-use-guide-card > header span { color: #e63d2f; font: 800 .62rem/1.2 ui-monospace, monospace; letter-spacing: .14em; }
+.first-use-guide-card h3 { margin: 5px 0 0; color: #11110f; font-size: clamp(1.45rem, 3.5vw, 2.45rem); line-height: 1.05; letter-spacing: -.04em; }
+.first-use-guide-close { position: absolute; top: 17px; right: 17px; width: 38px; height: 38px; border: 1px solid #c9c1b2; color: #11110f; background: transparent; }
+.first-use-guide-steps { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); margin: 30px 0 24px; border-top: 1px solid #c9c1b2; border-left: 1px solid #c9c1b2; }
+.first-use-guide-steps article { position: relative; display: grid; min-height: 164px; align-content: end; gap: 5px; padding: 19px; border-right: 1px solid #c9c1b2; border-bottom: 1px solid #c9c1b2; }
+.first-use-guide-steps b { position: absolute; top: 13px; right: 14px; color: #aaa49a; font: 800 .65rem ui-monospace, monospace; }
+.first-use-guide-steps i { margin-bottom: 12px; color: #e63d2f; font-size: 1.25rem; }
+.first-use-guide-steps strong { color: #11110f; font-size: .91rem; }
+.first-use-guide-steps small { color: #706b61; font-size: .72rem; line-height: 1.45; }
+.first-use-guide-done { width: 100%; min-height: 52px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; border: 0; color: #fff; background: #11110f; font-weight: 800; }
+.first-use-guide-done:hover { background: #e63d2f; }
+@media (max-width: 620px) {
+    .first-use-guide { align-items: end; padding: 10px; }
+    .first-use-guide-card { max-height: 92vh; overflow: auto; padding: 23px 17px 17px; box-shadow: none; }
+    .first-use-guide-steps { grid-template-columns: 1fr; margin-top: 23px; }
+    .first-use-guide-steps article { min-height: 94px; padding: 16px 18px; }
+    .first-use-guide-steps i { margin: 0; }
+}
+
 /* --------------------------------------------------------------------------
    1. Sàn dễ đọc – các nhãn mono đang ở 0.46–0.58rem (7–9px)
    -------------------------------------------------------------------------- */
@@ -1493,7 +1526,7 @@ html::after {
 /* ---- Mobile: cùng ngôn ngữ "triển lãm sáng" ---- */
 @media (max-width: 760px) {
     #tab-home .hero-carousel {
-        min-height: clamp(540px, 78svh, 640px);
+        min-height: calc(min(52vw, 240px) + 350px);
         background: var(--ivory);
         border-bottom: 1px solid var(--ink);
     }
@@ -1512,7 +1545,11 @@ html::after {
         filter: none;
     }
 
-    #tab-home .feature-sheet { color: var(--ink); }
+    #tab-home .feature-sheet {
+        top: calc(18px + min(52vw, 240px) + 24px);
+        bottom: auto;
+        color: var(--ink);
+    }
 
     #tab-home .feature-name h2 {
         color: var(--ink);
@@ -2668,4 +2705,46 @@ a.action-btn-secondary.profile-page-link:focus-visible {
     .detail-review-item > p {
         margin-left: 42px;
     }
+}
+
+/* V2 — hồ sơ tương tác bớt cảm giác modal mẫu, ưu tiên nhịp đọc và nội dung. */
+.detail-overlay { padding: clamp(10px, 2vw, 26px); }
+.detail-panel {
+    width: min(1380px, 100%);
+    max-height: calc(100vh - clamp(20px, 4vw, 52px));
+    border-top: 5px solid var(--vermilion);
+    box-shadow: 0 34px 90px rgba(0,0,0,.38);
+}
+.detail-header-banner { min-height: clamp(250px, 36vh, 390px); background-position: center 38%; }
+.detail-header-banner::before { content: none !important; display: none !important; }
+.detail-body { padding: clamp(25px, 4vw, 54px); }
+.detail-main-info { align-items: end; margin-bottom: 28px; padding-bottom: 27px; border-bottom: 1px solid var(--rule); }
+.detail-main-info h2 { max-width: 900px; font-size: clamp(2rem, 4.2vw, 4.2rem); line-height: .94; }
+.price-section { min-width: 220px; }
+.detail-progress-section { margin-bottom: clamp(34px, 5vw, 58px); padding: 0; border: 0; background: transparent; }
+.detail-layout { grid-template-columns: minmax(0, .9fr) minmax(400px, 1.1fr); gap: clamp(28px, 4vw, 58px); }
+.detail-layout .section-card { padding: 25px 0; border: 0; border-top: 1px solid var(--rule); background: transparent; }
+.detail-layout .section-card h3 { font-size: 1.1rem; }
+.detail-layout .section-card p { max-width: 760px; font-size: .85rem; line-height: 1.75; }
+.detail-layout .quick-note { padding: 21px; border: 1px solid var(--rule); border-left: 4px solid var(--vermilion); background: rgba(255,255,255,.42); }
+.detail-layout .detail-video-card { padding: 26px; color: #fff; border-top: 5px solid var(--vermilion); background: var(--ink); }
+.detail-layout .detail-video-card h3,
+.detail-layout .detail-video-card p { color: #fff; }
+.detail-layout .detail-video-card p { opacity: .72; }
+.detail-layout .detail-video-heading > a { color: #ff7a6e; }
+.detail-layout .credits-grid { gap: 8px; }
+.detail-layout .credit-item { border-color: var(--rule); background: rgba(255,255,255,.42); }
+.detail-layout .screenshots-gallery { gap: 10px; }
+@media (max-width: 900px) {
+    .detail-main-info { align-items: stretch; flex-direction: column; }
+    .price-section { min-width: 0; justify-items: stretch; }
+    .detail-layout { grid-template-columns: 1fr; }
+}
+@media (max-width: 620px) {
+    .detail-overlay { padding: 0; }
+    .detail-panel { width: 100%; max-height: 100vh; min-height: 100vh; border-right: 0; border-bottom: 0; border-left: 0; box-shadow: none; }
+    .detail-header-banner { min-height: 220px; }
+    .detail-body { padding: 22px 15px 36px; }
+    .detail-main-info h2 { font-size: clamp(2rem, 12vw, 3.25rem); }
+    .detail-layout .detail-video-card { padding: 18px; }
 }

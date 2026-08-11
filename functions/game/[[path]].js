@@ -120,7 +120,7 @@ function shell({ title, description, canonical, image, body, jsonLd, robots = "i
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap">
-    <link rel="stylesheet" href="/game-page.css?v=20260809-cover2">
+    <link rel="stylesheet" href="/game-page.css?v=20260811-v2">
     <script type="application/ld+json">${jsonLd}</script>
 </head>
 <body>
@@ -141,7 +141,7 @@ function shell({ title, description, canonical, image, body, jsonLd, robots = "i
     <footer class="site-foot">
         <a class="brand foot-brand" href="/"><img src="/assets/brand/favicon-48x48.png" width="32" height="32" alt=""><span><strong>VIETPATCH</strong><small>THƯ VIỆN VIỆT HÓA GAME PC</small></span></a>
         <p>Thông tin phiên bản, tiến độ và trạng thái kiểm thử được công bố theo từng hồ sơ.</p>
-        <div><a href="/privacy.html">Quyền riêng tư</a><span>© 2026 VietPatch</span></div>
+        <div><a href="mailto:dungsieuviet347@gmail.com">dungsieuviet347@gmail.com</a><span>YouTube · Sẽ cập nhật sau</span><a href="/privacy.html">Quyền riêng tư</a><span>© 2026 VietPatch</span></div>
     </footer>
 </body>
 </html>`;
@@ -217,6 +217,19 @@ function gameBody(game, stats) {
     const notes = game.notes
         ? `<section class="content-section note-section"><div class="section-heading"><p class="eyebrow">LƯU Ý</p><h2>Cài đặt và tương thích</h2></div><div class="prose">${paragraphs(game.notes)}</div></section>`
         : "";
+    const videoSection = game.videoId
+        ? `<section class="content-section video-section">
+            <div class="video-copy">
+                <p class="eyebrow">VIDEO VIỆT HÓA</p>
+                <h2>${escapeHtml(game.videoTitle || `Trải nghiệm ${displayTitle}`)}</h2>
+                <p>Xem trực tiếp phần giao diện, phụ đề hoặc hướng dẫn cài đặt của phiên bản này.</p>
+                <a href="https://www.youtube.com/watch?v=${encodeURIComponent(game.videoId)}" target="_blank" rel="noopener noreferrer">Mở trên YouTube <span>↗</span></a>
+            </div>
+            <div class="video-frame">
+                <iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(game.videoId)}?rel=0&amp;modestbranding=1" title="${escapeHtml(game.videoTitle || `Video Việt hóa ${displayTitle}`)}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            </div>
+        </section>`
+        : "";
 
     return `<main id="noi-dung" class="game-main">
         <nav class="breadcrumbs" aria-label="Đường dẫn"><a href="/">Trang chủ</a><span>/</span><a href="/game">Game</a><span>/</span><span>${escapeHtml(displayTitle)}</span></nav>
@@ -269,6 +282,7 @@ function gameBody(game, stats) {
                     <a href="/?game=${encodeURIComponent(game.id)}">Kiểm tra tải và tương thích →</a>
                 </aside>
             </section>
+            ${videoSection}
             ${screenshots}
             ${notes}
             ${creditsSection}
@@ -408,6 +422,17 @@ export async function onRequestGet(context) {
                 bestRating: 5,
                 worstRating: 1
             }
+        });
+    }
+    if (game.videoId) {
+        graph.push({
+            "@type": "VideoObject",
+            name: game.videoTitle || `Video Việt hóa ${displayTitle}`,
+            description: summarize(game.description, 158),
+            thumbnailUrl: `https://i.ytimg.com/vi/${game.videoId}/maxresdefault.jpg`,
+            embedUrl: `https://www.youtube-nocookie.com/embed/${game.videoId}`,
+            contentUrl: `https://www.youtube.com/watch?v=${game.videoId}`,
+            uploadDate: game.date || catalog.publishedAt || new Date().toISOString()
         });
     }
     const jsonLd = escapeJson({ "@context": "https://schema.org", "@graph": graph });

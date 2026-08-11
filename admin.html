@@ -10,8 +10,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="admin.css?v=20260626-trailerfix1">
-    <link rel="stylesheet" href="admin-redesign.css?v=20260810-trailerbot1">
+    <link rel="stylesheet" href="admin.css?v=20260811-v2">
+    <link rel="stylesheet" href="admin-redesign.css?v=20260811-v2">
 </head>
 <body>
     <div class="studio-shell">
@@ -82,6 +82,21 @@
 
             <section class="studio-panel active" id="panel-dashboard">
                 <div class="metric-grid" id="dashboard-metrics"></div>
+
+                <section class="studio-section dashboard-live-section">
+                    <div class="section-heading">
+                        <div>
+                            <span>LIVE OVERVIEW</span>
+                            <h2>Nhịp hoạt động 14 ngày</h2>
+                            <p class="manager-context">Số liệu thật từ website công khai, cập nhật cùng khu vực kiểm duyệt.</p>
+                        </div>
+                        <button class="secondary-command" id="dashboard-refresh-btn" type="button"><i class="fa-solid fa-rotate"></i> Làm mới</button>
+                    </div>
+                    <div class="dashboard-live-grid">
+                        <div class="dashboard-traffic-chart" id="dashboard-traffic-chart"><p>Đang tải số liệu máy chủ…</p></div>
+                        <aside class="dashboard-focus" id="dashboard-focus"><p>Đang tổng hợp việc cần chú ý…</p></aside>
+                    </div>
+                </section>
 
                 <div class="dashboard-layout">
                     <section class="studio-section">
@@ -582,6 +597,15 @@
                                 <small>Dán nhiều URL ảnh, mỗi dòng một ảnh. Web công khai sẽ hiển thị gallery và bấm ảnh để xem lớn.</small>
                             </label>
                             <label class="field field-wide">
+                                <span>Video Việt hóa trên YouTube</span>
+                                <input type="url" name="videoUrl" placeholder="https://www.youtube.com/watch?v=...">
+                                <small>Không bắt buộc. Khi có video, hồ sơ game sẽ tự hiện khu vực xem video riêng; để trống thì khu vực này được ẩn.</small>
+                            </label>
+                            <label class="field field-wide">
+                                <span>Tiêu đề video</span>
+                                <input name="videoTitle" maxlength="140" placeholder="Gameplay bản Việt hóa / Hướng dẫn cài đặt...">
+                            </label>
+                            <label class="field field-wide">
                                 <span>Lưu ý cài đặt</span>
                                 <textarea name="notes" rows="4" placeholder="Để trống nếu muốn giữ nội dung gốc."></textarea>
                             </label>
@@ -698,7 +722,7 @@
     <div class="studio-toast-wrap" id="studio-toast-wrap"></div>
 
     <script src="cms-public-seed.js?v=20260724-secure1"></script>
-    <script src="cms-shared.js?v=20260810-trailerbot1"></script>
-    <script src="admin.js?v=20260810-trailerbot1"></script>
+    <script src="cms-shared.js?v=20260811-v2"></script>
+    <script src="admin.js?v=20260811-v2"></script>
 </body>
 </html>

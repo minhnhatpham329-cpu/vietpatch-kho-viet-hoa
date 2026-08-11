@@ -70,6 +70,30 @@ function normalizeScreenshots(value) {
         .slice(0, 8);
 }
 
+function normalizeYouTubeId(value) {
+    const candidate = cleanText(value);
+    if (/^[A-Za-z0-9_-]{11}$/.test(candidate)) return candidate;
+    try {
+        const url = new URL(candidate);
+        const host = url.hostname.toLocaleLowerCase("en");
+        if (host === "youtu.be" || host.endsWith(".youtu.be")) {
+            const id = url.pathname.split("/").filter(Boolean)[0] || "";
+            return /^[A-Za-z0-9_-]{11}$/.test(id) ? id : "";
+        }
+        if (host === "youtube.com" || host.endsWith(".youtube.com") || host === "youtube-nocookie.com" || host.endsWith(".youtube-nocookie.com")) {
+            const queryId = url.searchParams.get("v") || "";
+            if (/^[A-Za-z0-9_-]{11}$/.test(queryId)) return queryId;
+            const parts = url.pathname.split("/").filter(Boolean);
+            const marker = parts.findIndex(part => ["embed", "shorts", "live"].includes(part));
+            const pathId = marker >= 0 ? parts[marker + 1] || "" : "";
+            return /^[A-Za-z0-9_-]{11}$/.test(pathId) ? pathId : "";
+        }
+    } catch {
+        return "";
+    }
+    return "";
+}
+
 function normalizeGame(gameIdValue, rawValue) {
     const id = sanitizeGameId(gameIdValue);
     const raw = plainObject(rawValue);
@@ -106,6 +130,8 @@ function normalizeGame(gameIdValue, rawValue) {
         date: cleanText(raw.date),
         description,
         notes: cleanLongText(raw.notes),
+        videoId: normalizeYouTubeId(raw.videoId || raw.videoUrl),
+        videoTitle: cleanText(raw.videoTitle, `Video Việt hóa ${title}`),
         imageUrl,
         screenshots,
         credits: plainObject(raw.credits),

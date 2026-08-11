@@ -466,3 +466,163 @@ h1, h2 { margin: 0; font-weight: 900; line-height: .98; letter-spacing: -.052em;
         animation-duration: .01ms !important;
     }
 }
+
+/* VietPatch V2 — hồ sơ game biên tập, gọn và ưu tiên giữ nguyên ảnh bìa. */
+.game-main {
+    width: min(1680px, calc(100% - clamp(32px, 5vw, 104px)));
+    padding-top: 28px;
+}
+
+.game-main .breadcrumbs {
+    margin-bottom: 16px;
+    font-family: ui-monospace, "JetBrains Mono", monospace;
+    letter-spacing: .035em;
+}
+
+.game-main .game-hero {
+    grid-template-areas: "cover summary";
+    grid-template-columns: minmax(0, 1.36fr) minmax(400px, .64fr);
+    min-height: 610px;
+    border-top-width: 1px;
+    box-shadow: 12px 14px 0 rgba(17,17,15,.08);
+}
+
+.game-main .game-cover {
+    grid-area: cover;
+    min-height: 610px;
+    border-right: 1px solid var(--ink);
+}
+
+.game-main .game-cover::before {
+    background:
+        linear-gradient(90deg, rgba(17,17,15,.1), transparent 25%, transparent 74%, rgba(17,17,15,.25)),
+        linear-gradient(0deg, rgba(17,17,15,.45), transparent 36%);
+}
+
+.game-main .game-cover::after { inset: 22px; }
+.game-main .cover-art { padding: clamp(18px, 2.5vw, 42px); }
+
+.game-main .game-summary {
+    grid-area: summary;
+    justify-content: flex-start;
+    padding: clamp(38px, 4vw, 68px) clamp(30px, 3.4vw, 58px);
+    border: 0;
+    background:
+        linear-gradient(145deg, rgba(230,61,47,.055), transparent 42%),
+        var(--paper-soft);
+}
+
+.game-main .game-summary::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: 5px;
+    background: var(--red);
+}
+
+.game-main .game-summary::after {
+    right: -18px;
+    bottom: -35px;
+    font-size: clamp(8rem, 13vw, 13rem);
+}
+
+.game-main .summary-code { margin-bottom: clamp(34px, 4vh, 54px); }
+.game-main .game-summary h1 {
+    max-width: 620px;
+    font-size: clamp(2.55rem, 3.25vw, 4.45rem);
+    line-height: .96;
+    letter-spacing: -.055em;
+}
+
+.game-main .lead {
+    display: -webkit-box;
+    overflow: hidden;
+    margin: 20px 0 27px;
+    font-size: .91rem;
+    line-height: 1.72;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+}
+
+.game-main .quick-facts { background: rgba(255,255,255,.26); }
+.game-main .quick-facts div { min-height: 69px; padding: 12px 14px; }
+.game-main .hero-actions { margin-top: 26px; }
+.game-main .primary-action { min-height: 52px; }
+
+.game-main .proof-strip {
+    margin-top: 28px;
+    color: var(--ink);
+    border-top: 4px solid var(--red);
+    background: rgba(250,247,239,.72);
+    box-shadow: 8px 9px 0 rgba(17,17,15,.07);
+}
+
+.game-main .proof-strip div { min-height: 104px; border-right-color: var(--line); }
+.game-main .proof-strip small { color: var(--muted); }
+
+.game-main .content-layout { padding: clamp(68px, 7vw, 108px) 0; }
+.game-main .technical-card { position: sticky; top: 104px; }
+
+.video-section {
+    display: grid;
+    grid-template-columns: minmax(280px, .38fr) minmax(0, .62fr);
+    gap: clamp(30px, 5vw, 80px);
+    align-items: center;
+    padding: clamp(36px, 5vw, 72px) !important;
+    color: #fff;
+    border-top: 5px solid var(--red) !important;
+    background:
+        radial-gradient(circle at 18% 20%, rgba(230,61,47,.14), transparent 34%),
+        #11110f;
+}
+
+.video-copy h2 { max-width: 580px; font-size: clamp(2rem, 3.4vw, 4.15rem); }
+.video-copy > p:not(.eyebrow) { max-width: 520px; color: #aaa69c; }
+.video-copy > a { display: inline-flex; gap: 16px; margin-top: 20px; color: #fff; font-weight: 800; text-decoration-color: var(--red); text-underline-offset: 6px; }
+.video-frame { position: relative; overflow: hidden; aspect-ratio: 16/9; border: 1px solid #4b4943; background: #050505; box-shadow: 12px 13px 0 rgba(230,61,47,.18); }
+.video-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+
+.game-main .shot-grid { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+.game-main .final-cta { margin-top: 24px; }
+
+.site-foot > div { max-width: 360px; }
+
+@media (min-width: 1780px) {
+    .index-main { width: min(1840px, calc(100% - 104px)); }
+    .index-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+    .index-card-copy { min-height: 292px; }
+}
+
+@media (min-width: 2320px) {
+    .index-main { width: min(2240px, calc(100% - 128px)); }
+    .index-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+}
+
+@media (max-width: 1180px) {
+    .game-main .game-hero {
+        grid-template-areas: "cover" "summary";
+        grid-template-columns: 1fr;
+    }
+    .game-main .game-cover { min-height: 0; aspect-ratio: 16/9; border-right: 0; border-bottom: 1px solid var(--ink); }
+    .game-main .game-summary { padding: 42px; }
+    .game-main .game-summary h1 { max-width: 900px; }
+    .video-section { grid-template-columns: 1fr; }
+    .game-main .technical-card { position: static; }
+}
+
+@media (max-width: 760px) {
+    .game-main { width: min(100% - 22px, 680px); padding-top: 14px; }
+    .game-main .game-cover { aspect-ratio: 16/10; }
+    .game-main .game-cover::after { inset: 9px; }
+    .game-main .cover-art { padding: 9px; }
+    .game-main .game-summary { padding: 26px 19px 30px; }
+    .game-main .summary-code { margin-bottom: 25px; }
+    .game-main .game-summary h1 { font-size: clamp(2.2rem, 11vw, 3.75rem); }
+    .game-main .proof-strip { box-shadow: 5px 6px 0 rgba(17,17,15,.07); }
+    .video-section { gap: 25px; padding: 31px 18px !important; }
+    .video-copy h2 { font-size: clamp(2rem, 10vw, 3rem); }
+    .game-main .shot-grid { grid-template-columns: 1fr; }
+    .site-foot > div { max-width: none; }
+}

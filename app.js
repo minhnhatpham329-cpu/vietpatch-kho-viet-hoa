@@ -811,7 +811,9 @@ function applyCmsCustomGames(customGames) {
             downloadUrl: entry.downloadUrl || "",
             imageUrl: entry.imageUrl || "",
             videoId: entry.videoId || "",
+            videoEnabled: entry.videoEnabled !== false,
             videoTitle: entry.videoTitle || "",
+            videoSummary: entry.videoSummary || "",
             badge: entry.badge || "",
             tags: Array.isArray(entry.tags) ? entry.tags : []
         });
@@ -843,7 +845,9 @@ function applyCmsGameOverrides(overrides) {
         if (entry.description) game.desc = entry.description;
         if (entry.notes) game.notes = entry.notes;
         if (Object.prototype.hasOwnProperty.call(entry, "videoId")) game.videoId = entry.videoId || "";
+        if (Object.prototype.hasOwnProperty.call(entry, "videoEnabled")) game.videoEnabled = entry.videoEnabled !== false;
         if (Object.prototype.hasOwnProperty.call(entry, "videoTitle")) game.videoTitle = entry.videoTitle || "";
+        if (Object.prototype.hasOwnProperty.call(entry, "videoSummary")) game.videoSummary = entry.videoSummary || "";
         if (entry.imageUrl) {
             game.imageUrl = entry.imageUrl;
             game.screenshots = [entry.imageUrl, ...(game.screenshots || [])].slice(0, 4);
@@ -2931,7 +2935,9 @@ function openGameDetails(gameId, { focusReview = false } = {}) {
     const videoCard = document.getElementById("detail-video-card");
     const videoFrame = document.getElementById("detail-video-frame");
     const videoTitle = document.getElementById("detail-video-title");
+    const videoSummary = document.getElementById("detail-video-summary");
     const videoLink = document.getElementById("detail-video-link");
+    const videoLinkCta = document.getElementById("detail-video-link-cta");
     
     // Render content
     banner.style.backgroundImage = `url('${getGameHeroImage(game)}')`;
@@ -2949,18 +2955,21 @@ function openGameDetails(gameId, { focusReview = false } = {}) {
     desc.textContent = game.desc;
     notes.textContent = game.notes;
 
-    const videoId = /^[A-Za-z0-9_-]{11}$/.test(String(game.videoId || "")) ? String(game.videoId) : "";
-    if (videoCard && videoFrame && videoTitle && videoLink) {
+    const videoId = game.videoEnabled !== false && /^[A-Za-z0-9_-]{11}$/.test(String(game.videoId || "")) ? String(game.videoId) : "";
+    if (videoCard && videoFrame && videoTitle && videoSummary && videoLink && videoLinkCta) {
         videoCard.hidden = !videoId;
         if (videoId) {
             const watchUrl = `https://www.youtube.com/watch?v=${encodeURIComponent(videoId)}`;
             videoTitle.textContent = game.videoTitle || `Video Việt hóa ${game.title}`;
+            videoSummary.textContent = game.videoSummary || "Xem trực tiếp giao diện, phụ đề và chất lượng hiển thị trong game.";
             videoFrame.title = videoTitle.textContent;
             videoFrame.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(videoId)}?rel=0&modestbranding=1`;
             videoLink.href = watchUrl;
+            videoLinkCta.href = watchUrl;
         } else {
             videoFrame.removeAttribute("src");
             videoLink.removeAttribute("href");
+            videoLinkCta.removeAttribute("href");
         }
     }
     
@@ -3875,11 +3884,46 @@ function initHotTrailerBanner() {
 // ==========================================================================
 // INITIALIZATION & EVENT LISTENERS ATTACHMENTS
 // ==========================================================================
-const FIRST_USE_GUIDE_KEY = "vietpatch:v2-guide-seen";
+const FIRST_USE_GUIDE_KEY = "vietpatch:v3-guide-seen";
+let firstUseGuideStep = 0;
+let firstUseGuideReturnFocus = null;
+
+function renderFirstUseGuideStep(nextStep) {
+    const guide = document.getElementById("first-use-guide");
+    if (!guide) return;
+    const scenes = [...guide.querySelectorAll("[data-guide-scene]")];
+    const steps = [...guide.querySelectorAll("[data-guide-step]")];
+    const maxStep = Math.max(0, scenes.length - 1);
+    firstUseGuideStep = Math.max(0, Math.min(maxStep, Number(nextStep) || 0));
+
+    scenes.forEach((scene, index) => {
+        const active = index === firstUseGuideStep;
+        scene.classList.toggle("active", active);
+        scene.setAttribute("aria-hidden", active ? "false" : "true");
+    });
+    steps.forEach((step, index) => {
+        const active = index === firstUseGuideStep;
+        step.classList.toggle("active", active);
+        step.setAttribute("aria-selected", active ? "true" : "false");
+    });
+
+    const counter = document.getElementById("first-use-guide-current");
+    const back = document.getElementById("first-use-guide-back");
+    const next = document.getElementById("first-use-guide-next");
+    const done = document.getElementById("first-use-guide-done");
+    if (counter) counter.textContent = String(firstUseGuideStep + 1).padStart(2, "0");
+    if (back) back.disabled = firstUseGuideStep === 0;
+    if (next) next.hidden = firstUseGuideStep === maxStep;
+    if (done) done.hidden = firstUseGuideStep !== maxStep;
+}
 
 function setFirstUseGuide(open) {
     const guide = document.getElementById("first-use-guide");
     if (!guide) return;
+    if (open) {
+        firstUseGuideReturnFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+        renderFirstUseGuideStep(0);
+    }
     guide.hidden = !open;
     guide.setAttribute("aria-hidden", open ? "false" : "true");
     guide.classList.toggle("active", open);
@@ -3887,6 +3931,8 @@ function setFirstUseGuide(open) {
         requestAnimationFrame(() => guide.querySelector(".first-use-guide-card")?.focus());
     } else {
         try { localStorage.setItem(FIRST_USE_GUIDE_KEY, "1"); } catch {}
+        firstUseGuideReturnFocus?.focus?.();
+        firstUseGuideReturnFocus = null;
     }
 }
 
@@ -3901,11 +3947,19 @@ function initFirstUseGuide() {
     ["first-use-guide-close", "first-use-guide-done"].forEach(id => {
         document.getElementById(id)?.addEventListener("click", () => setFirstUseGuide(false));
     });
+    guide.querySelectorAll("[data-guide-step]").forEach(button => {
+        button.addEventListener("click", () => renderFirstUseGuideStep(button.dataset.guideStep));
+    });
+    document.getElementById("first-use-guide-back")?.addEventListener("click", () => renderFirstUseGuideStep(firstUseGuideStep - 1));
+    document.getElementById("first-use-guide-next")?.addEventListener("click", () => renderFirstUseGuideStep(firstUseGuideStep + 1));
     guide.addEventListener("click", event => {
         if (event.target === guide) setFirstUseGuide(false);
     });
     document.addEventListener("keydown", event => {
-        if (event.key === "Escape" && !guide.hidden) setFirstUseGuide(false);
+        if (guide.hidden) return;
+        if (event.key === "Escape") setFirstUseGuide(false);
+        if (event.key === "ArrowLeft") renderFirstUseGuideStep(firstUseGuideStep - 1);
+        if (event.key === "ArrowRight") renderFirstUseGuideStep(firstUseGuideStep + 1);
     });
     let seen = false;
     try { seen = localStorage.getItem(FIRST_USE_GUIDE_KEY) === "1"; } catch {}

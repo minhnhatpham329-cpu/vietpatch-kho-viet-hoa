@@ -439,6 +439,12 @@
         const source = entry && typeof entry === "object" ? entry : {};
         const fallbackTags = Array.isArray(fallback.tags) ? fallback.tags : [];
         const type = text(source.type, fallback.type || (partial ? "" : "Free"));
+        const videoId = extractYouTubeId(source.videoId || source.videoUrl || fallback.videoId || fallback.videoUrl);
+        const hasVideoEnabled = Object.prototype.hasOwnProperty.call(source, "videoEnabled");
+        const hasFallbackVideoEnabled = Object.prototype.hasOwnProperty.call(fallback, "videoEnabled");
+        const videoEnabled = hasVideoEnabled
+            ? source.videoEnabled !== false
+            : (hasFallbackVideoEnabled ? fallback.videoEnabled !== false : (partial ? "" : Boolean(videoId)));
         const price = type.toLocaleLowerCase("en") === "free"
             ? 0
             : (source.price === "" || source.price == null
@@ -461,8 +467,10 @@
             date: text(source.date, fallback.date || (partial ? "" : new Date().toISOString().slice(0, 10))),
             description: text(source.description ?? source.desc, fallback.description ?? fallback.desc),
             notes: text(source.notes, fallback.notes),
-            videoId: extractYouTubeId(source.videoId || source.videoUrl || fallback.videoId || fallback.videoUrl),
+            videoId,
+            videoEnabled,
             videoTitle: text(source.videoTitle, fallback.videoTitle),
+            videoSummary: text(source.videoSummary, fallback.videoSummary),
             downloadUrl: safeUrl(source.downloadUrl || fallback.downloadUrl),
             imageUrl: safeAssetUrl(source.imageUrl || source.coverImage || fallback.imageUrl),
             badge: normalizeBadge(source.badge, fallback.badge),

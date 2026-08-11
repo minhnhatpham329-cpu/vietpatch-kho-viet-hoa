@@ -116,6 +116,7 @@ function normalizeGame(gameIdValue, rawValue) {
         raw.description ?? raw.desc,
         `Theo dõi thông tin, phiên bản tương thích và tiến độ bản Việt hóa ${title} tại VietPatch.`
     );
+    const videoId = normalizeYouTubeId(raw.videoId || raw.videoUrl);
 
     return {
         id,
@@ -130,8 +131,10 @@ function normalizeGame(gameIdValue, rawValue) {
         date: cleanText(raw.date),
         description,
         notes: cleanLongText(raw.notes),
-        videoId: normalizeYouTubeId(raw.videoId || raw.videoUrl),
+        videoId,
+        videoEnabled: raw.videoEnabled !== false && Boolean(videoId),
         videoTitle: cleanText(raw.videoTitle, `Video Việt hóa ${title}`),
+        videoSummary: cleanLongText(raw.videoSummary, "Xem trực tiếp giao diện, phụ đề và chất lượng hiển thị của bản Việt hóa trong game."),
         imageUrl,
         screenshots,
         credits: plainObject(raw.credits),

@@ -120,7 +120,7 @@ function shell({ title, description, canonical, image, body, jsonLd, robots = "i
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap">
-    <link rel="stylesheet" href="/game-page.css?v=20260811-v2">
+    <link rel="stylesheet" href="/game-page.css?v=20260811-v3-video">
     <script type="application/ld+json">${jsonLd}</script>
 </head>
 <body>
@@ -217,16 +217,21 @@ function gameBody(game, stats) {
     const notes = game.notes
         ? `<section class="content-section note-section"><div class="section-heading"><p class="eyebrow">LƯU Ý</p><h2>Cài đặt và tương thích</h2></div><div class="prose">${paragraphs(game.notes)}</div></section>`
         : "";
-    const videoSection = game.videoId
+    const videoSection = game.videoEnabled !== false && game.videoId
         ? `<section class="content-section video-section">
             <div class="video-copy">
-                <p class="eyebrow">VIDEO VIỆT HÓA</p>
+                <div class="video-kicker"><span>VP / SCREENING</span><b>01</b></div>
+                <p class="eyebrow">SUẤT CHIẾU BẢN VIỆT HÓA</p>
                 <h2>${escapeHtml(game.videoTitle || `Trải nghiệm ${displayTitle}`)}</h2>
-                <p>Xem trực tiếp phần giao diện, phụ đề hoặc hướng dẫn cài đặt của phiên bản này.</p>
-                <a href="https://www.youtube.com/watch?v=${encodeURIComponent(game.videoId)}" target="_blank" rel="noopener noreferrer">Mở trên YouTube <span>↗</span></a>
+                <p>${escapeHtml(game.videoSummary || "Xem trực tiếp giao diện, phụ đề và chất lượng hiển thị của bản Việt hóa trong game.")}</p>
+                <div class="video-proof"><span><i></i> Đúng hồ sơ game</span><span>YOUTUBE / 16:9</span></div>
+                <a href="https://www.youtube.com/watch?v=${encodeURIComponent(game.videoId)}" target="_blank" rel="noopener noreferrer">Xem trên YouTube <span>↗</span></a>
             </div>
-            <div class="video-frame">
-                <iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(game.videoId)}?rel=0&amp;modestbranding=1" title="${escapeHtml(game.videoTitle || `Video Việt hóa ${displayTitle}`)}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            <div class="video-stage">
+                <span class="video-stage-code">VIETPATCH / IN-GAME FOOTAGE</span>
+                <div class="video-frame">
+                    <iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(game.videoId)}?rel=0&amp;modestbranding=1" title="${escapeHtml(game.videoTitle || `Video Việt hóa ${displayTitle}`)}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
             </div>
         </section>`
         : "";
@@ -424,11 +429,11 @@ export async function onRequestGet(context) {
             }
         });
     }
-    if (game.videoId) {
+    if (game.videoEnabled !== false && game.videoId) {
         graph.push({
             "@type": "VideoObject",
             name: game.videoTitle || `Video Việt hóa ${displayTitle}`,
-            description: summarize(game.description, 158),
+            description: summarize(game.videoSummary || game.description, 158),
             thumbnailUrl: `https://i.ytimg.com/vi/${game.videoId}/maxresdefault.jpg`,
             embedUrl: `https://www.youtube-nocookie.com/embed/${game.videoId}`,
             contentUrl: `https://www.youtube.com/watch?v=${game.videoId}`,

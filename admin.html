@@ -10,8 +10,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="admin.css?v=20260811-v2">
-    <link rel="stylesheet" href="admin-redesign.css?v=20260811-v2">
+    <link rel="stylesheet" href="admin.css?v=20260811-v3-video">
+    <link rel="stylesheet" href="admin-redesign.css?v=20260811-v3-video">
 </head>
 <body>
     <div class="studio-shell">
@@ -596,15 +596,48 @@
                                 <textarea name="screenshots" rows="5" placeholder="Mỗi dòng một link ảnh. Ví dụ: https://shared.akamai.steamstatic.com/.../ss_xxx.jpg"></textarea>
                                 <small>Dán nhiều URL ảnh, mỗi dòng một ảnh. Web công khai sẽ hiển thị gallery và bấm ảnh để xem lớn.</small>
                             </label>
-                            <label class="field field-wide">
-                                <span>Video Việt hóa trên YouTube</span>
-                                <input type="url" name="videoUrl" placeholder="https://www.youtube.com/watch?v=...">
-                                <small>Không bắt buộc. Khi có video, hồ sơ game sẽ tự hiện khu vực xem video riêng; để trống thì khu vực này được ẩn.</small>
-                            </label>
-                            <label class="field field-wide">
-                                <span>Tiêu đề video</span>
-                                <input name="videoTitle" maxlength="140" placeholder="Gameplay bản Việt hóa / Hướng dẫn cài đặt...">
-                            </label>
+                            <fieldset class="field-wide patch-fieldset game-video-setup">
+                                <legend>Suất chiếu bản Việt hóa</legend>
+                                <div class="game-video-setup-head">
+                                    <div>
+                                        <strong>Video riêng của hồ sơ game</strong>
+                                        <small>Thiết lập một lần tại đây; trang hồ sơ và cửa sổ xem nhanh sẽ tự đồng bộ.</small>
+                                    </div>
+                                    <label class="studio-switch">
+                                        <input type="checkbox" name="videoEnabled">
+                                        <span aria-hidden="true"></span>
+                                        <b>Hiển thị</b>
+                                    </label>
+                                </div>
+                                <div class="game-video-setup-grid">
+                                    <div class="game-video-fields">
+                                        <label class="field">
+                                            <span>Link YouTube</span>
+                                            <input type="url" name="videoUrl" placeholder="https://www.youtube.com/watch?v=..." inputmode="url">
+                                            <small>Dùng video gameplay, giới thiệu bản dịch hoặc hướng dẫn cài đặt của đúng game này.</small>
+                                        </label>
+                                        <label class="field">
+                                            <span>Tiêu đề suất chiếu</span>
+                                            <input name="videoTitle" maxlength="140" placeholder="Trải nghiệm bản Việt hóa trong game">
+                                        </label>
+                                        <label class="field">
+                                            <span>Mô tả ngắn</span>
+                                            <textarea name="videoSummary" rows="3" maxlength="260" placeholder="Điểm nổi bật trong video: giao diện, phụ đề, font và cách cài đặt..."></textarea>
+                                        </label>
+                                    </div>
+                                    <div class="game-video-preview" id="game-video-preview" aria-live="polite">
+                                        <div class="game-video-preview-media" id="game-video-preview-media">
+                                            <i class="fa-brands fa-youtube" aria-hidden="true"></i>
+                                            <span>Dán link để xem trước</span>
+                                        </div>
+                                        <div class="game-video-preview-copy">
+                                            <span id="game-video-preview-status">CHƯA THIẾT LẬP</span>
+                                            <strong id="game-video-preview-title">Video Việt hóa</strong>
+                                            <small id="game-video-preview-summary">Khu vực này chỉ xuất hiện ngoài website khi video hợp lệ và công tắc Hiển thị được bật.</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
                             <label class="field field-wide">
                                 <span>Lưu ý cài đặt</span>
                                 <textarea name="notes" rows="4" placeholder="Để trống nếu muốn giữ nội dung gốc."></textarea>
@@ -722,7 +755,7 @@
     <div class="studio-toast-wrap" id="studio-toast-wrap"></div>
 
     <script src="cms-public-seed.js?v=20260724-secure1"></script>
-    <script src="cms-shared.js?v=20260811-v2"></script>
-    <script src="admin.js?v=20260811-v2"></script>
+    <script src="cms-shared.js?v=20260811-v3-video"></script>
+    <script src="admin.js?v=20260811-v3-video"></script>
 </body>
 </html>

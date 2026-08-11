@@ -47,11 +47,11 @@
     
     <!-- Custom CSS -->
     <link rel="stylesheet" href="style.css?v=20260726-requests1">
-    <link rel="stylesheet" href="redesign.css?v=20260811-v2">
-    <link rel="stylesheet" href="collection.css?v=20260811-v2">
+    <link rel="stylesheet" href="redesign.css?v=20260811-v3-video">
+    <link rel="stylesheet" href="collection.css?v=20260811-v3-video">
     <link rel="stylesheet" href="motion.css?v=20260724-v1">
     <link rel="stylesheet" href="home.css?v=20260725-home11">
-    <link rel="stylesheet" href="refine.css?v=20260811-v2">
+    <link rel="stylesheet" href="refine.css?v=20260811-v3-video">
     <noscript>
         <style>
             html.cms-booting .vp-content-boot { display: none !important; }
@@ -805,16 +805,55 @@
     <div class="first-use-guide" id="first-use-guide" role="dialog" aria-modal="true" aria-labelledby="first-use-guide-title" aria-hidden="true" hidden>
         <div class="first-use-guide-card" tabindex="-1">
             <button class="first-use-guide-close" id="first-use-guide-close" type="button" aria-label="Đóng hướng dẫn"><i class="fa-solid fa-xmark"></i></button>
-            <header>
-                <img src="assets/brand/favicon-48x48.png" width="42" height="42" alt="">
-                <div><span>LÀM QUEN / 30 GIÂY</span><h3 id="first-use-guide-title">Dùng VietPatch trong 3 bước.</h3></div>
+            <header class="first-use-guide-header">
+                <div class="first-use-guide-brand">
+                    <img src="assets/brand/favicon-48x48.png" width="42" height="42" alt="">
+                    <div><span>QUICK START / 30 GIÂY</span><h3 id="first-use-guide-title">Ba thao tác là đủ.</h3></div>
+                </div>
+                <div class="first-use-guide-counter"><b id="first-use-guide-current">01</b><span>/ 03</span></div>
             </header>
-            <div class="first-use-guide-steps">
-                <article><b>01</b><i class="fa-solid fa-magnifying-glass"></i><strong>Tìm đúng game</strong><small>Dùng tên hoặc engine.</small></article>
-                <article><b>02</b><i class="fa-solid fa-code-branch"></i><strong>So phiên bản</strong><small>Kiểm tra patch trước khi tải.</small></article>
-                <article><b>03</b><i class="fa-solid fa-bookmark"></i><strong>Lưu & đánh giá</strong><small>Đồng bộ trong tài khoản.</small></article>
+
+            <div class="first-use-guide-track" role="tablist" aria-label="Các bước làm quen VietPatch">
+                <button class="active" type="button" role="tab" aria-selected="true" data-guide-step="0"><span></span><b>Tìm game</b></button>
+                <button type="button" role="tab" aria-selected="false" data-guide-step="1"><span></span><b>So patch</b></button>
+                <button type="button" role="tab" aria-selected="false" data-guide-step="2"><span></span><b>Lưu lại</b></button>
             </div>
-            <button class="first-use-guide-done" id="first-use-guide-done" type="button">Bắt đầu khám phá <i class="fa-solid fa-arrow-right"></i></button>
+
+            <div class="first-use-guide-scenes">
+                <article class="first-use-guide-scene active" data-guide-scene="0" role="tabpanel" aria-hidden="false">
+                    <div class="first-use-guide-copy"><span>BƯỚC 01</span><h4>Tìm đúng game.</h4><p>Gõ tên game. Bộ lọc lo phần còn lại.</p></div>
+                    <div class="guide-demo guide-search-demo" aria-hidden="true">
+                        <div class="guide-demo-top"><i class="fa-solid fa-magnifying-glass"></i><span>resident evil</span><b>↵</b></div>
+                        <div class="guide-demo-result"><span class="guide-demo-cover">RE</span><div><strong>Resident Evil 4</strong><small>RE Engine · Sẵn sàng</small></div><i class="fa-solid fa-arrow-right"></i></div>
+                        <div class="guide-demo-tags"><span>RE Engine</span><span>Đã kiểm thử</span></div>
+                    </div>
+                </article>
+
+                <article class="first-use-guide-scene" data-guide-scene="1" role="tabpanel" aria-hidden="true">
+                    <div class="first-use-guide-copy"><span>BƯỚC 02</span><h4>So đúng phiên bản.</h4><p>Khớp bản game trước khi tải patch.</p></div>
+                    <div class="guide-demo guide-version-demo" aria-hidden="true">
+                        <div><span>GAME CỦA BẠN</span><strong>1.0.6</strong></div>
+                        <i class="fa-solid fa-link"></i>
+                        <div><span>PATCH VIETPATCH</span><strong>v1.0.6</strong></div>
+                        <b><i class="fa-solid fa-check"></i> TƯƠNG THÍCH</b>
+                    </div>
+                </article>
+
+                <article class="first-use-guide-scene" data-guide-scene="2" role="tabpanel" aria-hidden="true">
+                    <div class="first-use-guide-copy"><span>BƯỚC 03</span><h4>Lưu và theo dõi.</h4><p>Cập nhật mới sẽ nằm đúng trong bộ sưu tập.</p></div>
+                    <div class="guide-demo guide-save-demo" aria-hidden="true">
+                        <div class="guide-save-card"><span>VP / LIBRARY</span><strong>Patch đã lưu</strong><small>Đồng bộ theo tài khoản</small></div>
+                        <div class="guide-save-signal"><i class="fa-solid fa-bell"></i><span><b>Có bản mới</b><small>Sẵn sàng cập nhật</small></span></div>
+                        <div class="guide-save-check"><i class="fa-solid fa-bookmark"></i></div>
+                    </div>
+                </article>
+            </div>
+
+            <footer class="first-use-guide-actions">
+                <button class="first-use-guide-back" id="first-use-guide-back" type="button" disabled><i class="fa-solid fa-arrow-left"></i> Quay lại</button>
+                <button class="first-use-guide-next" id="first-use-guide-next" type="button">Tiếp theo <i class="fa-solid fa-arrow-right"></i></button>
+                <button class="first-use-guide-done" id="first-use-guide-done" type="button" hidden>Vào kho game <i class="fa-solid fa-arrow-right"></i></button>
+            </footer>
         </div>
     </div>
 
@@ -863,13 +902,20 @@
                         </div>
 
                         <div class="section-card detail-video-card" id="detail-video-card" hidden>
-                            <div class="detail-video-heading">
-                                <h3><i class="fa-brands fa-youtube"></i> Video Việt hóa</h3>
-                                <a id="detail-video-link" href="#" target="_blank" rel="noopener noreferrer">Mở YouTube <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                            <div class="detail-video-stage">
+                                <div class="detail-video-frame">
+                                    <iframe id="detail-video-frame" title="Video Việt hóa" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                                </div>
+                                <span class="detail-video-screen-code">VP / SCREENING</span>
                             </div>
-                            <p id="detail-video-title">Xem trải nghiệm bản Việt hóa.</p>
-                            <div class="detail-video-frame">
-                                <iframe id="detail-video-frame" title="Video Việt hóa" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                            <div class="detail-video-copy">
+                                <div class="detail-video-heading">
+                                    <span><i class="fa-brands fa-youtube"></i> SUẤT CHIẾU BẢN VIỆT HÓA</span>
+                                    <a id="detail-video-link" href="#" target="_blank" rel="noopener noreferrer" aria-label="Mở video trên YouTube"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                                </div>
+                                <h3 id="detail-video-title">Trải nghiệm bản Việt hóa</h3>
+                                <p id="detail-video-summary">Xem trực tiếp giao diện, phụ đề và chất lượng hiển thị trong game.</p>
+                                <a class="detail-video-cta" id="detail-video-link-cta" href="#" target="_blank" rel="noopener noreferrer">Xem trên YouTube <i class="fa-solid fa-arrow-right"></i></a>
                             </div>
                         </div>
                         
@@ -1195,9 +1241,9 @@
 
     <!-- Custom App Script -->
     <script src="cms-public-seed.js?v=20260724-secure1"></script>
-    <script src="cms-shared.js?v=20260811-v2"></script>
+    <script src="cms-shared.js?v=20260811-v3-video"></script>
     <script type="module" src="assets/vendor/hls-loader.js?v=1.6.16"></script>
-    <script src="app.js?v=20260811-v2"></script>
+    <script src="app.js?v=20260811-v3-video"></script>
     <script src="motion.js?v=20260724-v1"></script>
     <script src="brand-entry.js?v=20260725-home1"></script>
 </body>

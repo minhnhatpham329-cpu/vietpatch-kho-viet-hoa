@@ -149,6 +149,35 @@
         `;
     }
 
+    function updateGameVideoPreview() {
+        const form = byId("patch-form");
+        const preview = byId("game-video-preview");
+        const media = byId("game-video-preview-media");
+        const status = byId("game-video-preview-status");
+        const title = byId("game-video-preview-title");
+        const summary = byId("game-video-preview-summary");
+        if (!form || !preview || !media || !status || !title || !summary) return;
+
+        const videoId = CMS.extractYouTubeId(form.elements.videoUrl.value.trim());
+        const enabled = Boolean(form.elements.videoEnabled.checked && videoId);
+        const videoTitle = form.elements.videoTitle.value.trim() || "Trải nghiệm bản Việt hóa";
+        const videoSummary = form.elements.videoSummary.value.trim()
+            || "Xem trực tiếp giao diện, phụ đề và chất lượng hiển thị trong game.";
+
+        preview.classList.toggle("has-video", Boolean(videoId));
+        preview.classList.toggle("is-disabled", Boolean(videoId) && !enabled);
+        media.classList.toggle("has-video", Boolean(videoId));
+        media.style.backgroundImage = videoId
+            ? `linear-gradient(180deg, rgba(7,10,15,.08), rgba(7,10,15,.78)), url("https://i.ytimg.com/vi/${encodeURIComponent(videoId)}/hqdefault.jpg")`
+            : "";
+        media.innerHTML = videoId
+            ? `<i class="fa-solid fa-circle-play" aria-hidden="true"></i><span>Xem trước hồ sơ</span>`
+            : `<i class="fa-brands fa-youtube" aria-hidden="true"></i><span>Dán link để xem trước</span>`;
+        status.textContent = !videoId ? "CHƯA THIẾT LẬP" : (enabled ? "SẼ HIỂN THỊ" : "ĐANG TẠM ẨN");
+        title.textContent = videoTitle;
+        summary.textContent = videoSummary;
+    }
+
     function syncPatchPriceField() {
         const form = byId("patch-form");
         const price = form.elements.price;
@@ -201,7 +230,9 @@
             imageUrl,
             downloadUrl,
             videoId,
+            videoEnabled: Boolean(videoId && form.elements.videoEnabled.checked),
             videoTitle: form.elements.videoTitle.value.trim(),
+            videoSummary: form.elements.videoSummary.value.trim(),
             screenshots: screenshots.items,
             credits: {
                 translator: form.elements.creditTranslator.value.trim(),
@@ -357,7 +388,10 @@
             const stats = Array.isArray(communityData?.stats) ? communityData.stats : [];
             const top = [...stats].sort((left, right) => (Number(right.views) + Number(right.downloads)) - (Number(left.views) + Number(left.downloads)))[0];
             const topGame = top ? getCommunityGame(top.gameId) : null;
-            const videoCount = getAdminCatalog().filter(game => game.videoId).length;
+            const videoCount = getAdminCatalog().filter(game => {
+                const entry = getEditableGame(game.id).data;
+                return Boolean(entry?.videoId && entry?.videoEnabled !== false);
+            }).length;
             focus.innerHTML = `
                 <span>ĐIỂM CẦN CHÚ Ý</span>
                 <strong>${pendingReports ? `${formatCommunityNumber(pendingReports)} báo cáo đang chờ` : "Không có báo cáo tồn"}</strong>
@@ -737,7 +771,7 @@
             const hasImage = Boolean(entry?.imageUrl);
             const badge = CARD_BADGE_LABELS[entry?.badge] || "";
             const hasGallery = Array.isArray(entry?.screenshots) && entry.screenshots.length > 0;
-            const hasVideo = Boolean(entry?.videoId);
+            const hasVideo = Boolean(entry?.videoId && entry?.videoEnabled !== false);
             const hasCredits = entry?.credits && Object.values(entry.credits).some(Boolean);
             const hasOverride = Boolean(entry);
             const status = [
@@ -785,7 +819,9 @@
         form.elements.imageUrl.value = entry.imageUrl || "";
         form.elements.downloadUrl.value = entry.downloadUrl || "";
         form.elements.videoUrl.value = entry.videoId ? `https://www.youtube.com/watch?v=${entry.videoId}` : "";
+        form.elements.videoEnabled.checked = Boolean(entry.videoId && entry.videoEnabled !== false);
         form.elements.videoTitle.value = entry.videoTitle || "";
+        form.elements.videoSummary.value = entry.videoSummary || "";
         form.elements.description.value = entry.description || "";
         form.elements.creditTranslator.value = entry.credits?.translator || "";
         form.elements.creditEditor.value = entry.credits?.editor || "";
@@ -812,6 +848,7 @@
             <strong>${escapeHtml(game?.title || "Điền thông tin game mới")}</strong>
         `;
         updatePatchPreview();
+        updateGameVideoPreview();
     }
 
     function renderBackupReport() {
@@ -1459,6 +1496,12 @@
 
         byId("patch-form").addEventListener("input", event => {
             if (["title", "imageUrl"].includes(event.target.name)) updatePatchPreview();
+            if (event.target.name === "videoUrl") {
+                const videoId = CMS.extractYouTubeId(event.target.value);
+                if (videoId) event.currentTarget.elements.videoEnabled.checked = true;
+                if (!event.target.value.trim()) event.currentTarget.elements.videoEnabled.checked = false;
+            }
+            if (["videoUrl", "videoTitle", "videoSummary", "videoEnabled"].includes(event.target.name)) updateGameVideoPreview();
             if (event.target.name === "type") syncPatchPriceField();
         });
 
@@ -1530,7 +1573,9 @@
                     imageUrl: payload.imageUrl,
                     downloadUrl: payload.downloadUrl,
                     videoId: payload.videoId,
+                    videoEnabled: payload.videoEnabled,
                     videoTitle: payload.videoTitle || `Video Việt hóa ${payload.title}`,
+                    videoSummary: payload.videoSummary || "Xem trực tiếp giao diện, phụ đề và chất lượng hiển thị của bản Việt hóa trong game.",
                     credits: {
                         translator: payload.credits.translator || "VietPatch Community",
                         editor: payload.credits.editor || "Content Studio",

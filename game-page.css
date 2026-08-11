@@ -567,7 +567,7 @@ h1, h2 { margin: 0; font-weight: 900; line-height: .98; letter-spacing: -.052em;
 
 .video-section {
     display: grid;
-    grid-template-columns: minmax(280px, .38fr) minmax(0, .62fr);
+    grid-template-columns: minmax(280px, .34fr) minmax(0, .66fr);
     gap: clamp(30px, 5vw, 80px);
     align-items: center;
     padding: clamp(36px, 5vw, 72px) !important;
@@ -578,10 +578,17 @@ h1, h2 { margin: 0; font-weight: 900; line-height: .98; letter-spacing: -.052em;
         #11110f;
 }
 
+.video-kicker { display: flex; align-items: center; justify-content: space-between; margin-bottom: 36px; padding-bottom: 13px; border-bottom: 1px solid #3d3b36; color: #8f8b82; font: 800 .58rem/1 ui-monospace, monospace; letter-spacing: .1em; }
+.video-kicker b { display: grid; width: 28px; height: 28px; place-items: center; color: #fff; background: var(--red); }
 .video-copy h2 { max-width: 580px; font-size: clamp(2rem, 3.4vw, 4.15rem); }
 .video-copy > p:not(.eyebrow) { max-width: 520px; color: #aaa69c; }
+.video-proof { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 24px; color: #858178; font: 800 .57rem/1.3 ui-monospace, monospace; letter-spacing: .06em; }
+.video-proof span { display: inline-flex; align-items: center; gap: 7px; }
+.video-proof i { width: 7px; height: 7px; border-radius: 50%; background: #4ec286; box-shadow: 0 0 0 4px rgba(78,194,134,.12); }
 .video-copy > a { display: inline-flex; gap: 16px; margin-top: 20px; color: #fff; font-weight: 800; text-decoration-color: var(--red); text-underline-offset: 6px; }
-.video-frame { position: relative; overflow: hidden; aspect-ratio: 16/9; border: 1px solid #4b4943; background: #050505; box-shadow: 12px 13px 0 rgba(230,61,47,.18); }
+.video-stage { position: relative; padding: 28px 16px 16px; border: 1px solid #37352f; background: #080808; box-shadow: 12px 13px 0 rgba(230,61,47,.18); }
+.video-stage-code { position: absolute; top: 10px; left: 16px; color: #77736b; font: 800 .51rem/1 ui-monospace, monospace; letter-spacing: .12em; }
+.video-frame { position: relative; overflow: hidden; aspect-ratio: 16/9; border: 1px solid #4b4943; background: #050505; }
 .video-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 
 .game-main .shot-grid { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }

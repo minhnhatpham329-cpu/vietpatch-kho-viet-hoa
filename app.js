@@ -2233,21 +2233,27 @@ function renderGamesGrid() {
 
         card.innerHTML = `
             <a class="card-header-img" href="${escapeHtml(gameSeoPath(game))}" aria-label="Mở trang hồ sơ ${escapeHtml(game.title)}">
-                <img src="${escapeHtml(coverImage)}" alt="${escapeHtml(game.title)}" loading="lazy" onerror="this.src='${escapeHtml(getFallbackGameImage(game))}'">
+                <span class="card-art-stage">
+                    <img class="card-art-backdrop" src="${escapeHtml(coverImage)}" alt="" loading="lazy" aria-hidden="true" onerror="this.src='${escapeHtml(getFallbackGameImage(game))}'">
+                    <img class="card-art-primary" src="${escapeHtml(coverImage)}" alt="${escapeHtml(game.title)}" loading="lazy" onerror="this.src='${escapeHtml(getFallbackGameImage(game))}'">
+                </span>
             </a>
             <div class="catalog-identity">
-                ${badge ? `
-                    <span class="catalog-badge badge-${badge.key}" role="status" aria-label="${escapeHtml(badge.ariaLabel)}">
-                        <i class="fa-solid ${badge.icon}" aria-hidden="true"></i>
-                        <span>${escapeHtml(badge.label)}</span>
-                    </span>
-                ` : ""}
+                <div class="catalog-eyebrow">
+                    ${badge ? `
+                        <span class="catalog-badge badge-${badge.key}" role="status" aria-label="${escapeHtml(badge.ariaLabel)}">
+                            <i class="fa-solid ${badge.icon}" aria-hidden="true"></i>
+                            <span>${escapeHtml(badge.label)}</span>
+                        </span>
+                    ` : `<span class="catalog-kind">Hồ sơ Việt hóa</span>`}
+                    ${isOwned ? `<span class="catalog-saved"><i class="fa-solid fa-bookmark" aria-hidden="true"></i> Đã lưu</span>` : ""}
+                </div>
                 <h3 class="card-title"><a class="card-title-link" href="${escapeHtml(gameSeoPath(game))}" aria-label="Mở trang hồ sơ ${escapeHtml(game.title)}">${escapeHtml(game.title)}</a></h3>
                 <p>${escapeHtml(game.developer)} · ${escapeHtml(game.engine)}</p>
             </div>
             <div class="catalog-status status-${releaseState.key}">
                 <strong><span aria-hidden="true"></span>${isOwned ? "Trong thư viện" : escapeHtml(releaseState.shortLabel)}</strong>
-                <small>${releaseState.key === "in-progress" ? `Tiến độ ${progress}%` : `Cập nhật ${formatGameDate(game.date)}`}</small>
+                <small>${releaseState.key === "in-progress" ? `Đã hoàn thành ${progress}%` : isOwned ? "Đã lưu trong tài khoản" : "Có thể mở hồ sơ"}</small>
                 <div class="catalog-progress" role="progressbar" aria-label="Tiến độ Việt hóa" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${progress}">
                     <i style="width:${progress}%"></i>
                 </div>
@@ -2255,11 +2261,11 @@ function renderGamesGrid() {
             <dl class="catalog-specs">
                 <div><dt>Patch</dt><dd>${escapeHtml(game.version)}</dd></div>
                 <div><dt>Dung lượng</dt><dd>${escapeHtml(game.size)}</dd></div>
-                <div><dt>Giá</dt><dd class="spec-price${Number(game.price) > 0 ? "" : " is-free"}">${Number(game.price) > 0 ? escapeHtml(formatCurrency(game.price)) : "Miễn phí"}</dd></div>
+                <div><dt>Cập nhật</dt><dd>${formatGameDate(game.date)}</dd></div>
             </dl>
             <div class="catalog-community-stats" data-game-stats-id="${escapeHtml(game.id)}" aria-label="Thống kê cộng đồng">
-                <span title="Lượt xem"><i class="fa-regular fa-eye" aria-hidden="true"></i><strong data-stat="views">${formatMetricCount(getLiveGameStats(game.id).views)}</strong></span>
-                <span title="Lượt tải"><i class="fa-solid fa-cloud-arrow-down" aria-hidden="true"></i><strong data-stat="downloads">${formatMetricCount(getCombinedDownloadCount(game))}</strong></span>
+                <span title="Lượt xem"><i class="fa-regular fa-eye" aria-hidden="true"></i><strong data-stat="views">${formatMetricCount(getLiveGameStats(game.id).views)}</strong><small>Lượt xem</small></span>
+                <span title="Lượt tải"><i class="fa-solid fa-cloud-arrow-down" aria-hidden="true"></i><strong data-stat="downloads">${formatMetricCount(getCombinedDownloadCount(game))}</strong><small>Lượt tải</small></span>
                 <span title="Điểm đánh giá"><i class="fa-solid fa-star" aria-hidden="true"></i><strong data-stat="rating">${getLiveGameStats(game.id).reviewCount > 0 ? Number(getLiveGameStats(game.id).ratingAverage).toFixed(1) : "—"}</strong><small data-stat-label="rating">${getLiveGameStats(game.id).reviewCount > 0 ? `${formatMetricCount(getLiveGameStats(game.id).reviewCount)} đánh giá` : "Chưa đánh giá"}</small></span>
             </div>
             <div class="card-footer">

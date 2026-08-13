@@ -1,5 +1,6 @@
 import { getAdminSession } from "./_lib/auth.js";
 import { json, securityHeaders } from "./_lib/http.js";
+import { markPreviewReadOnly } from "./_lib/preview.js";
 
 const PRIVATE_ADMIN_PATHS = new Set(["/admin.html"]);
 const PREVIEW_WRITE_ALLOWLIST = new Set([
@@ -26,6 +27,9 @@ function isReadOnlyPreview(request, url) {
 
 export async function onRequest(context) {
     const url = new URL(context.request.url);
+    if (url.hostname.endsWith(".pages.dev")) {
+        markPreviewReadOnly(context.env);
+    }
     if (isReadOnlyPreview(context.request, url)) {
         return json({ error: "PREVIEW_READ_ONLY" }, 403, {
             "Cache-Control": "no-store",

@@ -1,4 +1,5 @@
 import { httpError } from "./http.js";
+import { isPreviewReadOnly } from "./preview.js";
 
 let schemaReady = null;
 
@@ -196,6 +197,7 @@ const SCHEMA_STATEMENTS = [
 
 export async function ensureSchema(env) {
     if (!env.DB) throw httpError(503, "CMS_DATABASE_NOT_CONFIGURED");
+    if (isPreviewReadOnly(env)) return;
     if (!schemaReady) {
         schemaReady = env.DB.batch(SCHEMA_STATEMENTS.map(statement => env.DB.prepare(statement)))
             .catch(error => {

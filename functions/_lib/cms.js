@@ -1,5 +1,6 @@
 import cmsSeed from "../../cms-server-seed.json";
 import { checksum, ensureSchema, writeAudit } from "./db.js";
+import { isPreviewReadOnly } from "./preview.js";
 import { httpError } from "./http.js";
 
 const DOCUMENT_KEY = "main";
@@ -126,6 +127,9 @@ async function initializeDocument(env) {
         "SELECT document_key FROM cms_documents WHERE document_key = ?"
     ).bind(DOCUMENT_KEY).first();
     if (existing) return;
+    if (isPreviewReadOnly(env)) {
+        throw httpError(503, "CMS_PREVIEW_DATA_MISSING");
+    }
 
     const now = new Date().toISOString();
     const state = normalizeCmsState(cmsSeed);

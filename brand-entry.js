@@ -25,7 +25,7 @@
             entry.hidden = true;
             entry.setAttribute("aria-hidden", "true");
             entry.classList.remove("is-leaving");
-        }, 420);
+        }, 180);
     };
 
     const hasSeenEntry = () => {
@@ -54,7 +54,7 @@
         entry.setAttribute("aria-hidden", "false");
         document.body.classList.add("brand-entry-active");
         markSeen();
-        closeTimer = window.setTimeout(() => closeEntry(false), 1650);
+        closeTimer = window.setTimeout(() => closeEntry(false), 250);
     };
 
     skip?.addEventListener("click", () => closeEntry(false));

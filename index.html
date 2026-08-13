@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="vi" class="cms-booting">
+<html lang="vi" class="cms-booting archive-v2">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Tra cứu bản Việt hóa game PC theo phiên bản, dung lượng, engine và trạng thái kiểm thử. Theo dõi tiến độ, lưu bộ sưu tập và gửi đề xuất tại VietPatch.">
-    <meta name="theme-color" content="#f3efe5">
+    <meta name="theme-color" content="#eee8dc">
     <meta name="application-name" content="VietPatch">
     <meta name="apple-mobile-web-app-title" content="VietPatch">
     <meta name="author" content="VietPatch">
@@ -43,17 +43,23 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&family=Noto+Serif:wght@500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap">
     
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="style.css?v=20260726-requests1">
-    <link rel="stylesheet" href="redesign.css?v=20260811-v3-video">
-    <link rel="stylesheet" href="collection.css?v=20260811-v3-video">
-    <link rel="stylesheet" href="motion.css?v=20260724-v1">
-    <link rel="stylesheet" href="home.css?v=20260725-home11">
-    <link rel="stylesheet" href="refine.css?v=20260813-v9-catalog-cards">
+    <style>
+        html.cms-booting body { visibility: visible; }
+        html.cms-booting .main-content { visibility: hidden; opacity: 0; }
+        html.cms-ready .main-content { visibility: visible; opacity: 1; }
+        @media (prefers-reduced-motion: no-preference) {
+            html.cms-ready .main-content { animation: vp-page-reveal .42s ease both; }
+        }
+        @keyframes vp-page-reveal { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+    <link rel="stylesheet" href="style.css?v=20260814-v2-base">
+    <link rel="stylesheet" href="archive-v2.css?v=20260814-v2-preview">
     <noscript>
         <style>
+            .brand-entry { display: none !important; }
             html.cms-booting .vp-content-boot { display: none !important; }
             html.cms-booting .main-content { display: block !important; visibility: visible !important; opacity: 1 !important; }
         </style>
@@ -61,7 +67,7 @@
 </head>
 <body>
     <div class="vp-scroll-progress" id="vp-scroll-progress" aria-hidden="true"></div>
-    <div class="brand-entry" id="brand-entry" hidden aria-hidden="true">
+    <div class="brand-entry" id="brand-entry" aria-hidden="false">
         <div class="brand-entry-grid" aria-hidden="true"></div>
         <div class="brand-entry-content" role="status" aria-live="polite">
             <span class="brand-entry-kicker">VIETPATCH / ARCHIVE ONLINE</span>
@@ -152,11 +158,34 @@
         
         <!-- ================= HOME TAB ================= -->
         <section id="tab-home" class="tab-content active">
+            <!-- Hero Slider / Carousel -->
+            <section class="hero-carousel" aria-label="Game tiêu điểm">
+                <div class="carousel-track" id="hero-slider-container">
+                    <!-- Dynamic Hero Banners will be rendered here -->
+                </div>
+                <div class="carousel-nav">
+                    <button class="nav-btn prev" type="button" aria-label="Banner trước"><i class="fa-solid fa-chevron-left"></i></button>
+                    <button class="nav-btn next" type="button" aria-label="Banner tiếp theo"><i class="fa-solid fa-chevron-right"></i></button>
+                </div>
+                <div class="carousel-dots" id="carousel-dots-container"></div>
+            </section>
+
+            <section class="archive-activity" aria-labelledby="archive-activity-title">
+                <header class="archive-activity-head">
+                    <div>
+                        <span>NHẬT KÝ KHO</span>
+                        <h2 id="archive-activity-title">Hoạt động gần đây</h2>
+                    </div>
+                    <p>Thay đổi mới nhất từ dữ liệu đang xuất bản.</p>
+                </header>
+                <ol class="archive-activity-list" id="archive-activity-list" aria-live="polite"></ol>
+            </section>
+
             <section class="weekly-trailer" aria-labelledby="weekly-trailer-title">
                 <header class="weekly-trailer-head">
                     <div>
-                        <span><i class="fa-solid fa-film" aria-hidden="true"></i> TRAILER TUẦN</span>
-                        <small>Game mới đáng chú ý</small>
+                        <span><i class="fa-solid fa-film" aria-hidden="true"></i> SUẤT CHIẾU TUẦN</span>
+                        <small>Trailer đang được tuyển chọn</small>
                     </div>
                     <time id="weekly-trailer-period">Cập nhật hàng tuần</time>
                 </header>
@@ -200,37 +229,13 @@
                     <div class="weekly-trailer-meta">
                         <span id="weekly-trailer-category">SURVIVAL HORROR / ADVENTURE</span>
                         <a id="weekly-trailer-link" href="https://www.youtube.com/watch?v=17thL7LTEjo" target="_blank" rel="noopener noreferrer" aria-label="Mở trailer Don't Sleep With The Fishes trên YouTube">
-                            YouTube <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
+                            Mở nguồn <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
                         </a>
                     </div>
-                    <h1 id="weekly-trailer-title">Don't Sleep With The Fishes</h1>
+                    <h2 id="weekly-trailer-title">Don't Sleep With The Fishes</h2>
                     <p id="weekly-trailer-description">Trailer chính thức của game được chọn cho tuần này.</p>
                 </div>
             </section>
-
-            <!-- Hero Slider / Carousel -->
-            <div class="hero-carousel">
-                <div class="home-hero-signature" aria-label="VietPatch, kho bản Việt hóa game">
-                    <img src="assets/brand/favicon-48x48.png" width="32" height="32" alt="">
-                    <span><strong>VietPatch</strong><small>Archive / Việt hóa game</small></span>
-                </div>
-                <div class="carousel-track" id="hero-slider-container">
-                    <!-- Dynamic Hero Banners will be rendered here -->
-                </div>
-                <div class="carousel-nav">
-                    <button class="nav-btn prev" type="button" aria-label="Banner trước"><i class="fa-solid fa-chevron-left"></i></button>
-                    <button class="nav-btn next" type="button" aria-label="Banner tiếp theo"><i class="fa-solid fa-chevron-right"></i></button>
-                </div>
-                <div class="carousel-dots" id="carousel-dots-container"></div>
-            </div>
-
-            <!-- Archive wire: dải tin chạy giữa hero và trailer -->
-            <div class="vp-ticker" id="vp-ticker">
-                <span class="vp-ticker-label" aria-hidden="true"><i class="fa-solid fa-bolt"></i> ARCHIVE WIRE</span>
-                <div class="vp-ticker-viewport" aria-hidden="true">
-                    <div class="vp-ticker-track" id="vp-ticker-track"></div>
-                </div>
-            </div>
 
             <!-- Live catalogue summary -->
             <div class="stats-bar" aria-label="Tổng quan kho Việt hóa" hidden>
@@ -363,110 +368,6 @@
             </section>
 
             <!-- Patchroom editorial desk -->
-            <section class="patch-desk fade-in-section" aria-labelledby="patch-desk-title" hidden>
-                <header class="patch-desk-header">
-                    <div>
-                        <span class="patch-desk-kicker">PATCHROOM / BẢN TIN TUẦN 26</span>
-                        <h2 id="patch-desk-title">Trong phòng biên tập.</h2>
-                        <p>Lịch patch, tín hiệu kiểm thử và những game cộng đồng đang chờ được gom vào một bàn tin sống.</p>
-                    </div>
-                    <button class="action-btn-secondary patch-desk-all" type="button" data-tab="progress">
-                        <i class="fa-solid fa-chart-simple"></i> Xem toàn bộ tiến độ
-                    </button>
-                </header>
-
-                <div class="patch-desk-grid">
-                    <article class="release-board">
-                        <div class="release-board-head">
-                            <span><i class="fa-solid fa-tower-broadcast"></i> LIVE PRODUCTION</span>
-                            <strong>03 dự án đang chạy</strong>
-                        </div>
-
-                        <div class="release-list">
-                            <div class="release-item">
-                                <div class="release-index">01</div>
-                                <div class="release-copy">
-                                    <span class="release-state qa">QA CUỐI</span>
-                                    <h3>Hades II</h3>
-                                    <p>Soát thuật ngữ thần thoại, kiểm tra font và các đoạn hội thoại phân nhánh.</p>
-                                </div>
-                                <div class="release-progress">
-                                    <div class="release-track"><span style="width: 82%"></span></div>
-                                    <strong>82%</strong>
-                                </div>
-                            </div>
-
-                            <div class="release-item">
-                                <div class="release-index">02</div>
-                                <div class="release-copy">
-                                    <span class="release-state edit">BIÊN TẬP</span>
-                                    <h3>Silent Hill 2 Remake</h3>
-                                    <p>Chỉnh giọng thoại, ghi chú vật phẩm và lỗi tràn chữ trong giao diện.</p>
-                                </div>
-                                <div class="release-progress">
-                                    <div class="release-track"><span style="width: 75%"></span></div>
-                                    <strong>75%</strong>
-                                </div>
-                            </div>
-
-                            <div class="release-item">
-                                <div class="release-index">03</div>
-                                <div class="release-copy">
-                                    <span class="release-state translate">ĐANG DỊCH</span>
-                                    <h3>Monster Hunter: Wilds</h3>
-                                    <p>Chuẩn hóa tên quái, trang bị và hướng dẫn hệ thống săn theo glossary chung.</p>
-                                </div>
-                                <div class="release-progress">
-                                    <div class="release-track"><span style="width: 40%"></span></div>
-                                    <strong>40%</strong>
-                                </div>
-                            </div>
-                        </div>
-                    </article>
-
-                    <aside class="patch-desk-side">
-                        <section class="qa-ticket">
-                            <div class="ticket-label">QA SIGNAL</div>
-                            <div class="qa-ticket-main">
-                                <div class="qa-score" aria-label="Điểm kiểm thử 98 trên 100">
-                                    <strong>98</strong>
-                                    <span>/100</span>
-                                </div>
-                                <div>
-                                    <h3>Bản build ổn định</h3>
-                                    <p>Kiểm tra nhanh của đội kỹ thuật trong 7 ngày gần nhất.</p>
-                                </div>
-                            </div>
-                            <ul class="qa-checklist">
-                                <li><i class="fa-solid fa-check"></i> Font tiếng Việt</li>
-                                <li><i class="fa-solid fa-check"></i> Installer sạch</li>
-                                <li><i class="fa-solid fa-check"></i> Có gói hoàn tác</li>
-                            </ul>
-                        </section>
-
-                        <section class="community-ticket">
-                            <span class="community-stamp">COMMUNITY PICK</span>
-                            <p class="community-eyebrow">Đang được đề xuất nhiều</p>
-                            <h3>Dragon's Dogma 2</h3>
-                            <div class="community-votes">
-                                <span><i class="fa-solid fa-arrow-up"></i> 1.284 lượt</span>
-                                <span>RE Engine</span>
-                            </div>
-                            <button class="community-action" type="button" data-tab="requests">
-                                Mở bảng yêu cầu <i class="fa-solid fa-arrow-right"></i>
-                            </button>
-                        </section>
-                    </aside>
-                </div>
-
-                <div class="patch-desk-ticker" aria-label="Trạng thái hệ thống VietPatch">
-                    <span><i class="fa-solid fa-circle"></i> 14 PATCH ĐÃ KIỂM CHỨNG</span>
-                    <span><i class="fa-solid fa-circle"></i> 4 ENGINE ĐANG HỖ TRỢ</span>
-                    <span><i class="fa-solid fa-circle"></i> PHẢN HỒI TRUNG BÌNH 6 GIỜ</span>
-                    <span><i class="fa-solid fa-circle"></i> BUILD MỚI MỖI TUẦN</span>
-                </div>
-            </section>
-
             <section class="install-flow" aria-labelledby="install-flow-title">
                 <header>
                     <span class="section-kicker">TIÊU CHUẨN CÔNG BỐ</span>
@@ -721,45 +622,11 @@
         <!-- ================= ABOUT TAB ================= -->
         <section id="tab-about" class="tab-content">
             <div class="page-container">
-                <div class="about-hero">
-                    <h1 style="font-family: var(--font-heading); font-size: 3.5rem; letter-spacing: 0; font-weight: 500;">Về VietPatch</h1>
-                    <p style="font-family: var(--font-mono); color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px;">THÀNH LẬP TỪ NĂM 2026</p>
-                </div>
-
-                <div class="about-quote-box">
-                    VietPatch tập trung vào bản dịch dễ hiểu, thông tin tương thích rõ ràng và quy trình cài đặt có thể hoàn tác.
-                </div>
-
-                <div class="section-header" style="justify-content: center; margin-bottom: 2rem;">
-                    <h2><i class="fa-solid fa-users"></i> Nhóm thực hiện</h2>
-                </div>
-                
-                <div class="team-grid">
-                    <div class="team-card">
-                        <span class="team-avatar" aria-hidden="true">KE</span>
-                        <div class="team-name">Kenshi</div>
-                        <div class="team-role">Founder / Lead Tech</div>
-                        <p style="margin-top: 1rem; font-size: 0.85rem; color: var(--text-secondary);">Chuyên gia giải mã Unreal Engine & Unity. Đứng sau công cụ trích xuất text.</p>
-                    </div>
-                    <div class="team-card">
-                        <span class="team-avatar" aria-hidden="true">MI</span>
-                        <div class="team-name">Mizuki</div>
-                        <div class="team-role">Head Translator</div>
-                        <p style="margin-top: 1rem; font-size: 0.85rem; color: var(--text-secondary);">Biên tập viên chính, đảm bảo văn phong tự nhiên, đậm chất điện ảnh.</p>
-                    </div>
-                    <div class="team-card">
-                        <span class="team-avatar" aria-hidden="true">ZE</span>
-                        <div class="team-name">Zero</div>
-                        <div class="team-role">QA & Tester</div>
-                        <p style="margin-top: 1rem; font-size: 0.85rem; color: var(--text-secondary);">Kiểm thử hàng trăm giờ in-game để đảm bảo không lỗi tràn chữ.</p>
-                    </div>
-                    <div class="team-card">
-                        <span class="team-avatar" aria-hidden="true">LU</span>
-                        <div class="team-name">Luna</div>
-                        <div class="team-role">Community Mgr</div>
-                        <p style="margin-top: 1rem; font-size: 0.85rem; color: var(--text-secondary);">Quản lý cộng đồng Discord, ghi nhận và xử lý yêu cầu game.</p>
-                    </div>
-                </div>
+                <header class="archive-masthead about-masthead">
+                    <div class="archive-masthead-copy"><span class="archive-section-index">VIETPATCH / GIỚI THIỆU</span><h1>Một kho Việt hóa có thể tra cứu.</h1><p>VietPatch công bố đúng phiên bản, tiến độ, người thực hiện và trạng thái kiểm thử theo dữ liệu của từng hồ sơ.</p></div>
+                    <dl class="archive-metrics"><div><dt>Bắt đầu</dt><dd>2026</dd></div><div><dt>Liên hệ</dt><dd><small>dungsieuviet347@gmail.com</small></dd></div><div class="metric-wide"><dt>YouTube</dt><dd><small>Sẽ cập nhật sau</small></dd></div></dl>
+                </header>
+                <div class="about-principles"><article><span>01</span><h2>Đúng phiên bản</h2><p>Thông số, dung lượng và ngày cập nhật đi cùng từng game.</p></article><article><span>02</span><h2>Có dấu vết thực hiện</h2><p>Credits chỉ xuất hiện khi hồ sơ có dữ liệu thật.</p></article><article><span>03</span><h2>Có đường hoàn tác</h2><p>Lưu ý cài đặt và tương thích được trình bày ngay trong hồ sơ.</p></article></div>
             </div>
         </section>
     </main>
@@ -1241,10 +1108,11 @@
 
     <!-- Custom App Script -->
     <script src="cms-public-seed.js?v=20260724-secure1"></script>
+    <script src="preview-mode.js?v=20260814-v2-preview"></script>
     <script src="cms-shared.js?v=20260811-v4-ultrawide-progress"></script>
     <script type="module" src="assets/vendor/hls-loader.js?v=1.6.16"></script>
-    <script src="app.js?v=20260813-v9-catalog-cards"></script>
+    <script src="app.js?v=20260814-v2-preview"></script>
     <script src="motion.js?v=20260724-v1"></script>
-    <script src="brand-entry.js?v=20260725-home1"></script>
+    <script src="brand-entry.js?v=20260814-v2-preview"></script>
 </body>
 </html>

@@ -628,6 +628,7 @@ function renderReviewStars(rating) {
 }
 
 async function recordAnonymousSiteVisit() {
+    if (window.VIETPATCH_PREVIEW_READ_ONLY) return;
     const vietnamDay = new Date(Date.now() + (7 * 60 * 60 * 1000)).toISOString().slice(0, 10);
     const sessionKey = `vietpatch-visit:${vietnamDay}`;
     try {
@@ -2075,7 +2076,7 @@ function getCatalogBadge(game) {
     const explicitBadges = {
         new: {
             key: "new",
-            label: "Cập nhật mới",
+            label: "Mới cập nhật",
             icon: "fa-bolt",
             ariaLabel: "Bản cập nhật mới"
         },
@@ -2087,25 +2088,19 @@ function getCatalogBadge(game) {
         },
         progress: {
             key: "progress",
-            label: "Đang hoàn thiện",
+            label: "Đang dịch",
             icon: "fa-arrows-rotate",
             ariaLabel: "Bản đang hoàn thiện"
         },
-        community: {
-            key: "community",
-            label: "Cộng đồng chọn",
-            icon: "fa-people-group",
-            ariaLabel: "Bản được cộng đồng chọn"
-        },
-        free: {
-            key: "free",
-            label: "Miễn phí",
-            icon: "fa-gift",
-            ariaLabel: "Bản miễn phí"
-        }
+        community: null,
+        free: null
     };
 
-    if (explicitBadges[explicit]) {
+    if (explicit === "new") {
+        const updatedAt = Date.parse(game?.date);
+        const age = Number.isFinite(updatedAt) ? Date.now() - updatedAt : Infinity;
+        if (age <= 14 * 86400000 && age >= -86400000) return explicitBadges.new;
+    } else if (explicitBadges[explicit]) {
         return explicitBadges[explicit];
     }
 
@@ -2116,13 +2111,85 @@ function getCatalogBadge(game) {
     if (explicit === "hot" || featuredIds.includes(game?.id)) {
         return {
             key: "hot",
-            label: "Nổi bật",
+            label: "Tiêu điểm",
             icon: "fa-crown",
             ariaLabel: "Bản nổi bật"
         };
     }
 
-    return null;
+    const progress = clampPercent(game?.progress);
+    if (progress < 100) return explicitBadges.progress;
+
+    const updatedAt = Date.parse(game?.date);
+    const age = Number.isFinite(updatedAt) ? Date.now() - updatedAt : Infinity;
+    if (age <= 14 * 86400000 && age >= -86400000) return explicitBadges.new;
+    return explicit === "verified" ? explicitBadges.verified : null;
+}
+
+function getGameTeamLabel(game) {
+    const credits = game?.credits && typeof game.credits === "object" ? game.credits : {};
+    return credits.translator || credits.editor || credits.technical || credits.qa || "";
+}
+
+function getActivityTimestamp(value) {
+    const timestamp = Date.parse(value);
+    return Number.isFinite(timestamp) ? timestamp : 0;
+}
+
+function formatActivityDate(value) {
+    const timestamp = getActivityTimestamp(value);
+    if (!timestamp) return "";
+    const days = Math.floor(Math.max(0, Date.now() - timestamp) / 86400000);
+    if (days === 0) return "Hôm nay";
+    if (days === 1) return "Hôm qua";
+    if (days < 14) return `${days} ngày trước`;
+    return formatGameDate(value);
+}
+
+function renderRecentActivity() {
+    const container = document.getElementById("archive-activity-list");
+    if (!container || !cmsState) return;
+
+    const gameItems = getPublicGames().map(game => ({
+        type: clampPercent(game.progress) < 100 ? "progress" : "release",
+        date: game.date,
+        timestamp: getActivityTimestamp(game.date),
+        title: game.title,
+        meta: [game.version, clampPercent(game.progress) < 100 ? `${clampPercent(game.progress)}%` : "Đã kiểm thử"].filter(Boolean).join(" · "),
+        href: gameSeoPath(game)
+    }));
+    const postItems = (Array.isArray(cmsState.posts) ? cmsState.posts : [])
+        .filter(post => post.published)
+        .map(post => ({
+            type: "post",
+            date: post.publishedAt,
+            timestamp: getActivityTimestamp(post.publishedAt),
+            title: post.title,
+            meta: post.category || "Bản tin",
+            href: window.VietPatchCMS?.safeUrl(post.link) || ""
+        }));
+    const trailerItems = (Array.isArray(cmsState.trailers) ? cmsState.trailers : [])
+        .filter(trailer => trailer.enabled && trailer.generatedAt)
+        .map(trailer => ({
+            type: "trailer",
+            date: trailer.generatedAt,
+            timestamp: getActivityTimestamp(trailer.generatedAt),
+            title: trailer.title,
+            meta: "Suất chiếu tuần",
+            href: "#weekly-trailer-title"
+        }));
+    const items = [...gameItems, ...postItems, ...trailerItems]
+        .filter(item => item.timestamp)
+        .sort((a, b) => b.timestamp - a.timestamp)
+        .slice(0, 6);
+
+    container.innerHTML = items.map(item => {
+        const body = `<span class="activity-type type-${item.type}">${item.type === "release" ? "PATCH" : item.type === "progress" ? "TIẾN ĐỘ" : item.type === "trailer" ? "TRAILER" : "BẢN TIN"}</span><strong>${escapeHtml(item.title)}</strong><small>${escapeHtml(item.meta)}</small>`;
+        return `<li><time datetime="${escapeHtml(String(item.date || ""))}">${escapeHtml(formatActivityDate(item.date))}</time>${item.href ? `<a href="${escapeHtml(item.href)}">${body}<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>` : `<div>${body}</div>`}</li>`;
+    }).join("");
+
+    const section = container.closest(".archive-activity");
+    if (section) section.hidden = items.length === 0;
 }
 
 function renderCatalogPagination(totalItems) {
@@ -2230,6 +2297,7 @@ function renderGamesGrid() {
         card.className = `game-card catalog-row state-${releaseState.key}`;
 
         const progress = Math.max(0, Math.min(100, Number(game.progress) || 0));
+        const teamLabel = getGameTeamLabel(game);
 
         card.innerHTML = `
             <a class="card-header-img" href="${escapeHtml(gameSeoPath(game))}" aria-label="Mở trang hồ sơ ${escapeHtml(game.title)}">
@@ -2258,15 +2326,22 @@ function renderGamesGrid() {
                     <i style="width:${progress}%"></i>
                 </div>
             </div>
-            <dl class="catalog-specs">
+            <dl class="catalog-specs card-primary-meta">
                 <div><dt>Patch</dt><dd>${escapeHtml(game.version)}</dd></div>
                 <div><dt>Dung lượng</dt><dd>${escapeHtml(game.size)}</dd></div>
-                <div><dt>Cập nhật</dt><dd>${formatGameDate(game.date)}</dd></div>
             </dl>
-            <div class="catalog-community-stats" data-game-stats-id="${escapeHtml(game.id)}" aria-label="Thống kê cộng đồng">
-                <span title="Lượt xem"><i class="fa-regular fa-eye" aria-hidden="true"></i><strong data-stat="views">${formatMetricCount(getLiveGameStats(game.id).views)}</strong><small>Lượt xem</small></span>
-                <span title="Lượt tải"><i class="fa-solid fa-cloud-arrow-down" aria-hidden="true"></i><strong data-stat="downloads">${formatMetricCount(getCombinedDownloadCount(game))}</strong><small>Lượt tải</small></span>
-                <span title="Điểm đánh giá"><i class="fa-solid fa-star" aria-hidden="true"></i><strong data-stat="rating">${getLiveGameStats(game.id).reviewCount > 0 ? Number(getLiveGameStats(game.id).ratingAverage).toFixed(1) : "—"}</strong><small data-stat-label="rating">${getLiveGameStats(game.id).reviewCount > 0 ? `${formatMetricCount(getLiveGameStats(game.id).reviewCount)} đánh giá` : "Chưa đánh giá"}</small></span>
+            <button class="card-more-toggle" type="button" aria-expanded="false"><span>Xem thêm</span><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
+            <div class="card-secondary" aria-hidden="true">
+                <dl class="card-secondary-meta">
+                    <div><dt>Engine</dt><dd>${escapeHtml(game.engine || "")}</dd></div>
+                    <div><dt>Cập nhật</dt><dd>${escapeHtml(formatGameDate(game.date))}</dd></div>
+                    ${teamLabel ? `<div><dt>Thực hiện</dt><dd>${escapeHtml(teamLabel)}</dd></div>` : ""}
+                </dl>
+                <div class="catalog-community-stats" data-game-stats-id="${escapeHtml(game.id)}" aria-label="Thống kê cộng đồng">
+                    <span title="Lượt xem"><i class="fa-regular fa-eye" aria-hidden="true"></i><strong data-stat="views">${formatMetricCount(getLiveGameStats(game.id).views)}</strong><small>Lượt xem</small></span>
+                    <span title="Lượt tải"><i class="fa-solid fa-cloud-arrow-down" aria-hidden="true"></i><strong data-stat="downloads">${formatMetricCount(getCombinedDownloadCount(game))}</strong><small>Lượt tải</small></span>
+                    <span title="Điểm đánh giá"><i class="fa-solid fa-star" aria-hidden="true"></i><strong data-stat="rating">${getLiveGameStats(game.id).reviewCount > 0 ? Number(getLiveGameStats(game.id).ratingAverage).toFixed(1) : "—"}</strong><small data-stat-label="rating">${getLiveGameStats(game.id).reviewCount > 0 ? `${formatMetricCount(getLiveGameStats(game.id).reviewCount)} đánh giá` : "Chưa đánh giá"}</small></span>
+                </div>
             </div>
             <div class="card-footer">
                 <a class="card-detail-btn" href="${escapeHtml(gameSeoPath(game))}" aria-label="Mở trang hồ sơ ${escapeHtml(game.title)}">
@@ -2317,13 +2392,14 @@ function renderHeroSlider() {
         slide.className = `hero-slide ${index === 0 ? "active" : ""}`;
         slide.innerHTML = `
             <img class="hero-slide-bg" src="${escapeHtml(heroImage)}" alt="Ảnh bìa ${escapeHtml(game.title)}" onerror="this.src='${escapeHtml(getGameCoverImage(game))}'">
-            <span class="hero-slide-index" aria-hidden="true">${String(index + 1).padStart(2, "0")}</span>
+            <span class="hero-slide-index" aria-hidden="true">${String(index + 1).padStart(2, "0")} / ${String(featuredGames.length).padStart(2, "0")}</span>
             <span class="photo-note">CẬP NHẬT · ${escapeHtml(formatGameDate(game.date))}</span>
             <article class="feature-sheet">
                 <div class="feature-name">
-                    <span>Cập nhật mới</span>
+                    <span>Game tiêu điểm</span>
                     <h2 class="${titleSizeClass}">${escapeHtml(game.title)}</h2>
                     <p>${escapeHtml(game.developer)} · ${escapeHtml(game.engine)}</p>
+                    ${getGameTeamLabel(game) ? `<small class="feature-credit">Nhóm thực hiện · ${escapeHtml(getGameTeamLabel(game))}</small>` : ""}
                 </div>
                 <dl class="release-specs">
                     <div><dt>Phiên bản</dt><dd>${escapeHtml(game.version)}</dd></div>
@@ -2355,6 +2431,7 @@ function renderHeroSlider() {
 
 function startHeroRotation() {
     stopHeroRotation();
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
     const slides = document.querySelectorAll(".hero-slide");
     if (slides.length <= 1) return;
     heroRotationInterval = window.setInterval(() => {
@@ -2938,7 +3015,7 @@ function switchTab(tabId) {
 // ==========================================================================
 // DETAILS MODAL / DRAWER SYSTEM
 // ==========================================================================
-function openGameDetails(gameId, { focusReview = false } = {}) {
+function openGameDetails(gameId, { focusReview = false, focusReport = false } = {}) {
     const game = gamesDatabase.find(g => g.id === gameId);
     if (!game) return;
     activeDetailGameId = game.id;
@@ -3084,18 +3161,20 @@ function openGameDetails(gameId, { focusReview = false } = {}) {
     const detailPanel = overlay.querySelector(".detail-panel");
     if (detailPanel) detailPanel.scrollTop = 0;
     requestAnimationFrame(() => {
-        if (!focusReview) {
+        if (!focusReview && !focusReport) {
             detailPanel?.focus();
             return;
         }
-        const reviewBoard = document.querySelector("#detail-community .review-board");
-        if (!reviewBoard) return;
-        reviewBoard.setAttribute("tabindex", "-1");
-        reviewBoard.scrollIntoView({
+        const targetBoard = focusReport
+            ? document.querySelector("#detail-community .update-report-card")
+            : document.querySelector("#detail-community .review-board");
+        if (!targetBoard) return;
+        targetBoard.setAttribute("tabindex", "-1");
+        targetBoard.scrollIntoView({
             behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
             block: "start"
         });
-        reviewBoard.focus({ preventScroll: true });
+        targetBoard.focus({ preventScroll: true });
     });
     loadDetailCommunity(game, { recordView: true });
 }
@@ -4018,7 +4097,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     renderGamesGrid();
     renderHeroSlider();
-    renderArchiveTicker();
+    renderRecentActivity();
     initWeeklyTrailerPlayer();
 
     mainContent?.setAttribute("aria-busy", "false");
@@ -4131,6 +4210,17 @@ document.addEventListener("DOMContentLoaded", async () => {
         menuToggle.innerHTML = `<i class="fa-solid ${isOpen ? "fa-xmark" : "fa-bars"}"></i>`;
     });
 
+    document.getElementById("games-grid-container")?.addEventListener("click", event => {
+        const toggle = event.target.closest(".card-more-toggle");
+        if (!toggle) return;
+        const card = toggle.closest(".game-card");
+        if (!card) return;
+        const expanded = card.classList.toggle("is-expanded");
+        toggle.setAttribute("aria-expanded", String(expanded));
+        toggle.querySelector("span").textContent = expanded ? "Thu gọn" : "Xem thêm";
+        card.querySelector(".card-secondary")?.setAttribute("aria-hidden", String(!expanded));
+    });
+
     const userWidget = document.getElementById("user-profile-widget");
     const toggleUserMenu = () => userWidget?.classList.toggle("menu-open");
     userWidget?.addEventListener("click", (e) => {
@@ -4233,6 +4323,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
     heroCarousel?.addEventListener("mouseenter", stopHeroRotation);
     heroCarousel?.addEventListener("mouseleave", startHeroRotation);
+    heroCarousel?.addEventListener("focusin", stopHeroRotation);
+    heroCarousel?.addEventListener("focusout", event => {
+        if (!heroCarousel.contains(event.relatedTarget)) startHeroRotation();
+    });
     
     // 9. Close Detail Panel Panel
     document.getElementById("close-detail-btn").addEventListener("click", closeGameDetails);
@@ -4593,7 +4687,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     const requestedGame = getPublicGames().find(game => game.id === requestedGameId);
     if (requestedGame) {
         switchTab("home");
-        openGameDetails(requestedGame.id);
+        const requestedAction = String(initialParams.get("action") || "").toLocaleLowerCase("en");
+        openGameDetails(requestedGame.id, {
+            focusReview: requestedAction === "review",
+            focusReport: requestedAction === "report"
+        });
     }
     
     // 17. Intersection Observer for Scroll Animations

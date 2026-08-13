@@ -119,8 +119,8 @@ function shell({ title, description, canonical, image, body, jsonLd, robots = "i
     <link rel="manifest" href="/site.webmanifest">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap">
-    <link rel="stylesheet" href="/game-page.css?v=20260811-v4-ultrawide-progress">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&family=Noto+Serif:wght@500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap">
+    <link rel="stylesheet" href="/game-page.css?v=20260814-archive-v2">
     <script type="application/ld+json">${jsonLd}</script>
 </head>
 <body>
@@ -252,7 +252,7 @@ function gameBody(game, stats) {
                         <div><span>Phát hành</span><strong>${escapeHtml(formatPrice(game))}</strong></div>
                     </div>
                     <div class="hero-actions">
-                        <a class="primary-action" href="/?game=${encodeURIComponent(game.id)}">Mở hồ sơ tương tác <span>→</span></a>
+                <a class="primary-action" href="${escapeHtml(canonicalPath)}#tai-va-danh-gia">Tải và đánh giá <span>→</span></a>
                         <a class="text-action" href="/game">Xem toàn bộ game</a>
                     </div>
                 </div>
@@ -284,16 +284,20 @@ function gameBody(game, stats) {
                         <div><dt>Patch</dt><dd>${escapeHtml(game.version)}</dd></div>
                         <div><dt>Tiến độ</dt><dd>${escapeHtml(String(game.progress))}%</dd></div>
                     </dl>
-                    <a href="/?game=${encodeURIComponent(game.id)}">Kiểm tra tải và tương thích →</a>
+                    <a href="${escapeHtml(canonicalPath)}#tai-va-danh-gia">Kiểm tra tải và tương thích →</a>
                 </aside>
             </section>
             ${videoSection}
             ${screenshots}
             ${notes}
             ${creditsSection}
-            <section class="final-cta">
-                <div><p class="eyebrow">VIETPATCH / ${escapeHtml(game.id.toUpperCase())}</p><h2>Đúng game. Đúng phiên bản.</h2><p>Mở hồ sơ tương tác để xem quyền tải, đánh giá cộng đồng và báo cáo phiên bản mới.</p></div>
-                <a class="primary-action" href="/?game=${encodeURIComponent(game.id)}">Mở hồ sơ <span>→</span></a>
+            <section class="final-cta" id="tai-va-danh-gia">
+                <div><p class="eyebrow">VIETPATCH / ${escapeHtml(game.id.toUpperCase())}</p><h2>Tải, đánh giá và báo phiên bản.</h2><p>Các thao tác cộng đồng mở trong cùng hồ sơ game, không tạo một địa chỉ khác.</p></div>
+                <div class="final-actions">
+                    <a class="primary-action" href="/?game=${encodeURIComponent(game.id)}">Kiểm tra quyền tải <span>→</span></a>
+                    <a class="secondary-action" href="/?game=${encodeURIComponent(game.id)}&amp;action=review">Viết đánh giá</a>
+                    <a class="secondary-action" href="/?game=${encodeURIComponent(game.id)}&amp;action=report">Báo phiên bản mới</a>
+                </div>
             </section>
         </article>
     </main>`;

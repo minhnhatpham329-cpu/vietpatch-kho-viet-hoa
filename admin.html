@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" class="archive-v2-admin">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,12 +8,16 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Noto+Serif:wght@500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="admin.css?v=20260811-v3-video">
-    <link rel="stylesheet" href="admin-redesign.css?v=20260811-v4-ultrawide-progress">
+    <link rel="stylesheet" href="admin-archive-v2.css?v=20260814-v2-preview">
 </head>
 <body>
+    <div class="preview-admin-banner" id="preview-admin-banner" hidden>
+        <i class="fa-solid fa-eye" aria-hidden="true"></i>
+        <span><strong>Bản xem trước chỉ đọc</strong> — xem toàn bộ dữ liệu thật, nhưng không thể lưu, xuất bản, khôi phục hoặc kiểm duyệt.</span>
+    </div>
     <div class="studio-shell">
         <aside class="studio-sidebar">
             <a class="studio-brand" href="admin.html" aria-label="VietPatch Studio">
@@ -39,6 +43,9 @@
                 </button>
                 <button class="studio-nav-btn" type="button" data-panel="requests">
                     <i class="fa-solid fa-envelope-open-text"></i><span>Đề xuất</span>
+                </button>
+                <button class="studio-nav-btn" type="button" data-panel="posts">
+                    <i class="fa-solid fa-newspaper"></i><span>Bài đăng</span>
                 </button>
                 <button class="studio-nav-btn" type="button" data-panel="community">
                     <i class="fa-solid fa-comments"></i><span>Tương tác</span>
@@ -96,6 +103,17 @@
                         <div class="dashboard-traffic-chart" id="dashboard-traffic-chart"><p>Đang tải số liệu máy chủ…</p></div>
                         <aside class="dashboard-focus" id="dashboard-focus"><p>Đang tổng hợp việc cần chú ý…</p></aside>
                     </div>
+                </section>
+
+                <section class="studio-section dashboard-activity-section">
+                    <div class="section-heading">
+                        <div>
+                            <span>EDITORIAL LOG</span>
+                            <h2>Dòng hoạt động nội dung</h2>
+                            <p class="manager-context">Suy từ ngày game, phiên bản, tiến độ, bài đăng và lần cập nhật CMS hiện có.</p>
+                        </div>
+                    </div>
+                    <ol class="dashboard-activity-list" id="dashboard-activity-list"></ol>
                 </section>
 
                 <div class="dashboard-layout">

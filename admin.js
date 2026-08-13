@@ -3,6 +3,7 @@
 
     const CMS = window.VietPatchCMS;
     if (!CMS) return;
+    const PREVIEW_READ_ONLY = location.hostname.endsWith(".pages.dev");
 
     const panelTitles = {
         dashboard: "Tổng quan nội dung",
@@ -273,13 +274,22 @@
         const meta = CMS.getSyncMeta();
         const publishButton = byId("publish-btn");
         if (!publishButton) return;
-        publishButton.disabled = !meta?.dirty;
+        publishButton.disabled = PREVIEW_READ_ONLY || !meta?.dirty;
+        if (PREVIEW_READ_ONLY) {
+            publishButton.title = "Bản xem trước chỉ đọc";
+            return;
+        }
         publishButton.title = meta?.dirty
             ? "Đưa toàn bộ bản nháp hiện tại ra website"
             : "Website đang dùng đúng bản mới nhất";
     }
 
     function persist(message) {
+        if (PREVIEW_READ_ONLY) {
+            setSaveState("Bản xem trước chỉ đọc", false, true);
+            showToast("PREVIEW_READ_ONLY: nhánh xem trước không ghi dữ liệu.", "error");
+            return Promise.resolve();
+        }
         const snapshot = CMS.clone(state);
         setSaveState("Đang lưu", true);
         saveQueue = saveQueue.then(async () => {
@@ -441,6 +451,43 @@
                 <div class="health-value">ROADMAP</div>
             </div>
         `;
+
+        const activityList = byId("dashboard-activity-list");
+        if (activityList) {
+            const games = getAdminCatalog().filter(game => !game.hidden).map(game => ({
+                date: game.date,
+                timestamp: Date.parse(game.date) || 0,
+                type: Number(game.progress) < 100 ? "TIẾN ĐỘ" : "GAME",
+                title: game.title,
+                detail: [game.version, Number(game.progress) < 100 ? `${Number(game.progress) || 0}%` : "Đã kiểm thử"].filter(Boolean).join(" · ")
+            }));
+            const posts = state.posts.filter(post => post.published).map(post => ({
+                date: post.publishedAt,
+                timestamp: Date.parse(post.publishedAt) || 0,
+                type: "BÀI ĐĂNG",
+                title: post.title,
+                detail: post.category || "Nội dung"
+            }));
+            const cmsUpdate = state.updatedAt ? [{
+                date: state.updatedAt,
+                timestamp: Date.parse(state.updatedAt) || 0,
+                type: "CMS",
+                title: "Bản nháp được cập nhật",
+                detail: `v${Number(CMS.getSyncMeta()?.draftVersion || 0)}`
+            }] : [];
+            const entries = [...games, ...posts, ...cmsUpdate]
+                .filter(item => item.timestamp)
+                .sort((a, b) => b.timestamp - a.timestamp)
+                .slice(0, 10);
+            activityList.innerHTML = entries.length ? entries.map(item => `
+                <li>
+                    <time>${escapeHtml(new Intl.DateTimeFormat("vi-VN", { day: "2-digit", month: "2-digit", year: "numeric" }).format(new Date(item.timestamp)))}</time>
+                    <span>${escapeHtml(item.type)}</span>
+                    <strong>${escapeHtml(item.title)}</strong>
+                    <small>${escapeHtml(item.detail)}</small>
+                </li>
+            `).join("") : `<li class="dashboard-activity-empty">Chưa có hoạt động để hiển thị.</li>`;
+        }
     }
 
     function fillHomepageForm() {
@@ -1149,6 +1196,10 @@
     }
 
     async function publishCurrentDraft() {
+        if (PREVIEW_READ_ONLY) {
+            showToast("PREVIEW_READ_ONLY: không thể xuất bản từ URL xem trước.", "error");
+            return;
+        }
         await saveQueue;
         const meta = CMS.getSyncMeta();
         if (!meta?.dirty) {
@@ -1201,6 +1252,11 @@
     }
 
     document.addEventListener("DOMContentLoaded", async () => {
+        if (PREVIEW_READ_ONLY) {
+            const banner = byId("preview-admin-banner");
+            if (banner) banner.hidden = false;
+            document.body.classList.add("preview-read-only");
+        }
         setSaveState("Đang kết nối máy chủ", true);
         try {
             const session = await adminRequest("/api/admin/session");
